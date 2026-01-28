@@ -49,6 +49,17 @@ with tab_uvod:
 
 # --- SEKCE PŘIHLÁŠENÍ ---
 with tab_dotaznik:
+    with col1:
+    st.subheader("Nová registrace")
+    reg_email = st.text_input("Váš e-mail:")
+    # Tady je ten vylepšený návod:
+    st.info("""
+    **Váš unikátní kód vytvoříte takto:**
+    1. První 2 písmena jména (např. Tereza -> **TE**)
+    2. Den narození - vždy dvě cifry (např. 2. dne -> **02**)
+    3. Poslední 2 čísla mobilu (např. ...123489 -> **89**)
+    *Váš kód by tedy byl: **TE0289***
+    """)
     st.header("Přihlášení")
     st.write("Zadejte údaje, které jste použili při registraci.")
     
