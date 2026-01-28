@@ -1,128 +1,115 @@
 import streamlit as st
 from datetime import datetime, time
 
-# --- KONFIGURACE VÝZKUMU ---
-# Tady nastav datum, kdy tvůj výzkum OFICIÁLNĚ ZAČÍNÁ (rok, měsíc, den)
+# --- 1. KONFIGURACE VÝZKUMU ---
 DATUM_STARTU = datetime(2026, 1, 29) 
-CAS_ODEMCENI = time(9, 0) # Lekce se otevře vždy v 9:00 ráno
+CAS_ODEMCENI = time(9, 0)
 
-# 1. Nastavení stránky
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
-st.title("🧘 Výzkum: Vliv dechových cvičení")
+# --- 2. CSS STYLY (Pro Vilgain efekt a vzhled) ---
+st.markdown("""
+    <style>
+    /* Styl pro velká výběrová tlačítka oblastí */
+    .stButton > button {
+        height: 150px;
+        font-size: 22px !important;
+        font-weight: bold;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        margin-bottom: 15px;
+    }
+    .stButton > button:hover {
+        transform: scale(1.02);
+        border-color: #4CAF50;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# 2. Hlavní horní menu
-tab_uvod, tab_souhlas, tab_dotaznik, tab_lekce = st.tabs([
-    "🏠 Úvodní informace", 
-    "📝 Informovaný souhlas", 
-    "📊 Vstupní dotazník", 
-    "📅 Lekce"
-])
-
-# Pomocná funkce pro výpočet aktuálně dostupné lekce
+# --- 3. POMOCNÉ FUNKCE ---
 def ziskej_dostupnou_lekci():
     ted = datetime.now()
     rozdil = ted - DATUM_STARTU
-    pocet_dni = rozdil.days + 1 # Den 1 začíná v den startu
-    
-    # Pokud je dnes před 9:00 ráno, poslední lekce ještě není dostupná
+    pocet_dni = rozdil.days + 1
     if ted.time() < CAS_ODEMCENI:
         pocet_dni -= 1
-        
     return max(0, pocet_dni)
 
-# --- SEKCE 1-3 (Zůstávají stejné) ---
+# --- 4. HLAVNÍ STRUKTURA (MENU) ---
+tab_uvod, tab_dotaznik, tab_lekce = st.tabs([
+    "🏠 Úvodní informace", 
+    "📊 Přihlášení / Registrace", 
+    "📅 Vaše lekce"
+])
+
+# --- SEKCE ÚVOD ---
 with tab_uvod:
-    st.header("Vítejte")
-    st.write("Informace o diplomové práci...")
+    st.header("Vítejte v programu")
+    st.write("Tato aplikace je součástí výzkumu k diplomové práci.")
 
-with tab_souhlas:
-    st.header("Souhlas")
-    st.checkbox("Souhlasím se zpracováním údajů")
-
+# --- SEKCE PŘIHLÁŠENÍ ---
 with tab_dotaznik:
-    st.header("Vstupní dotazník")
-    st.text_input("Jméno:")
+    st.header("Přihlášení")
+    st.write("Zadejte údaje, které jste použili při registraci.")
+    
+    email = st.text_input("E-mail:", key="input_email")
+    jmeno = st.text_input("Jméno:", key="input_jmeno")
+    
+    if st.button("Vstoupit do aplikace"):
+        if email and jmeno:
+            st.session_state.prihlasen = True
+            st.success(f"Přihlášeno: {jmeno}")
+        else:
+            st.error("Prosím vyplňte e-mail i jméno.")
 
-# --- SEKCE 4: LEKCE ---
+# --- SEKCE LEKCE ---
 with tab_lekce:
-    # 1. Styly pro "Vilgain" karty (obrázky/tlačítka pod sebou)
-    st.markdown("""
-        <style>
-        div.stButton > button {
-            height: 150px;
-            font-size: 24px !important;
-            font-weight: bold;
-            border-radius: 15px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-        div.stButton > button:hover {
-            transform: scale(1.02);
-            border-color: #4CAF50;
-            color: #4CAF50;
-            background-color: #f0f9f0;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # 2. Logika výběru oblasti (zobrazí se jen poprvé)
-    if 'vybrana_oblast' not in st.session_state:
-        st.header("Na co se chceš v programu zaměřit?")
-        st.write("Vyber si jednu oblast, která tě nejvíce pálí:")
-
-        # Tři velká tlačítka pod sebou
-        if st.button("🚀 Zvládání stresu a zkoušková úzkost", use_container_width=True):
-            st.session_state.vybrana_oblast = "Stres"
-            st.rerun()
-
-        if st.button("⏰ Time-management a prokrastinace", use_container_width=True):
-            st.session_state.vybrana_oblast = "Time-management"
-            st.rerun()
-
-        if st.button("😴 Problémy se spánkem a regenerací", use_container_width=True):
-            st.session_state.vybrana_oblast = "Spánek"
-            st.rerun()
-            
+    # Kontrola, zda je uživatel přihlášen
+    if not st.session_state.get("prihlasen", False):
+        st.warning("⚠️ Pro přístup k lekcím se prosím nejdříve přihlaste v záložce 'Přihlášení / Registrace'.")
     else:
-        # --- ZOBRAZENÍ LEKCÍ PO VÝBĚRU ---
-        st.info(f"Tvé zaměření: **{st.session_state.vybrana_oblast}**")
-        if st.button("🔄 Změnit zaměření"):
-            del st.session_state.vybrana_oblast
-            st.rerun()
-
-        st.divider()
-
-        # Tady zůstává tvá logika s odemykáním lekcí
-        max_dostupna = ziskej_dostupnou_lekci()
-        
-        # Admin přístup
-        if st.session_state.get("uzivatel_jmeno") == "Admin":
-            max_dostupna = 7
-        
-        cols = st.columns(7)
-        if 'vybrana_lekce' not in st.session_state:
-            st.session_state.vybrana_lekce = 1 if max_dostupna > 0 else 0
-
-        for i in range(1, 8):
-            je_odemceno = i <= max_dostupna
-            with cols[i-1]:
-                if st.button(f"{i}", key=f"btn_lekce_{i}", use_container_width=True, disabled=not je_odemceno):
-                    st.session_state.vybrana_lekce = i
-
-        st.divider()
-
-        # OBSAH LEKCÍ PODLE OBLASTI
-        vyber = st.session_state.vybrana_lekce
-        oblast = st.session_state.vybrana_oblast
-
-        if vyber == 1:
-            st.subheader(f"Lekce 1: První kroky ({oblast})")
+        # A. VÝBĚR OBLASTI (zobrazí se jen poprvé)
+        if 'vybrana_oblast' not in st.session_state:
+            st.header("Vyberte si své zaměření")
+            st.info("Vyberte oblast, na které chcete pracovat. Toto rozhodnutí je pro tento výzkum konečné.")
             
+            if st.button("🚀 Zvládání stresu a zkoušková úzkost", use_container_width=True):
+                st.session_state.vybrana_oblast = "Stres"
+                st.rerun()
+            if st.button("⏰ Time-management a prokrastinace", use_container_width=True):
+                st.session_state.vybrana_oblast = "Time-management"
+                st.rerun()
+            if st.button("😴 Problémy se spánkem a regenerací", use_container_width=True):
+                st.session_state.vybrana_oblast = "Spánek"
+                st.rerun()
+        
+        # B. ZOBRAZENÍ PROGRAMU (po výběru oblasti)
+        else:
+            oblast = st.session_state.vybrana_oblast
+            st.subheader(f"Vaše cesta: {oblast}")
+            
+            # Výpočet progresu
+            max_dostupna = ziskej_dostupnou_lekci()
+            if st.session_state.get("input_jmeno") == "Admin":
+                max_dostupna = 7
+
+            # Lišta s lekcemi (tlačítka 1-7)
+            cols = st.columns(7)
+            for i in range(1, 8):
+                je_odemceno = i <= max_dostupna
+                with cols[i-1]:
+                    if st.button(f"Lekce {i}", key=f"btn_l{i}", use_container_width=True, disabled=not je_odemceno):
+                        st.session_state.vybrana_lekce = i
+
+            st.divider()
+
+            # Zobrazení konkrétního obsahu
+            vyber = st.session_state.get("vybrana_lekce", 1)
+            st.subheader(f"Den {vyber}: Instrukce")
+
             if oblast == "Stres":
-                st.write("Dnes se zaměříme na uvolnění napětí v ramenou...")
+                st.write("Dnes se zaměříme na techniku 4-7-8 pro okamžité uklidnění...")
             elif oblast == "Time-management":
-                st.write("Dnes začneme krátkým cvičením na soustředění...")
+                st.write("Dnes využijeme dech k zostření pozornosti před studiem...")
             elif oblast == "Spánek":
-                st.write("Dnes se naučíme, jak zklidnit mysl před spaním...")
+                st.write("Před spaním vyzkoušejte toto uvolňující cvičení...")
