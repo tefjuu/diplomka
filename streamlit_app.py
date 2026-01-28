@@ -44,39 +44,85 @@ with tab_dotaznik:
     st.header("Vstupní dotazník")
     st.text_input("Jméno:")
 
-# --- SEKCE 4: LEKCE (Tvůj nový systém) ---
+# --- SEKCE 4: LEKCE ---
 with tab_lekce:
-    st.header("Denní program")
-    
-    max_dostupna = ziskej_dostupnou_lekci()
-    
-    # Vytvoření 7 sloupců pro tlačítka lekcí
-    cols = st.columns(7)
-    
-    # Inicializace paměti pro vybranou lekci (pokud ještě nebyla vybrána)
-    if 'vybrana_lekce' not in st.session_state:
-        st.session_state.vybrana_lekce = 1 if max_dostupna > 0 else 0
+    # 1. Styly pro "Vilgain" karty (obrázky/tlačítka pod sebou)
+    st.markdown("""
+        <style>
+        div.stButton > button {
+            height: 150px;
+            font-size: 24px !important;
+            font-weight: bold;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        div.stButton > button:hover {
+            transform: scale(1.02);
+            border-color: #4CAF50;
+            color: #4CAF50;
+            background-color: #f0f9f0;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
-    # Vykreslení tlačítek 1-7
-    for i in range(1, 8):
-        je_odemceno = True
-        with cols[i-1]:
-            # Tlačítko je šedé (disabled), pokud ještě není čas
-            if st.button(f"Lekce {i}", use_container_width=True, disabled=not je_odemceno):
-                st.session_state.vybrana_lekce = i
+    # 2. Logika výběru oblasti (zobrazí se jen poprvé)
+    if 'vybrana_oblast' not in st.session_state:
+        st.header("Na co se chceš v programu zaměřit?")
+        st.write("Vyber si jednu oblast, která tě nejvíce pálí:")
 
-    st.divider()
+        # Tři velká tlačítka pod sebou
+        if st.button("🚀 Zvládání stresu a zkoušková úzkost", use_container_width=True):
+            st.session_state.vybrana_oblast = "Stres"
+            st.rerun()
 
-    # Zobrazení obsahu vybrané lekce
-    vyber = st.session_state.vybrana_lekce
+        if st.button("⏰ Time-management a prokrastinace", use_container_width=True):
+            st.session_state.vybrana_oblast = "Time-management"
+            st.rerun()
 
-    if vyber == 0:
-        st.info(f"První lekce se odemkne {DATUM_STARTU.strftime('%d.%m.')} v {CAS_ODEMCENI.strftime('%H:%M')}.")
-    elif vyber == 1:
-        st.subheader("Lekce 1: První kroky")
-        st.success("Tato lekce je nyní AKTIVNÍ")
-        st.write("Tady začíná tvé dýchací cvičení...")
-    elif vyber == 2:
-        st.subheader("Lekce 2: Prohloubený dech")
-        st.write("Obsah pro druhý den...")
-    # ... doplníš si další dny podle potřeby
+        if st.button("😴 Problémy se spánkem a regenerací", use_container_width=True):
+            st.session_state.vybrana_oblast = "Spánek"
+            st.rerun()
+            
+    else:
+        # --- ZOBRAZENÍ LEKCÍ PO VÝBĚRU ---
+        st.info(f"Tvé zaměření: **{st.session_state.vybrana_oblast}**")
+        if st.button("🔄 Změnit zaměření"):
+            del st.session_state.vybrana_oblast
+            st.rerun()
+
+        st.divider()
+
+        # Tady zůstává tvá logika s odemykáním lekcí
+        max_dostupna = ziskej_dostupnou_lekci()
+        
+        # Admin přístup
+        if st.session_state.get("uzivatel_jmeno") == "Admin":
+            max_dostupna = 7
+        
+        cols = st.columns(7)
+        if 'vybrana_lekce' not in st.session_state:
+            st.session_state.vybrana_lekce = 1 if max_dostupna > 0 else 0
+
+        for i in range(1, 8):
+            je_odemceno = i <= max_dostupna
+            with cols[i-1]:
+                if st.button(f"{i}", key=f"btn_lekce_{i}", use_container_width=True, disabled=not je_odemceno):
+                    st.session_state.vybrana_lekce = i
+
+        st.divider()
+
+        # OBSAH LEKCÍ PODLE OBLASTI
+        vyber = st.session_state.vybrana_lekce
+        oblast = st.session_state.vybrana_oblast
+
+        if vyber == 1:
+            st.subheader(f"Lekce 1: První kroky ({oblast})")
+            
+            if oblast == "Stres":
+                st.write("Dnes se zaměříme na uvolnění napětí v ramenou...")
+            elif oblast == "Time-management":
+                st.write("Dnes začneme krátkým cvičením na soustředění...")
+            elif oblast == "Spánek":
+                st.write("Dnes se naučíme, jak zklidnit mysl před spaním...")
