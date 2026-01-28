@@ -49,39 +49,48 @@ with tab_uvod:
     st.header("Vítejte v programu")
     st.write("Tato aplikace je součástí výzkumu k diplomové práci.")
 
-# --- SEKCE PŘIHLÁŠENÍ ---
+# --- SEKCE PŘIHLÁŠENÍ / REGISTRACE ---
 with tab_dotaznik:
+    st.header("Vstup do programu")
+    
     # Přepínač mezi registrací a přihlášením
-    rezim = st.radio("Vyberte akci:", ["Jsem tu poprvé (Registrace)", "Už mám svůj kód (Přihlášení)"], horizontal=True)
-
+    rezim = st.radio("Jste zde poprvé?", ["Chci se zaregistrovat", "Už mám svůj kód (Přihlášení)"], horizontal=True)
     st.divider()
 
-    if rezim == "Jsem tu poprvé (Registrace)":
-        st.subheader("Vytvoření nového účtu")
-        reg_email = st.text_input("Zadejte svůj e-mail:")
+    if rezim == "Chci se zaregistrovat":
+        st.subheader("Nová registrace")
+        reg_email = st.text_input("Zadejte svůj e-mail (pro zaslání kódu):")
+        
         st.info("""
-        **Vytvořte si svůj unikátní kód:**
-        (2 písmena jména + 2 čísla dne narození + poslední 2 čísla mobilu)
+        **Váš unikátní kód si vytvořte takto:**
+        1. První 2 písmena jména (Tereza -> **TE**)
+        2. Den narození (vždy 2 cifry, 2. den -> **02**)
+        3. Poslední 2 čísla mobilu (...89 -> **89**)
+        *Výsledek: **TE0289***
         """)
-        novy_kod = st.text_input("Váš nový kód (např. TE0289):", key="reg_kod").upper()
+        
+        novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
         
         if st.button("Dokončit registraci"):
             if reg_email and novy_kod:
-                # Tady se v budoucnu spustí odeslání e-mailu
-                st.success(f"Registrace úspěšná! Na e-mail {reg_email} jsme odeslali potvrzení s vaším kódem: {novy_kod}")
+                # --- TADY BUDE PROPOJENÍ ---
+                # 1. Zápis do Google Tabulky
+                # 2. Odeslání e-mailu přes SendGrid
+                st.success(f"Registrace úspěšná! Na e-mail {reg_email} byl odeslán váš kód: {novy_kod}")
                 st.balloons()
             else:
-                st.error("Vyplňte prosím e-mail i kód.")
+                st.error("Vyplňte prosím e-mail i kód!")
 
     else:
-        st.subheader("Přihlášení do aplikace")
+        st.subheader("Přihlášení")
         login_kod = st.text_input("Zadejte svůj unikátní kód:", key="login_kod").upper()
         
-        if st.button("Vstoupit do výzkumu"):
+        if st.button("Vstoupit k lekcím"):
             if login_kod:
+                # Tady web zkontroluje kód v Google tabulce
                 st.session_state.prihlasen = True
-                st.session_state.input_jmeno = login_kod
-                st.success(f"Vítejte zpět! Váš kód {login_kod} byl rozpoznán.")
+                st.session_state.moje_id = login_kod
+                st.success(f"Přihlášeno! Vítejte zpět.")
             else:
                 st.error("Zadejte prosím kód.")
 
