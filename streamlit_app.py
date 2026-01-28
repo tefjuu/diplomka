@@ -51,37 +51,39 @@ with tab_uvod:
 
 # --- SEKCE PŘIHLÁŠENÍ ---
 with tab_dotaznik:
-    col1, col2 = st.columns(2) # Tady jsme vytvořili ty dva sloupce
-    
-    with col1:
-        st.subheader("Nová registrace")
-        reg_email = st.text_input("Váš e-mail:")
-        st.info("""
-        **Váš unikátní kód vytvoříte takto:**
-        1. První 2 písmena jména (např. Tereza -> **TE**)
-        2. Den narození - vždy dvě cifry (např. 2. dne -> **02**)
-        3. Poslední 2 čísla mobilu (např. ...89)
-        *Příklad kódu: **TE0289***
-        """)
-        if st.button("Registrovat se"):
-            st.success("Registrace (simulovaná) proběhla. Nyní se přihlaste vpravo.")
+    # Přepínač mezi registrací a přihlášením
+    rezim = st.radio("Vyberte akci:", ["Jsem tu poprvé (Registrace)", "Už mám svůj kód (Přihlášení)"], horizontal=True)
 
-    with col2:
-        st.subheader("Přihlášení")
-        st.write("Zadejte kód pro vstup do lekcí.")
+    st.divider()
+
+    if rezim == "Jsem tu poprvé (Registrace)":
+        st.subheader("Vytvoření nového účtu")
+        reg_email = st.text_input("Zadejte svůj e-mail:")
+        st.info("""
+        **Vytvořte si svůj unikátní kód:**
+        (2 písmena jména + 2 čísla dne narození + poslední 2 čísla mobilu)
+        """)
+        novy_kod = st.text_input("Váš nový kód (např. TE0289):", key="reg_kod").upper()
         
-        email = st.text_input("E-mail:", key="input_email")
-        # Přihlašujeme se kódem, který student vytvořil
-        kod_login = st.text_input("Váš unikátní kód (např. TE0289):", key="input_kod")
-        
-        if st.button("Vstoupit do aplikace"):
-            if email and kod_login:
-                st.session_state.prihlasen = True
-                # Uložíme kód do jména, aby fungoval i Admin mód
-                st.session_state.input_jmeno = kod_login.upper()
-                st.success(f"Přihlášeno: {kod_login.upper()}")
+        if st.button("Dokončit registraci"):
+            if reg_email and novy_kod:
+                # Tady se v budoucnu spustí odeslání e-mailu
+                st.success(f"Registrace úspěšná! Na e-mail {reg_email} jsme odeslali potvrzení s vaším kódem: {novy_kod}")
+                st.balloons()
             else:
-                st.error("Prosím vyplňte e-mail i kód.")
+                st.error("Vyplňte prosím e-mail i kód.")
+
+    else:
+        st.subheader("Přihlášení do aplikace")
+        login_kod = st.text_input("Zadejte svůj unikátní kód:", key="login_kod").upper()
+        
+        if st.button("Vstoupit do výzkumu"):
+            if login_kod:
+                st.session_state.prihlasen = True
+                st.session_state.input_jmeno = login_kod
+                st.success(f"Vítejte zpět! Váš kód {login_kod} byl rozpoznán.")
+            else:
+                st.error("Zadejte prosím kód.")
 
 # --- SEKCE LEKCE ---
 with tab_lekce:
