@@ -7,17 +7,19 @@ CAS_ODEMCENI = time(9, 0)
 
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
-# --- 2. CSS STYLY (Pro Vilgain efekt a vzhled) ---
+# HLAVNÍ NÁZEV
+st.title("🧘 Výzkum: Vliv dechových cvičení")
+
+# --- 2. CSS STYLY ---
 st.markdown("""
     <style>
-    /* Styl pro velká výběrová tlačítka oblastí */
     .stButton > button {
-        height: 150px;
-        font-size: 22px !important;
+        height: 120px;
+        font-size: 20px !important;
         font-weight: bold;
         border-radius: 15px;
         transition: all 0.3s ease;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
     .stButton > button:hover {
         transform: scale(1.02);
@@ -49,40 +51,46 @@ with tab_uvod:
 
 # --- SEKCE PŘIHLÁŠENÍ ---
 with tab_dotaznik:
+    col1, col2 = st.columns(2) # Tady jsme vytvořili ty dva sloupce
+    
     with col1:
-    st.subheader("Nová registrace")
-    reg_email = st.text_input("Váš e-mail:")
-    # Tady je ten vylepšený návod:
-    st.info("""
-    **Váš unikátní kód vytvoříte takto:**
-    1. První 2 písmena jména (např. Tereza -> **TE**)
-    2. Den narození - vždy dvě cifry (např. 2. dne -> **02**)
-    3. Poslední 2 čísla mobilu (např. ...123489 -> **89**)
-    *Váš kód by tedy byl: **TE0289***
-    """)
-    st.header("Přihlášení")
-    st.write("Zadejte údaje, které jste použili při registraci.")
-    
-    email = st.text_input("E-mail:", key="input_email")
-    jmeno = st.text_input("Jméno:", key="input_jmeno")
-    
-    if st.button("Vstoupit do aplikace"):
-        if email and jmeno:
-            st.session_state.prihlasen = True
-            st.success(f"Přihlášeno: {jmeno}")
-        else:
-            st.error("Prosím vyplňte e-mail i jméno.")
+        st.subheader("Nová registrace")
+        reg_email = st.text_input("Váš e-mail:")
+        st.info("""
+        **Váš unikátní kód vytvoříte takto:**
+        1. První 2 písmena jména (např. Tereza -> **TE**)
+        2. Den narození - vždy dvě cifry (např. 2. dne -> **02**)
+        3. Poslední 2 čísla mobilu (např. ...89)
+        *Příklad kódu: **TE0289***
+        """)
+        if st.button("Registrovat se"):
+            st.success("Registrace (simulovaná) proběhla. Nyní se přihlaste vpravo.")
+
+    with col2:
+        st.subheader("Přihlášení")
+        st.write("Zadejte kód pro vstup do lekcí.")
+        
+        email = st.text_input("E-mail:", key="input_email")
+        # Přihlašujeme se kódem, který student vytvořil
+        kod_login = st.text_input("Váš unikátní kód (např. TE0289):", key="input_kod")
+        
+        if st.button("Vstoupit do aplikace"):
+            if email and kod_login:
+                st.session_state.prihlasen = True
+                # Uložíme kód do jména, aby fungoval i Admin mód
+                st.session_state.input_jmeno = kod_login.upper()
+                st.success(f"Přihlášeno: {kod_login.upper()}")
+            else:
+                st.error("Prosím vyplňte e-mail i kód.")
 
 # --- SEKCE LEKCE ---
 with tab_lekce:
-    # Kontrola, zda je uživatel přihlášen
     if not st.session_state.get("prihlasen", False):
         st.warning("⚠️ Pro přístup k lekcím se prosím nejdříve přihlaste v záložce 'Přihlášení / Registrace'.")
     else:
-        # A. VÝBĚR OBLASTI (zobrazí se jen poprvé)
         if 'vybrana_oblast' not in st.session_state:
             st.header("Vyberte si své zaměření")
-            st.info("Vyberte oblast, na které chcete pracovat. Toto rozhodnutí je pro tento výzkum konečné.")
+            st.info("Vyberte oblast, na které chcete pracovat. Toto rozhodnutí je konečné.")
             
             if st.button("🚀 Zvládání stresu a zkoušková úzkost", use_container_width=True):
                 st.session_state.vybrana_oblast = "Stres"
@@ -94,27 +102,24 @@ with tab_lekce:
                 st.session_state.vybrana_oblast = "Spánek"
                 st.rerun()
         
-        # B. ZOBRAZENÍ PROGRAMU (po výběru oblasti)
         else:
             oblast = st.session_state.vybrana_oblast
             st.subheader(f"Vaše cesta: {oblast}")
             
-            # Výpočet progresu
             max_dostupna = ziskej_dostupnou_lekci()
-            if st.session_state.get("input_jmeno") == "Admin":
+            # Pokud se přihlásíš jako ADMIN, uvidíš všechno
+            if st.session_state.get("input_jmeno") == "ADMIN":
                 max_dostupna = 7
 
-            # Lišta s lekcemi (tlačítka 1-7)
             cols = st.columns(7)
             for i in range(1, 8):
                 je_odemceno = i <= max_dostupna
                 with cols[i-1]:
-                    if st.button(f"Lekce {i}", key=f"btn_l{i}", use_container_width=True, disabled=not je_odemceno):
+                    if st.button(f"{i}", key=f"btn_l{i}", use_container_width=True, disabled=not je_odemceno):
                         st.session_state.vybrana_lekce = i
 
             st.divider()
 
-            # Zobrazení konkrétního obsahu
             vyber = st.session_state.get("vybrana_lekce", 1)
             st.subheader(f"Den {vyber}: Instrukce")
 
