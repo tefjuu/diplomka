@@ -56,4 +56,4 @@ with tab_lekce:
     st.header("Program dechových cvičení")
     
     # Výběr dne (rozbalovací seznam)
-    den = st.selectbox("Vyberte
+    den = st.selectbox("Vyberte"
