@@ -59,7 +59,7 @@ with tab_lekce:
 
     # Vykreslení tlačítek 1-7
     for i in range(1, 8):
-        je_odemceno = i <= max_dostupna
+        je_odemceno = True
         with cols[i-1]:
             # Tlačítko je šedé (disabled), pokud ještě není čas
             if st.button(f"Lekce {i}", use_container_width=True, disabled=not je_odemceno):
