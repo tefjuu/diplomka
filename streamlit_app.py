@@ -138,32 +138,33 @@ with tab_dotaznik:
                 stop_registrace = True
 
         # TLAČÍTKO - přidána kontrola délky (kod_je_spravne_dlouhy)
+        # TLAČÍTKO - Finální zpracování registrace
         if st.button("Dokončit registraci", key="final_reg_btn"):
+            # 1. Kontrola prázdných polí a shody emailů
             if not reg_email or reg_email != reg_email_potvrzeni or not novy_kod:
                 st.error("Zkontrolujte e-maily a vyplňte kód!")
+            
+            # 2. Kontrola délky kódu (musí být přesně 8)
             elif not kod_je_spravne_dlouhy:
                 st.error("Registrace není možná. Kód musí mít přesně 8 znaků!")
+            
+            # 3. Kontrola duplicity (tvá nová hláška)
             elif stop_registrace:
-                st.error("Registrace není možná. Tento kód nebo e-mail už existuje.")
-            else:
-                # Zde následuje zbytek kódu pro odeslání emailu a zápis (status = odeslat_email...)
-
-        if st.button("Dokončit registraci", key="final_reg_btn"):
-            if not reg_email or reg_email != reg_email_potvrzeni or not novy_kod:
-                st.error("Zkontrolujte e-maily a vyplňte kód!")
-            elif stop_registrace:
-                st.error("Registrace není možná.")
+                st.error("⚠️ Bohužel došlo ke shodě kódu s již zaregistrovaným uživatelem. V tomto případě upravte svůj kód a místo prvních dvou písmen Vašeho křestního jména použijte 1. a 3., popřípadě udělejte jinou potřebnou změnu (kód Vám po dokončení pošleme na e-mailovou adresu).")
+            
+            # 4. Pokud je vše OK, odešleme email a zapíšeme do tabulky
             else:
                 status = odeslat_email(reg_email, novy_kod)
                 if status in [200, 202]:
-                    # Zápis do tabulky
+                    # Zápis do tabulky přes Google Sheets connection
                     novy_radek = pd.DataFrame([{"Email": reg_email, "Kod": novy_kod}])
                     aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
                     conn.update(data=aktualizovana_data)
-                    st.success("Registrace úspěšná! Kód odeslán na e-mail.")
+                    
+                    st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
                     st.balloons()
                 else:
-                    st.error(f"Chyba odesílání: {status}")
+                    st.error(f"Chyba při odesílání e-mailu (kód chyby: {status}). Zkuste to prosím později.")
 
     else:
         st.subheader("Přihlášení")
