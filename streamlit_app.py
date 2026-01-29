@@ -215,8 +215,8 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-    # --- SEKCE PŘIHLÁŠENÍ ---
-    st.subheader("Přihlášení do výzkumu")
+        # --- SEKCE PŘIHLÁŠENÍ ---
+        st.subheader("Přihlášení do výzkumu")
     
     col_l1, col_l2 = st.columns(2)
     with col_l1:
