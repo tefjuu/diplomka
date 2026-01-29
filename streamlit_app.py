@@ -33,6 +33,7 @@ def odeslat_email(prijemce, kod):
                 f"<p><a href='https://vyzkum-diplomka.streamlit.app/' "
                 f"style='display: inline-block; padding: 10px 20px; background-color: #4CAF50
         response = requests.post(url, json=data, headers=headers)
+        }
         return response.status_code
     except:
         return "Chyba"
