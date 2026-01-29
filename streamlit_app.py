@@ -215,67 +215,55 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-        # --- SEKCE PŘIHLÁŠENÍ ---
-        st.subheader("Přihlášení do výzkumu")
-        
-        col_l1, col_l2 = st.columns(2)
-        with col_l1:
-            login_email = st.text_input("E-mail:", key="login_email_field").strip()
-        with col_l2:
-            login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
-        
-        if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
-            if not login_email or not login_pass:
-                st.warning("Vyplňte prosím e-mail a heslo.")
-            else:
-                try:
-                    # 1. Načtení dat (vždy čerstvá)
-                    conn = st.connection("gsheets", type=GSheetsConnection)
-                    df_login = conn.read(worksheet="List 1", ttl=0)
-                    
-                    # 2. Očista vstupů od uživatele
-                    vstup_email = str(login_email).lower().strip()
-                    vstup_heslo = str(login_pass).strip()
+    # --- SEKCE PŘIHLÁŠENÍ ---
+    st.subheader("Přihlášení do výzkumu")
+    
+    col_l1, col_l2 = st.columns(2)
+    with col_l1:
+        login_email = st.text_input("E-mail:", key="login_email_field").strip()
+    with col_l2:
+        login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
+    
+    if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
+        if not login_email or not login_pass:
+            st.warning("Vyplňte prosím e-mail a heslo.")
+        else:
+            try:
+                # 1. Načtení dat (vždy čerstvá)
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                df_login = conn.read(worksheet="List 1", ttl=0)
 
-                    # 3. HLEDÁNÍ V TABULCE (prohledá všechny řádky)
-                    # Vynutíme, aby Pandas bral sloupce jako text a očistil je
-                    maska = (
-                        (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
-                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
-                    )
-                    uzivatel = df_login[maska]
+                # 2. Očista vstupů od uživatele
+                vstup_email = str(login_email).lower().strip()
+                vstup_heslo = str(login_pass).strip()
+
+                # Debug output
+                st.write("Načtená data:", df_login)
+                st.write("Hledaný email:", vstup_email)
+                st.write("Hledané heslo:", vstup_heslo)
+
+                # 3. HLEDÁNÍ V TABULCE (prohledá všechny řádky)
+                maska = (
+                    (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
+                    (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+                )
+                uzivatel = df_login[maska]
+
+                if not uzivatel.empty:
+                    # ÚSPĚCH!
+                    st.session_state.prihlasen = True
+                    st.session_state.muj_email = vstup_email
+                    # Vytáhneme kód z toho konkrétního řádku (iloc[0] vezme první nalezený)
+                    st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
                     
-                    if not uzivatel.empty:
-                        # ÚSPĚCH!
-                        st.session_state.prihlasen = True
-                        st.session_state.muj_email = vstup_email
-                        # Vytáhneme kód z toho konkrétního řádku (iloc[0] vezme první nalezený)
-                        st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
-                        
-                        st.success("🎉 Přihlášení úspěšné!")
-                        st.balloons()
-                        st.rerun()
-                    else:
-                        st.error("❌ Nesprávný e-mail nebo heslo.")
-                        
-                except Exception as e:
-                    st.error(f"Chyba při komunikaci s tabulkou: {e}")
-with tab_lekce:
-    if not st.session_state.get("prihlasen", False):
-        st.warning("Přihlaste se prosím v záložce '📊 Přihlášení/Registrace'.")
-    else:
-        # 1. Výběr oblasti, pokud ještě není vybrána
-        if 'vybrana_oblast' not in st.session_state:
-            st.header("Vyberte si zaměření")
-            col_a, col_b = st.columns(2)
-            with col_a:
-                if st.button("🚀 Stres a úzkost", key="btn_stres", use_container_width=True):
-                    st.session_state.vybrana_oblast = "Stres"
+                    st.success("🎉 Přihlášení úspěšné!")
+                    st.balloons()
                     st.rerun()
-            with col_b:
-                if st.button("⏰ Time-management", key="btn_time", use_container_width=True):
-                    st.session_state.vybrana_oblast = "Time"
-                    st.rerun()
+                else:
+                    st.error("❌ Nesprávný e-mail nebo heslo.")
+
+            except Exception as e:
+                st.error(f"Chyba při komunikaci s tabulkou: {e}")
         
         # 2. Zobrazení lekcí po výběru oblasti
         else:
