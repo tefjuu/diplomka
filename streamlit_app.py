@@ -106,11 +106,28 @@ with tab_dotaznik:
                 else:
                     st.error("❌ E-maily se neshodují")
 
+
+st.markdown("""
+<div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
+    <b>Váš unikátní kód si vytvořte takto:</b><br>
+    1. První 2 písmena Vašeho jména (např. Tereza -> <b>TE</b>)<br>
+    2. Den narození (vždy 2 cifry, např. 2. ledna -> <b>02</b>)<br>
+    3. Poslední 2 čísla Vašeho mobilu (např. xxx xxx x42 -> <b>42</b>)<br>
+    4. První 2 písmena jména Vaší matky (např. Julie -> <b>JU</b>)<br>
+    <br>
+    <i>Vzorový kód: <b>TE0242JU</b></i>
+</div>
+""", unsafe_allow_html=True)
+            
+
             st.markdown("""
             <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
                 <b>Váš unikátní kód si vytvořte takto:</b><br>
-                1. První 2 písmena jména, 2. Den narození, 3. Poslední 2 čísla tel., 4. První 2 písmena jména matky.<br>
-                <i>Příklad: <b>TE0242JU</b></i>
+                1. První 2 písmena Vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
+                2. Den Vašeho narození (napiště dvouciferné číslo, např. 2. ledna -> <b>02</b>)<br> 
+                3. Poslední 2 cifry Vašeho tel. čísla (např. 0911 546 741 -> <b>41</b>)<br>
+                4. První 2 písmena jména Vaší matky (např. Julie -> <b>JU</b>)<br>.<br>
+                <i>Vzorový kód: <b>TE0241JU</b></i>
             </div>
             """, unsafe_allow_html=True)
             
