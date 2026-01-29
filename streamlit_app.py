@@ -105,6 +105,22 @@ with tab_dotaznik:
                     st.success("✅ E-maily se shodují")
                 else:
                     st.error("❌ E-maily se neshodují")
+            # --- NOVÉ: KOLONKY PRO HESLO ---
+            col3, col4 = st.columns(2)
+            with col3:
+                reg_heslo = st.text_input("Vaše heslo:", type="password", key="reg_pass_field", placeholder="Zadejte heslo")
+            with col4:
+                reg_heslo_potvrzeni = st.text_input("Zopakujte heslo:", type="password", key="reg_pass_confirm")
+            
+            if reg_heslo and reg_heslo_potvrzeni:
+                if reg_heslo == reg_heslo_potvrzeni:
+                    if len(reg_heslo) < 8:
+                        st.warning("⚠️ Heslo je příliš krátké (použijte aspoň 8 znaků).")
+                    else:
+                        st.success("✅ Hesla se shodují")
+                else:
+                    st.error("❌ Hesla se neshodují")
+            # -------------------------------
             st.markdown("""
             <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
                 <b>Váš unikátní kód si vytvořte takto:</b><br>
