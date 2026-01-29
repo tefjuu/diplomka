@@ -215,7 +215,6 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-        else:
         # --- SEKCE PŘIHLÁŠENÍ (Jen e-mail a heslo) ---
         st.subheader("Přihlášení do výzkumu")
         
