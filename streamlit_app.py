@@ -140,17 +140,26 @@ with tab_dotaznik:
         # TLAČÍTKO - přidána kontrola délky (kod_je_spravne_dlouhy)
         # TLAČÍTKO - Finální zpracování registrace
         if st.button("Dokončit registraci", key="final_reg_btn"):
-            # 1. Kontrola shody e-mailů a vyplnění polí
-            if not reg_email or not reg_email_potvrzeni or not novy_kod:
-                st.error("Vyplňte prosím všechna pole.")
+            
+            # 1. NEJDŘÍV KONTROLA DUPLICITY (aby uživatel hned věděl, že už existuje)
+            if stop_registrace:
+                # Zjistíme, co konkrétně je špatně, abychom vypsali správnou hlášku
+                if reg_email in df["Email"].values:
+                    st.error("❌ Tento e-mail už je zaregistrován. Zkuste se přihlásit.")
+                else:
+                    st.error("⚠️ Tento kód už někdo používá. Upravte si svůj unikátní kód.")
+            
+            # 2. POTOM KONTROLA PRÁZDNÝCH POLÍ A SHODY
+            elif not reg_email or not reg_email_potvrzeni or not novy_kod:
+                st.error("Vyplňte prosím všechna pole (E-mail i Kód).")
             elif reg_email != reg_email_potvrzeni:
                 st.error("E-maily se neshodují.")
             
-            # 2. Kontrola duplicity (využívá proměnnou stop_registrace z řádku 155)
-            elif stop_registrace:
-                st.error("Registraci nelze dokončit. Upravte kód nebo e-mail podle chybových hlášek výše.")
-            
-            # 3. Pokud je vše OK, odešleme email a zapíšeme do tabulky
+            # 3. KONTROLA DÉLKY KÓDU
+            elif not kod_je_spravne_dlouhy:
+                st.error("Kód musí mít přesně 8 znaků.")
+
+            # 4. POKUD PROŠLO VŠÍM, ZAPÍŠEME
             else:
                 status = odeslat_email(reg_email, novy_kod)
                 if status in [200, 202]:
@@ -165,13 +174,14 @@ with tab_dotaznik:
                         "Last_Lesson": "N/A"
                     }])
                     
+                    # Důležité: Ujisti se, že worksheet se jmenuje "Sheet1"
                     aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
                     conn.update(worksheet="Sheet1", data=aktualizovana_data)
                     
-                    st.success("Registrace proběhla úspěšně! Váš kód byl odeslán na e-mail.")
+                    st.success("Registrace proběhla úspěšně! Kód byl odeslán na e-mail.")
                     st.balloons()
                 else:
-                    st.error(f"Chyba při odesílání e-mailu (kód chyby: {status}). Zkuste to prosím později.")
+                    st.error(f"Chyba při odesílání e-mailu (kód: {status}).")
 
     else:
         st.subheader("Přihlášení")
