@@ -88,10 +88,9 @@ with tab_dotaznik:
             # Načtení dat (ošetřené proti chybám připojení)
             try:
                 conn = st.connection("gsheets", type=GSheetsConnection)
-                df_aktualni = conn.read(worksheet="List 1")
+                df_aktualni = conn.read(worksheet="List 1") # <--- TADY JE TEN ŘÁDEK!
             except Exception:
                 df_aktualni = pd.DataFrame(columns=["Email", "Code", "Registration_Date", "Topic", "Last_Lesson"])
-
             col1, col2 = st.columns(2)
             with col1:
                 reg_email = st.text_input("E-mail:", key="reg_email_field", placeholder="t.novakova@email.cz").strip()
