@@ -213,8 +213,7 @@ with tab_dotaznik:
                             st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
                     except Exception as e:
                         st.error(f"Chyba při ukládání: {e}")
-
-else:
+    else:
         # --- SEKCE PŘIHLÁŠENÍ ---
         st.subheader("Přihlášení do výzkumu")
         
@@ -229,7 +228,7 @@ else:
                 st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
-                    # 1. Načtení dat
+                    # 1. Načtení dat (ttl=0 vynutí čerstvá data z tabulky)
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
 
@@ -237,7 +236,7 @@ else:
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
 
-                    # 3. HLEDÁNÍ V TABULCE
+                    # 3. Hledání shody (Email + Heslo) napříč celou tabulkou
                     maska = (
                         (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
                         (df_login["Password"].astype(str).str.strip() == vstup_heslo)
@@ -245,6 +244,7 @@ else:
                     uzivatel = df_login[maska]
 
                     if not uzivatel.empty:
+                        # ÚSPĚCH - Uložíme do session_state
                         st.session_state.prihlasen = True
                         st.session_state.muj_email = vstup_email
                         st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
