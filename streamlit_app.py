@@ -140,17 +140,19 @@ with tab_dotaznik:
         # TLAČÍTKO - přidána kontrola délky (kod_je_spravne_dlouhy)
         # TLAČÍTKO - Finální zpracování registrace
         if st.button("Dokončit registraci", key="final_reg_btn"):
-            # 1. Kontrola prázdných polí a shody emailů
-            if not reg_email or reg_email != reg_email_potvrzeni or not novy_kod:
-                st.error("Zkontrolujte e-maily a vyplňte kód!")
+            # Ujisti se, že proměnná novy_kod skutečně obsahuje to, co uživatel napsal
+            # Pokud se tvůj input jmenuje jinak, uprav název v uvozovkách
+            # novy_kod = st.session_state.get('uzivatelsky_kod_input', '') 
+
+            # 1. Kontrola shody e-mailů a vyplnění polí
+            if not reg_email or not reg_email_potvrzeni or not novy_kod:
+                st.error("Vyplňte prosím všechna pole.")
+            elif reg_email != reg_email_potvrzeni:
+                st.error("E-maily se neshodují.")
             
-            # 2. Kontrola délky kódu (musí být přesně 8)
-            elif not kod_je_spravne_dlouhy:
-                st.error("Registrace není možná. Kód musí mít přesně 8 znaků!")
-            
-            # 3. Kontrola duplicity (tvá nová hláška)
+            # 2. Teď teprve přijde kontrola duplicity (stop_registrace)
             elif stop_registrace:
-                st.error("⚠️ Bohužel došlo ke shodě kódu s již zaregistrovaným uživatelem. V tomto případě upravte svůj kód a místo prvních dvou písmen Vašeho křestního jména použijte 1. a 3., popřípadě udělejte jinou potřebnou změnu (kód Vám po dokončení pošleme na e-mailovou adresu).")
+                st.error("⚠️ Zadaný email nebo univerzální kód jsou již zaregistrovány. Zku")
             
             # 4. Pokud je vše OK, odešleme email a zapíšeme do tabulky
             else:
