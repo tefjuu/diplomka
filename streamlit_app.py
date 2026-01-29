@@ -105,19 +105,25 @@ with tab_dotaznik:
                     st.success("✅ E-maily se shodují")
                 else:
                     st.error("❌ E-maily se neshodují")
-            # --- NOVÉ: KOLONKY PRO HESLO ---
+            
+            # --- KOLONKY PRO HESLO (Vylepšená verze) ---
             col3, col4 = st.columns(2)
             with col3:
-                reg_heslo = st.text_input("Heslo:", type="password", key="reg_pass_field", placeholder="Zadejte heslo")
+                reg_heslo = st.text_input("Vaše heslo:", type="password", key="reg_pass_field", placeholder="Minimálně 8 znaků").strip()
             with col4:
-                reg_heslo_potvrzeni = st.text_input("Zopakujte heslo:", type="password", key="reg_pass_confirm")
+                reg_heslo_potvrzeni = st.text_input("Zopakujte heslo:", type="password", key="reg_pass_confirm").strip()
             
-            if reg_heslo and reg_heslo_potvrzeni:
-                if reg_heslo == reg_heslo_potvrzeni:
-                    if len(reg_heslo) < 8:
-                        st.warning("⚠️ Heslo je příliš krátké (použijte aspoň 8 znaků).")
-                    else:
+            # 1. Kontrola délky (reaguje hned na první políčko)
+            if reg_heslo:
+                if len(reg_heslo) < 8:
+                    st.warning(f"⚠️ Heslo je příliš krátké (zatím {len(reg_heslo)}/8 znaků).")
+                
+                # 2. Kontrola shody (spustí se, až když je něco i v druhém políčku)
+                if reg_heslo_potvrzeni:
+                    if reg_heslo == reg_heslo_potvrzeni:
                         st.success("✅ Hesla se shodují")
+                    else:
+                        st.error("❌ Hesla se neshodují")
                 else:
                     st.error("❌ Hesla se neshodují")
             # -------------------------------
