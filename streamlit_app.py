@@ -179,7 +179,7 @@ with tab_dotaznik:
                         novy_radek = pd.DataFrame([{
                             "Email": reg_email, 
                             "Code": novy_kod,
-                            "Password": reg_heslo
+                            "Password": reg_heslo,
                             "Registration_Date": reg_time,
                             "Topic": "Diplomka_Vyzkum",
                             "Last_Lesson": "N/A"
