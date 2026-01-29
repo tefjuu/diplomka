@@ -92,6 +92,12 @@ with tab_dotaznik:
             reg_email = st.text_input("E-mail:", key="reg_email_field", placeholder="t.novakova@email.cz")
         with col2:
             reg_email_potvrzeni = st.text_input("E-mail znovu:", key="reg_email_confirm")
+        # Okamžitá kontrola shody e-mailů
+        if reg_email and reg_email_potvrzeni:
+            if reg_email == reg_email_potvrzeni:
+                st.success("✅ E-maily se shodují")
+            else:
+                st.error("❌ E-maily se neshodují")
 
         # TVŮJ NÁVOD NA KÓD
         st.markdown("""
