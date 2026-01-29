@@ -224,74 +224,47 @@ with tab_dotaznik:
         with col_l2:
             login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
         
-        # Tlačítko na celou šířku
         if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
             if not login_email or not login_pass:
                 st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
+                    # 1. Načtení dat
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # --- DETEKTIVNÍ VÝPIS (Potom ho smažeme) ---
-                    # st.write("Sloupce v tabulce:", df_login.columns.tolist())
-                    # st.dataframe(df_login) 
-                    # ------------------------------------------
-
+                    # 2. Příprava vstupů
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
 
-                    # Vynutíme, aby Pandas bral data jako čistý text a odstranil mezery
-                    df_login['Email'] = df_login['Email'].astype(str).str.lower().str.strip()
-                    df_login['Password'] = df_login['Password'].astype(str).str.strip()
-
-                    uzivatel = df_login[
-                        (df_login["Email"] == vstup_email) & 
-                        (df_login["Password"] == vstup_heslo)
-                    ]
-
-                    # 2. VYČIŠTĚNÍ DAT V TABULCE (převedení na text, malá písmena a odstranění mezer)
-                    # Vytvoříme si pomocné řady, aby se tabulka nepoškodila
-                    emails_v_tabulce = df_login["Email"].astype(str).str.lower().str.strip()
-                    hesla_v_tabulce = df_login["Password"].astype(str).str.strip()
-
-                    # 3. HLEDÁNÍ SHODY
-                    maska = (emails_v_tabulce == vstup_email) & (hesla_v_tabulce == vstup_heslo)
+                    # 3. DIAGNOSTIKA - uvidíš pod tlačítkem, co aplikace čte
+                    st.write("---")
+                    st.write(f"DEBUG: Hledám e-mail: `{vstup_email}`")
+                    if not df_login.empty:
+                        # Ukáže e-mail z prvního řádku v tabulce pro porovnání
+                        prvni_email_v_tabulce = str(df_login.iloc[0]['Email']).lower().strip()
+                        st.write(f"DEBUG: V tabulce na 1. řádku vidím: `{prvni_email_v_tabulce}`")
+                    
+                    # 4. Samotné hledání (očištěné)
+                    maska = (
+                        (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
+                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+                    )
                     uzivatel = df_login[maska]
                     
                     if not uzivatel.empty:
-                        # Uložíme si kód z původní tabulky
+                        # Uložíme data do session_state
                         st.session_state.prihlasen = True
                         st.session_state.muj_email = vstup_email
+                        # Bezpečné získání kódu
                         st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
                         
                         st.success("🎉 Přihlášení úspěšné!")
                         st.balloons()
                         st.rerun()
                     else:
-                        st.error("❌ Nesprávný e-mail nebo heslo. Zkontrolujte prosím údaje.")
-                        # Pomocný výpis pro tebe (později ho smaž)
-                        # st.write(f"Zkouším: '{vstup_email}' a '{vstup_heslo}'")
-                except Exception as e:
-                    st.error(f"Chyba při ověřování: {e}")
-
-                    # Hledáme shodu pouze Email + Heslo
-                    uzivatel = df_login[
-                        (df_login["Email"].str.lower().str.strip() == vstup_email) & 
-                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
-                    ]
-                    
-                    if not uzivatel.empty:
-                        # Uložíme si kód z tabulky do session_state, abychom s ním mohli dál pracovat
-                        st.session_state.prihlasen = True
-                        st.session_state.muj_email = vstup_email
-                        st.session_state.moje_id = uzivatel.iloc[0]["Code"] 
+                        st.error("❌ Nesprávný e-mail nebo heslo.")
                         
-                        st.success("🎉 Přihlášení proběhlo úspěšně!")
-                        st.balloons()
-                        st.rerun()
-                    else:
-                        st.error("❌ Nesprávný e-mail nebo heslo. Zkontrolujte prosím údaje.")
                 except Exception as e:
                     st.error(f"Chyba při ověřování: {e}")
 
