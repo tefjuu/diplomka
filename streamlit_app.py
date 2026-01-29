@@ -103,10 +103,11 @@ with tab_dotaznik:
         st.markdown("""
         <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
             <b>Váš unikátní kód si vytvořte takto:</b><br>
-            1. První 2 písmena vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
+            1. První 2 písmena Vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
             2. Den Vašeho narození (vždy pište 2 cifry, např. datum narození 2. září -> <b>02</b>)<br>
             3. Poslední 2 cifry Vašeho tel. čísla (0911 564 742 -> <b>42</b>)<br>
-            <i>Výsledný kód: <b>TE0242</b></i>
+            4. První 2 písmena Vašeho rodného města(např. Púchov -> <b>PÚ</b>)<br>
+            <i>Výsledný kód: <b>TE0242PÚ</b></i>
         </div>
         """, unsafe_allow_html=True)
         
