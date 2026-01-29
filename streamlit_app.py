@@ -16,18 +16,35 @@ def odeslat_email(prijemce, kod):
             "from": {"email": st.secrets["MAILERSEND_SENDER"], "name": "Výzkum: Diplomová práce"},
             "to": [{"email": prijemce}],
             "subject": "Tvůj unikátní kód pro výzkum",
-            "html": f"Dobrý den, tvůj kód je: <b>{kod}</b>"
+            "html": f"""
+            <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+                <h2 style="color: #333;">Dobrý den,</h2>
+                <p style="font-size: 16px; color: #555;">děkujeme za zapojení do výzkumu k diplomové práci. Tvůj unikátní kód pro přihlášení je:</p>
+                <div style="background-color: #f9f9f9; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+                    <span style="font-size: 24px; font-weight: bold; color: #4CAF50; letter-spacing: 2px;">{kod}</span>
+                </div>
+                <p style="font-size: 16px; color: #555;">Do aplikace s lekcemi se můžeš kdykoliv vrátit kliknutím na odkaz níže:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="https://vyzkum-diplomka.streamlit.app/" 
+                       style="background-color: #4CAF50; color: white; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 18px;">
+                       VSTOUPIT DO APLIKACE
+                    </a>
+                </div>
+                <p style="font-size: 14px; color: #888; border-top: 1px solid #eee; pt-10px; margin-top: 30px;">
+                    Doporučujeme si tento e-mail uložit.
+                </p>
+            </div>
+            """
         }
         response = requests.post(url, json=data, headers=headers)
         
-        # Pokud status není OK, vypiš chybu přímo na obrazovku
+        # Ponecháme diagnostiku, kdyby se zase vyčerpal limit, ať víme
         if response.status_code not in [200, 202]:
             st.error(f"❌ MailerSend Error: {response.status_code} - {response.text}")
             
         return response.status_code
     except Exception as e:
-        # Pokud spadne samotný Python (např. chybí knihovna requests)
-        st.error(f"🔥 Kritická chyba v kódu: {e}")
+        st.error(f"🔥 Kritická chyba v kódu odesílání: {e}")
         return "Chyba"
 
 # --- 2. KONFIGURACE VÝZKUMU ---
