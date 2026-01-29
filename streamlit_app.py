@@ -138,7 +138,7 @@ with tab_dotaznik:
                     if email_cisty in df_aktualni["Email"].values:
                         st.error("❌ Tento e-mail už je zaregistrován. Přejděte k přihlášení.")
                         vse_ok = False
-                    elif kod_cisty in df
+                    elif kod_cisty in df_aktualni["Code"].values:
         if st.button("Dokončit registraci", key="final_reg_btn"):
             
             # 1. POKUS O NAČTENÍ DAT (S opravou na "List 1")
