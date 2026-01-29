@@ -1,6 +1,8 @@
 import streamlit as st
-import requests  # PŘIDÁNO: Nutné pro MailerSend
+import requests
+import pandas as pd  # <--- TADY JE TO NEJLEPŠÍ
 from datetime import datetime, time
+from streamlit_gsheets import GSheetsConnection # <--- Pokud používáš tohle pro tabulky
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU (NOVÉ) ---
 def odeslat_email(prijemce, kod):
@@ -132,23 +134,35 @@ with tab_dotaznik:
             elif reg_email in df["Email"].values:
                 st.error("❌ Tento e-mail je již zaregistrován.")
                 stop_registrace = True
-        if st.button("Dokončit registraci"):
-            # 1. KONTROLA PRÁZDNÝCH POLÍ
+      if st.button("Dokončit registraci"):
+            # 1. KONTROLA PRÁZDNÝCH POLÍ A SHODY
             if not reg_email or not reg_email_potvrzeni or not novy_kod:
                 st.error("Vyplňte prosím všechna pole!")
-            
-            # 2. KONTROLA SHODY E-MAILŮ
             elif reg_email != reg_email_potvrzeni:
-                st.error("Zadané e-maily se neshodují! Zkontrolujte prosím překlepy.")
+                st.error("Zadané e-maily se neshodují!")
+            
+            # 2. STOPKA PŘI DUPLICITĚ (kontrola z tabulky)
+            elif stop_registrace:
+                st.error("Registrace není možná. Tento kód nebo e-mail už v databázi existuje.")
             
             else:
-                # --- TADY BUDE POZDĚJI KONTROLA DUPLICIT Z TABULKY ---
+                # 3. POKUS O ODESLÁNÍ EMAILU
                 status = odeslat_email(reg_email, novy_kod)
+                
                 if status in [200, 202]:
-                    st.success(f"Registrace úspěšná! Kód byl odeslán na {reg_email}.")
+                    # --- ZÁPIS DO TABULKY ---
+                    import pandas as pd
+                    # Vytvoříme nový řádek
+                    novy_radek = pd.DataFrame([{"Email": reg_email, "Kod": novy_kod}])
+                    # Spojíme ho se starými daty
+                    aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
+                    # Odešleme zpět do Google Sheets
+                    conn.update(data=aktualizovana_data)
+                    
+                    st.success(f"Registrace úspěšná! Kód byl odeslán na {reg_email} a uložen do databáze.")
                     st.balloons()
                 else:
-                    st.error(f"E-mail se nepodařilo odeslat. (Chyba {status})")
+                    st.error(f"E-mail se nepodařilo odeslat (Chyba {status}). Registrace nebyla dokončena.")
 
     else:
         st.subheader("Přihlášení")
