@@ -156,22 +156,22 @@ with tab_dotaznik:
             else:
                 status = odeslat_email(reg_email, novy_kod)
                 if status in [200, 202]:
-            import datetime
-            # Tento formát vypíše: Den.Měsíc.Rok Hodina:Minuta:Sekunda
-            registration_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+                    import datetime
+                    # Všechny řádky níže mají přesně 12 mezer od kraje
+                    registration_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+                    novy_radek = pd.DataFrame([{
+                        "Email": reg_email, 
+                        "Code": novy_kod,
+                        "Registration_Date": registration_time,
+                        Topic": "Diplomka_Vyzkum",
+                        "Last_Lesson": "N/A"
+                    }])
+                    # Pozor: proměnná s daty se u tebe jmenuje 'df' (podle řádku 150 na tvém obrázku)
+                    aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
+                    conn.update(worksheet="Sheet1", data=aktualizovana_data)
 
-            # Vytvoření nového řádku
-            novy_radek = pd.DataFrame([{
-                "Email": reg_email, 
-                "Code": novy_kod,
-                "Registration_Date": registration_time, # Tady už je kompletní datum i čas
-                "Topic": "Diplomka_Vyzkum",            # Tady jsem ti rovnou doplnil název tématu
-                "Last_Lesson": "N/A"
-            }])
-
-            # Zápis do tabulky
-            aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
-            conn.update(worksheet="Sheet1", data=aktualizovana_data)
+            st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
+            st.balloons()
                     
                     st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
                     st.balloons()
