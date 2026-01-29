@@ -235,9 +235,9 @@ with tab_dotaznik:
                     vstup_heslo = str(login_pass).strip()
 
                     maska = (
-                        (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
-                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
-                    )
+    (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
+    (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+)
                     uzivatel = df_login[maska]
 
                     if not uzivatel.empty:
