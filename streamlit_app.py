@@ -163,7 +163,7 @@ with tab_dotaznik:
                         "Email": reg_email, 
                         "Code": novy_kod,
                         "Registration_Date": registration_time,
-                        Topic": "Diplomka_Vyzkum",
+                        "Topic": "Diplomka_Vyzkum",
                         "Last_Lesson": "N/A"
                     }])
                     # Pozor: proměnná s daty se u tebe jmenuje 'df' (podle řádku 150 na tvém obrázku)
