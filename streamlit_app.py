@@ -38,7 +38,7 @@ def odeslat_email(prijemce, kod):
             """
         }
         response = requests.post(url, json=data, headers=headers)
-        }
+        
         return response.status_code
     except:
         return "Chyba"
