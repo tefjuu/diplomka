@@ -228,15 +228,12 @@ with tab_dotaznik:
                 st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
-                    # 1. Načtení dat (ttl=0 vynutí čerstvá data z tabulky)
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
 
-                    # 2. Očista vstupů
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
 
-                    # 3. Hledání shody (Email + Heslo) napříč celou tabulkou
                     maska = (
                         (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
                         (df_login["Password"].astype(str).str.strip() == vstup_heslo)
@@ -244,53 +241,69 @@ with tab_dotaznik:
                     uzivatel = df_login[maska]
 
                     if not uzivatel.empty:
-                        # ÚSPĚCH - Uložíme do session_state
                         st.session_state.prihlasen = True
                         st.session_state.muj_email = vstup_email
                         st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
+                        # Tímto řádkem opravíme tu AttributeError chybu:
+                        st.session_state.vybrana_oblast = str(uzivatel.iloc[0]["Topic"]).strip()
                         
                         st.success("🎉 Přihlášení úspěšné!")
                         st.balloons()
                         st.rerun()
                     else:
                         st.error("❌ Nesprávný e-mail nebo heslo.")
-
                 except Exception as e:
                     st.error(f"Chyba při komunikaci s tabulkou: {e}")
+
+# Tady končí tab_dotaznik a začíná tab_lekce (mimo předchozí bloky)
+with tab_lekce:
+    if not st.session_state.get("prihlasen"):
+        st.warning("Pro zobrazení lekcí se nejprve přihlaste v záložce Přihlášení/Registrace.")
+    else:
+        # 1. Získání oblasti (buď z přihlášení, nebo výchozí)
+        oblast = st.session_state.get('vybrana_oblast', 'Diplomka_Vyzkum')
+        st.subheader(f"Vaše cesta: {oblast}")
         
-        # 2. Zobrazení lekcí po výběru oblasti
-        else:
-            st.subheader(f"Vaše cesta: {st.session_state.vybrana_oblast}")
-            dostupna_lekce = ziskej_dostupnou_lekci()
+        # 2. Výpočet, kolikátý je den
+        dostupna_lekce = ziskej_dostupnou_lekci()
+        
+        # 3. Definice obsahu lekcí
+        # (Zde si doplň své skutečné názvy a URL z YouTube)
+        lekce_data = {
+            "Stres": [
+                {"titel": "1. den: Úvod do dýchání", "url": "https://www.youtube.com/watch?v=example1"},
+                {"titel": "2. den: Krabicový dech", "url": "https://www.youtube.com/watch?v=example2"},
+                {"titel": "3. den: Prodloužený výdech", "url": "https://www.youtube.com/watch?v=example3"}
+            ],
+            "Time": [
+                {"titel": "1. den: Prioritizace", "url": "https://www.youtube.com/watch?v=example4"},
+                {"titel": "2. den: Pomodoro technika", "url": "https://www.youtube.com/watch?v=example5"},
+                {"titel": "3. den: Digitální detox", "url": "https://www.youtube.com/watch?v=example6"}
+            ],
+            "Diplomka_Vyzkum": [
+                {"titel": "1. den: Úvodní video", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                {"titel": "2. den: Technika dechu", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+            ]
+        }
+
+        # Načtení konkrétních lekcí pro danou oblast
+        lekce_pro_vysledek = lekce_data.get(oblast, [])
+
+        # 4. Zobrazení lekcí v expanderech
+        for i, lekce in enumerate(lekce_pro_vysledek):
+            cislo_lekce = i + 1
+            stav_ikona = '✅' if dostupna_lekce >= cislo_lekce else '🔒'
             
-            # Definice obsahu lekcí (příklad pro Stres)
-            lekce_data = {
-                "Stres": [
-                    {"titel": "1. den: Úvod do dýchání", "url": "https://www.youtube.com/watch?v=example1"},
-                    {"titel": "2. den: Krabicový dech", "url": "https://www.youtube.com/watch?v=example2"},
-                    {"titel": "3. den: Prodloužený výdech", "url": "https://www.youtube.com/watch?v=example3"}
-                ],
-                "Time": [
-                    {"titel": "1. den: Prioritizace", "url": "https://www.youtube.com/watch?v=example4"},
-                    {"titel": "2. den: Pomodoro technika", "url": "https://www.youtube.com/watch?v=example5"},
-                    {"titel": "3. den: Digitální detox", "url": "https://www.youtube.com/watch?v=example6"}
-                ]
-            }
+            with st.expander(f"{stav_ikona} {lekce['titel']}"):
+                if dostupna_lekce >= cislo_lekce:
+                    st.write(f"Vítejte u {cislo_lekce}. lekce!")
+                    st.video(lekce['url'])
+                    if st.button(f"Označit lekci {cislo_lekce} za hotovou", key=f"done_{cislo_lekce}"):
+                        st.success("Skvělá práce! Pokrok byl zaznamenán.")
+                else:
+                    st.info(f"Tato lekce se odemkne až {cislo_lekce}. den výzkumu.")
 
-            oblast = st.session_state.vybrana_oblast
-            lekce_pro_vysledek = lekce_data.get(oblast, [])
-
-            for i, lekce in enumerate(lekce_pro_vysledek):
-                cislo_lekce = i + 1
-                with st.expander(f"{lekce['titel']} {'✅' if dostupna_lekce >= cislo_lekce else '🔒'}"):
-                    if dostupna_lekce >= cislo_lekce:
-                        st.write(f"Vítejte u {cislo_lekce}. lekce!")
-                        st.video(lekce['url'])
-                        if st.button(f"Označit lekci {cislo_lekce} za hotovou", key=f"done_{cislo_lekce}"):
-                            st.success("Skvělá práce!")
-                    else:
-                        st.info(f"Tato lekce se odemkne až {cislo_lekce}. den výzkumu.")
-
-            if st.button("Změnit zaměření (reset)", key="reset_oblast"):
-                del st.session_state.vybrana_oblast
-                st.rerun()
+        # Tlačítko pro odhlášení (volitelné)
+        if st.button("Odhlásit se", key="logout_btn"):
+            st.session_state.prihlasen = False
+            st.rerun()
