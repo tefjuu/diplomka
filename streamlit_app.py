@@ -231,13 +231,13 @@ with tab_dotaznik:
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
 
-                    vstup_email = str(login_email).lower().strip()
+                    vstup_email = str(login_email).strip().lower()
                     vstup_heslo = str(login_pass).strip()
 
                     maska = (
-    (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
-    (df_login["Password"].astype(str).str.strip() == vstup_heslo)
-)
+                        (df_login["Email"].astype(str).str.strip().str.lower() == vstup_email) & 
+                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+                    )
                     uzivatel = df_login[maska]
 
                     if not uzivatel.empty:
