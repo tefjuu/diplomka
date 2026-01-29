@@ -138,8 +138,41 @@ with tab_dotaznik:
                     if email_cisty in df_aktualni["Email"].values:
                         st.error("❌ Tento e-mail už je zaregistrován. Přejděte k přihlášení.")
                         vse_ok = False
-                    elif kod_cisty in df_aktualni["Code"].values:
-        if st.button("Dokončit registraci", key="final_reg_btn"):
+                    # Řádek 141: Kontrola, zda kód už v tabulce existuje
+                elif kod_cisty in df_aktualni["Code"].values:
+                    st.error("⚠️ Tento kód už někdo používá. Upravte si jej.")
+                    vse_ok = False
+
+            # TLAČÍTKO - Teď už je odsazené správně a mimo podmínky výše
+            if st.button("Dokončit registraci", key="final_reg_btn"):
+                if vse_ok:
+                    try:
+                        import datetime
+                        reg_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+                        
+                        novy_radek = pd.DataFrame([{
+                            "Email": email_cisty, 
+                            "Code": kod_cisty,
+                            "Registration_Date": reg_time,
+                            "Topic": "Diplomka_Vyzkum",
+                            "Last_Lesson": "N/A"
+                        }])
+                        
+                        # Zápis do tabulky
+                        nova_data = pd.concat([df_aktualni, novy_radek], ignore_index=True)
+                        conn.update(worksheet="List 1", data=nova_data)
+                        
+                        # Odeslání emailu
+                        status = odeslat_email(email_cisty, kod_cisty)
+                        
+                        if status in [200, 202]:
+                            # ZDE JE TA STOPKA: Nastavíme, že je hotovo, a stránka se překreslí bez formuláře
+                            st.session_state.registrace_dokoncena = True
+                            st.rerun() 
+                        else:
+                            st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
+                    except Exception as e:
+                        st.error("Chyba při ukládání. Zkuste to prosím znovu.")
             
             # 1. POKUS O NAČTENÍ DAT (S opravou na "List 1")
             try:
