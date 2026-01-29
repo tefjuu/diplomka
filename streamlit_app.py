@@ -229,15 +229,16 @@ with tab_dotaznik:
                 st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
+                    # 1. Načtení dat (vždy čerstvá)
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # Příprava vstupů od uživatele
+                    # 2. Očista vstupů od uživatele
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
 
-                    # HLEDÁNÍ V CELÉ TABULCE:
-                    # Vytvoříme masku, která projde každý řádek a hledá shodu e-mailu i hesla
+                    # 3. HLEDÁNÍ V TABULCE (prohledá všechny řádky)
+                    # Vynutíme, aby Pandas bral sloupce jako text a očistil je
                     maska = (
                         (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
                         (df_login["Password"].astype(str).str.strip() == vstup_heslo)
@@ -245,10 +246,10 @@ with tab_dotaznik:
                     uzivatel = df_login[maska]
                     
                     if not uzivatel.empty:
-                        # NAŠLI JSME SHODU (v jakémkoliv řádku)
+                        # ÚSPĚCH!
                         st.session_state.prihlasen = True
                         st.session_state.muj_email = vstup_email
-                        # Vytáhneme kód z toho konkrétního řádku, kde seděl e-mail a heslo
+                        # Vytáhneme kód z toho konkrétního řádku (iloc[0] vezme první nalezený)
                         st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
                         
                         st.success("🎉 Přihlášení úspěšné!")
@@ -256,9 +257,9 @@ with tab_dotaznik:
                         st.rerun()
                     else:
                         st.error("❌ Nesprávný e-mail nebo heslo.")
+                        
                 except Exception as e:
-                    st.error(f"Chyba při ověřování: {e}")
-
+                    st.error(f"Chyba při komunikaci s tabulkou: {e}")
 with tab_lekce:
     if not st.session_state.get("prihlasen", False):
         st.warning("Přihlaste se prosím v záložce '📊 Přihlášení/Registrace'.")
