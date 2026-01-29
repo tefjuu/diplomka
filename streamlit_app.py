@@ -78,20 +78,20 @@ with tab_dotaznik:
     st.divider()
 
     if rezim == "Chci se zaregistrovat":
-        # 1. KONTROLA STAVU (Schová formulář po úspěchu)
+        # 1. KONTROLA STAVU (Zabrání opakovanému odesílání)
         if st.session_state.get("registrace_dokoncena", False):
             st.success("### 🎉 Registrace proběhla úspěšně!")
-            st.info("Na Váš e-mail jsme poslali potvrzení. Nyní se prosím přepněte nahoře na **'Už mám svůj kód'**.")
+            st.info("Na Váš e-mail jsme poslali potvrzení. Nyní se prosím přepněte nahoře na **'Už mám svůj kód'** a přihlaste se.")
             st.balloons()
         
         else:
             st.subheader("Nová registrace")
             
-            # Načtení dat z tabulky (pouze jednou)
+            # Načtení dat (ošetřené proti chybám připojení)
             try:
                 conn = st.connection("gsheets", type=GSheetsConnection)
                 df_aktualni = conn.read(worksheet="List 1")
-            except:
+            except Exception:
                 df_aktualni = pd.DataFrame(columns=["Email", "Code", "Registration_Date", "Topic", "Last_Lesson"])
 
             col1, col2 = st.columns(2)
@@ -100,7 +100,6 @@ with tab_dotaznik:
             with col2:
                 reg_email_potvrzeni = st.text_input("E-mail znovu:", key="reg_email_confirm").strip()
             
-            # Okamžitá vizuální kontrola shody
             if reg_email and reg_email_potvrzeni:
                 if reg_email == reg_email_potvrzeni:
                     st.success("✅ E-maily se shodují")
@@ -110,18 +109,17 @@ with tab_dotaznik:
             st.markdown("""
             <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
                 <b>Váš unikátní kód si vytvořte takto:</b><br>
-                1. První 2 písmena jména (TE), 2. Den narození (02), 3. Poslední 2 čísla tel. (42), 4. První 2 písmena jména matky (JU).<br>
-                <i>Výsledný kód: <b>TE0242JU</b></i>
+                1. První 2 písmena jména, 2. Den narození, 3. Poslední 2 čísla tel., 4. První 2 písmena jména matky.<br>
+                <i>Příklad: <b>TE0242JU</b></i>
             </div>
             """, unsafe_allow_html=True)
             
             novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field", max_chars=8).upper().strip()
 
-            # JEDINÉ TLAČÍTKO PRO REGISTRACI
+            # TLAČÍTKO PRO REGISTRACI (Pouze jedno)
             if st.button("Dokončit registraci", key="final_reg_btn"):
                 vse_ok = True
                 
-                # Kontroly před odesláním
                 if not reg_email or not novy_kod:
                     st.error("Vyplňte prosím všechna pole.")
                     vse_ok = False
@@ -136,35 +134,102 @@ with tab_dotaznik:
                         st.error("⚠️ Tento kód už někdo používá.")
                         vse_ok = False
 
-                # Pokud je vše v pořádku, provedeme zápis a e-mail
                 if vse_ok:
                     try:
                         import datetime
                         reg_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
-                        novy_radek
+                        novy_radek = pd.DataFrame([{
+                            "Email": reg_email, 
+                            "Code": novy_kod,
+                            "Registration_Date": reg_time,
+                            "Topic": "Diplomka_Vyzkum",
+                            "Last_Lesson": "N/A"
+                        }])
+                        
+                        # Zápis do Google Sheets (List 1)
+                        nova_data = pd.concat([df_aktualni, novy_radek], ignore_index=True)
+                        conn.update(worksheet="List 1", data=nova_data)
+                        
+                        # Odeslání e-mailu
+                        status = odeslat_email(reg_email, novy_kod)
+                        
+                        if status in [200, 202]:
+                            st.session_state.registrace_dokoncena = True
+                            st.rerun() 
+                        else:
+                            st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
+                    except Exception as e:
+                        st.error(f"Chyba při ukládání: {e}")
+
     else:
+        # SEKCE PŘIHLÁŠENÍ (Už mám svůj kód)
         st.subheader("Přihlášení")
-        login_kod = st.text_input("Zadejte kód:", key="login_field").upper()
+        login_kod = st.text_input("Zadejte kód:", key="login_field").upper().strip()
+        
         if st.button("Vstoupit", key="login_btn"):
-            if login_kod:
-                st.session_state.prihlasen = True
-                st.session_state.moje_id = login_kod
-                st.success("Vítejte!")
-            else:
-                st.error("Zadejte kód!")
+            try:
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                df_login = conn.read(worksheet="List 1")
+                
+                if login_kod in df_login["Code"].values:
+                    st.session_state.prihlasen = True
+                    st.session_state.moje_id = login_kod
+                    st.success("Vítejte! Nyní můžete přejít na záložku Lekce.")
+                else:
+                    st.error("Tento kód neexistuje. Zaregistrujte se prosím.")
+            except:
+                st.error("Chyba při ověřování kódu.")
 
 with tab_lekce:
     if not st.session_state.get("prihlasen", False):
-        st.warning("Přihlaste se prosím.")
+        st.warning("Přihlaste se prosím v záložce '📊 Přihlášení/Registrace'.")
     else:
+        # 1. Výběr oblasti, pokud ještě není vybrána
         if 'vybrana_oblast' not in st.session_state:
             st.header("Vyberte si zaměření")
-            if st.button("🚀 Stres a úzkost", key="btn_stres", use_container_width=True):
-                st.session_state.vybrana_oblast = "Stres"
-                st.rerun()
-            if st.button("⏰ Time-management", key="btn_time", use_container_width=True):
-                st.session_state.vybrana_oblast = "Time"
-                st.rerun()
+            col_a, col_b = st.columns(2)
+            with col_a:
+                if st.button("🚀 Stres a úzkost", key="btn_stres", use_container_width=True):
+                    st.session_state.vybrana_oblast = "Stres"
+                    st.rerun()
+            with col_b:
+                if st.button("⏰ Time-management", key="btn_time", use_container_width=True):
+                    st.session_state.vybrana_oblast = "Time"
+                    st.rerun()
+        
+        # 2. Zobrazení lekcí po výběru oblasti
         else:
             st.subheader(f"Vaše cesta: {st.session_state.vybrana_oblast}")
-            # ... zbytek lekcí (stejný jako dříve)
+            dostupna_lekce = ziskej_dostupnou_lekci()
+            
+            # Definice obsahu lekcí (příklad pro Stres)
+            lekce_data = {
+                "Stres": [
+                    {"titel": "1. den: Úvod do dýchání", "url": "https://www.youtube.com/watch?v=example1"},
+                    {"titel": "2. den: Krabicový dech", "url": "https://www.youtube.com/watch?v=example2"},
+                    {"titel": "3. den: Prodloužený výdech", "url": "https://www.youtube.com/watch?v=example3"}
+                ],
+                "Time": [
+                    {"titel": "1. den: Prioritizace", "url": "https://www.youtube.com/watch?v=example4"},
+                    {"titel": "2. den: Pomodoro technika", "url": "https://www.youtube.com/watch?v=example5"},
+                    {"titel": "3. den: Digitální detox", "url": "https://www.youtube.com/watch?v=example6"}
+                ]
+            }
+
+            oblast = st.session_state.vybrana_oblast
+            lekce_pro_vysledek = lekce_data.get(oblast, [])
+
+            for i, lekce in enumerate(lekce_pro_vysledek):
+                cislo_lekce = i + 1
+                with st.expander(f"{lekce['titel']} {'✅' if dostupna_lekce >= cislo_lekce else '🔒'}"):
+                    if dostupna_lekce >= cislo_lekce:
+                        st.write(f"Vítejte u {cislo_lekce}. lekce!")
+                        st.video(lekce['url'])
+                        if st.button(f"Označit lekci {cislo_lekce} za hotovou", key=f"done_{cislo_lekce}"):
+                            st.success("Skvělá práce!")
+                    else:
+                        st.info(f"Tato lekce se odemkne až {cislo_lekce}. den výzkumu.")
+
+            if st.button("Změnit zaměření (reset)", key="reset_oblast"):
+                del st.session_state.vybrana_oblast
+                st.rerun()
