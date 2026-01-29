@@ -112,7 +112,7 @@ with tab_dotaznik:
         """, unsafe_allow_html=True)
         
         # Vstup pro kód
-        novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field").upper().strip()
+        novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field", max_chars=8).upper().strip()
 
         # --- KONTROLA DÉLKY (8 ZNAKŮ) ---
         kod_je_spravne_dlouhy = False
