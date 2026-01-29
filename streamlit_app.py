@@ -213,7 +213,7 @@ with tab_dotaznik:
                             st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
                     except Exception as e:
                         st.error(f"Chyba při ukládání: {e}")
-else:
+    else:
         # --- SEKCE PŘIHLÁŠENÍ ---
         st.subheader("Přihlášení do výzkumu")
         
