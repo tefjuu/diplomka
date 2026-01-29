@@ -215,7 +215,8 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-        # --- SEKCE PŘIHLÁŠENÍ (Už mám svůj kód) ---
+        else:
+        # --- SEKCE PŘIHLÁŠENÍ (Jen e-mail a heslo) ---
         st.subheader("Přihlášení do výzkumu")
         
         col_l1, col_l2 = st.columns(2)
@@ -224,39 +225,36 @@ with tab_dotaznik:
         with col_l2:
             login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
         
-        login_kod = st.text_input("Tvůj unikátní kód:", key="login_code_field").upper().strip()
-        
+        # Tlačítko na celou šířku
         if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
-            if not login_email or not login_pass or not login_kod:
-                st.warning("Vyplňte prosím všechna pole.")
+            if not login_email or not login_pass:
+                st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # --- OPRAVA ZAČÍNÁ ZDE ---
-                    # Příprava vstupů (všechno na malá/velká a bez mezer)
+                    # Očista vstupů
                     vstup_email = login_email.lower().strip()
                     vstup_heslo = login_pass.strip()
-                    vstup_kod = login_kod.upper().strip()
 
-                    # Hledáme řádek - u Emailu dáváme .str.lower(), aby se ignorovala velikost písmen
+                    # Hledáme shodu pouze Email + Heslo
                     uzivatel = df_login[
                         (df_login["Email"].str.lower().str.strip() == vstup_email) & 
-                        (df_login["Password"].astype(str).str.strip() == vstup_heslo) & 
-                        (df_login["Code"].str.strip() == vstup_kod)
+                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
                     ]
-                    # --- OPRAVA KONČÍ ZDE ---
                     
                     if not uzivatel.empty:
+                        # Uložíme si kód z tabulky do session_state, abychom s ním mohli dál pracovat
                         st.session_state.prihlasen = True
-                        st.session_state.moje_id = vstup_kod
                         st.session_state.muj_email = vstup_email
-                        st.success(f"Vítejte zpět! Nyní můžete přejít na záložku Lekce.")
+                        st.session_state.moje_id = uzivatel.iloc[0]["Code"] 
+                        
+                        st.success("🎉 Přihlášení proběhlo úspěšně!")
                         st.balloons()
-                        st.rerun() # Přidáno pro okamžitý skok do aplikace
+                        st.rerun()
                     else:
-                        st.error("❌ Nesprávný e-mail, heslo nebo kód. Zkontrolujte prosím údaje.")
+                        st.error("❌ Nesprávný e-mail nebo heslo. Zkontrolujte prosím údaje.")
                 except Exception as e:
                     st.error(f"Chyba při ověřování: {e}")
 
