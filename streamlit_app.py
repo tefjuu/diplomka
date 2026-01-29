@@ -38,7 +38,7 @@ CAS_ODEMCENI = time(9, 0)
 
 # OPRAVA CHYBY Z OBRÁZKU: Přidána uzavírací závorka )
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
-st.title("🧘 Výzkum: Vliv dechových cvičení")
+st.title("🧘 Výzkum: Podpůrné intervence na redukci stresu")
 
 # --- 3. CSS STYLY (Zelené orámování a vzhled tlačítek) ---
 st.markdown("""
@@ -71,10 +71,10 @@ tab_uvod, tab_dotaznik, tab_lekce = st.tabs(["🏠 Úvod", "📊 Přihlášení/
 
 with tab_uvod:
     st.header("Vítejte v programu")
-    st.write("Tato aplikace je součástí výzkumu k diplomové práci.")
+    st.write("Tato webová aplikace je součástí výzkumu k diplomové práci.")
 
 with tab_dotaznik:
-    rezim = st.radio("Jste zde poprvé?", ["Chci se zaregistrovat", "Už mám kód"], horizontal=True, key="main_rezim")
+    rezim = st.radio("Jste zde poprvé?", ["Chci se zaregistrovat", "Už mám svůj kód"], horizontal=True, key="main_rezim")
     st.divider()
 
     if rezim == "Chci se zaregistrovat":
@@ -103,14 +103,14 @@ with tab_dotaznik:
         st.markdown("""
         <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
             <b>Váš unikátní kód si vytvořte takto:</b><br>
-            1. První 2 písmena jména (Tereza -> <b>TE</b>)<br>
-            2. Den narození (vždy 2 cifry, 2. den -> <b>02</b>)<br>
-            3. Poslední 2 čísla mobilu (...89 -> <b>89</b>)<br>
-            <i>Výsledek: <b>TE0289</b></i>
+            1. První 2 písmena vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
+            2. Den Vašeho narození (vždy pište 2 cifry, např. jste se narodil/ 2. září -> <b>02</b>)<br>
+            3. Poslední 2 cifry Vašeho tel. čísla např 0911 564 742 (...42 -> <b>89</b>)<br>
+            <i>Výsledný kód: <b>TE0242</b></i>
         </div>
         """, unsafe_allow_html=True)
         
-        novy_kod = st.text_input("Vytvořte si svůj kód:", key="reg_kod_field").upper()
+        novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field").upper()
 
         # Kontrola duplicit
         stop_registrace = False
