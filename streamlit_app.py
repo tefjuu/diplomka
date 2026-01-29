@@ -96,29 +96,42 @@ with tab_dotaznik:
     if rezim == "Chci se zaregistrovat":
         st.subheader("Nová registrace")
         
-        # Dvě políčka pro e-mail vedle sebe
+        # 1. Navázání spojení s tabulkou (pomocí odkazu ze Secrets)
+        conn = st.connection("gsheets", type="gsheets")
+        
+        # 2. Načtení dat z tabulky
+        try:
+            df = conn.read()
+        except:
+            # Pokud je tabulka prázdná, vytvoříme prázdný "stůl" se správnými sloupci
+            import pandas as pd
+            df = pd.DataFrame(columns=["Email", "Kod"])
+
+        # --- Zde následují tvá políčka pro e-maily a kód ---
         col1, col2 = st.columns(2)
         with col1:
-            reg_email = st.text_input("Zadejte svůj e-mail:")
+            reg_email = st.text_input("Zadejte svůj e-mail:", key="email_1")
         with col2:
-            reg_email_potvrzeni = st.text_input("Zadejte e-mail znovu pro kontrolu:")
+            reg_email_potvrzeni = st.text_input("Zadejte e-mail znovu:", key="email_2")
 
-        # --- NOVÁ ČÁST: OKAMŽITÁ KONTROLA SHODY ---
+        # Okamžitá kontrola e-mailů (proužky)
         if reg_email and reg_email_potvrzeni:
             if reg_email == reg_email_potvrzeni:
                 st.success("✅ E-maily se shodují")
             else:
                 st.error("❌ E-maily se neshodují")
-        
-        st.info("""
-        **Váš unikátní kód si vytvořte takto:**
-        1. První 2 písmena jména (Tereza -> **TE**)
-        2. Den narození (vždy 2 cifry, 2. den -> **02**)
-        3. Poslední 2 čísla mobilu (...89 -> **89**)
-        """)
-        
+
         novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
-        
+
+        # --- KONTROLA DUPLICITY V TABULCE ---
+        stop_registrace = False
+        if novy_kod and not df.empty:
+            if novy_kod in df["Kod"].values:
+                st.error("❌ Tento kód je již použit – kontaktujte vedoucího výzkumu.")
+                stop_registrace = True
+            elif reg_email in df["Email"].values:
+                st.error("❌ Tento e-mail je již zaregistrován.")
+                stop_registrace = True
         if st.button("Dokončit registraci"):
             # 1. KONTROLA PRÁZDNÝCH POLÍ
             if not reg_email or not reg_email_potvrzeni or not novy_kod:
