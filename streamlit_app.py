@@ -125,7 +125,8 @@ with tab_dotaznik:
 
         novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
 
-        # --- KONTROLA DUPLICITY V TABULCE ---
+      
+       # --- KONTROLA DUPLICITY V TABULCE ---
         stop_registrace = False
         if novy_kod and not df.empty:
             if novy_kod in df["Kod"].values:
@@ -134,20 +135,33 @@ with tab_dotaznik:
             elif reg_email in df["Email"].values:
                 st.error("❌ Tento e-mail je již zaregistrován.")
                 stop_registrace = True
-      if st.button("Dokončit registraci"):
+
+        # TLAČÍTKO - všimni si, že začíná na stejné úrovni jako "stop_registrace" výše
+        if st.button("Dokončit registraci", key="btn_registrace_final"):
             # 1. KONTROLA PRÁZDNÝCH POLÍ A SHODY
             if not reg_email or not reg_email_potvrzeni or not novy_kod:
                 st.error("Vyplňte prosím všechna pole!")
             elif reg_email != reg_email_potvrzeni:
                 st.error("Zadané e-maily se neshodují!")
             
-            # 2. STOPKA PŘI DUPLICITĚ (kontrola z tabulky)
+            # 2. STOPKA PŘI DUPLICITĚ
             elif stop_registrace:
                 st.error("Registrace není možná. Tento kód nebo e-mail už v databázi existuje.")
             
             else:
                 # 3. POKUS O ODESLÁNÍ EMAILU
                 status = odeslat_email(reg_email, novy_kod)
+                if status in [200, 202]:
+                    # ZÁPIS DO TABULKY
+                    import pandas as pd
+                    novy_radek = pd.DataFrame([{"Email": reg_email, "Kod": novy_kod}])
+                    aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
+                    conn.update(data=aktualizovana_data)
+                    
+                    st.success(f"Registrace úspěšná! Kód byl odeslán na {reg_email}.")
+                    st.balloons()
+                else:
+                    st.error(f"E-mail se nepodařilo odeslat (Chyba {status}).")
                 
                 if status in [200, 202]:
                     # --- ZÁPIS DO TABULKY ---
