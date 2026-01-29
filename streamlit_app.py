@@ -169,13 +169,10 @@ with tab_dotaznik:
                     # Pozor: proměnná s daty se u tebe jmenuje 'df' (podle řádku 150 na tvém obrázku)
                     aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
                     conn.update(worksheet="Sheet1", data=aktualizovana_data)
-
-            st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
-            st.balloons()
                     
             st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
             st.balloons()
-                else:
+            else:
                     st.error(f"Chyba při odesílání e-mailu (kód chyby: {status}). Zkuste to prosím později.")
 
     else:
