@@ -118,8 +118,6 @@ st.markdown("""
     <i>Vzorový kód: <b>TE0242JU</b></i>
 </div>
 """, unsafe_allow_html=True)
-            
-
             st.markdown("""
             <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
                 <b>Váš unikátní kód si vytvořte takto:</b><br>
