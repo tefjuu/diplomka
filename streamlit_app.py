@@ -129,18 +129,7 @@ with tab_dotaznik:
                     st.balloons()
                 else:
                     st.error(f"E-mail se nepodařilo odeslat. (Chyba {status})")
-        
-        if st.button("Dokončit registraci"):
-            if reg_email and novy_kod:
-                # --- OPRAVENÉ PROPOJENÍ NA MAIL ---
-                status = odeslat_email(reg_email, novy_kod)
-                if status in [200, 202]:
-                    st.success(f"Registrace úspěšná! Na e-mail {reg_email} byl odeslán váš kód: {novy_kod}")
-                    st.balloons()
-                else:
-                    st.error(f"E-mail se nepodařilo odeslat. (Chyba {status}). Máte správně Secrets?")
-            else:
-                st.error("Vyplňte prosím e-mail i kód!")
+
 
     else:
         st.subheader("Přihlášení")
