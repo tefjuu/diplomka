@@ -16,20 +16,18 @@ def odeslat_email(prijemce, kod):
             "from": {"email": st.secrets["MAILERSEND_SENDER"], "name": "Výzkum: Diplomová práce"},
             "to": [{"email": prijemce}],
             "subject": "Tvůj unikátní kód pro výzkum",
-            "html": f"""
-                <div style="font-family: sans-serif; line-height: 1.5; color: #333;">
-                    <p>Dobrý den,</p>
-                    <p>děkujeme za zapojení do výzkumu. Tvůj unikátní kód je: 
-                    <b style="color: #4CAF50; font-size: 1.2em;">{kod}</b></p>
-                    <p><a href="https://vyzkum-diplomka.streamlit.app/" 
-                    style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
-                    VSTOUPIT DO APLIKACE</a></p>
-                </div>
-            """
+            "html": f"Dobrý den, tvůj kód je: <b>{kod}</b>"
         }
         response = requests.post(url, json=data, headers=headers)
+        
+        # Pokud status není OK, vypiš chybu přímo na obrazovku
+        if response.status_code not in [200, 202]:
+            st.error(f"❌ MailerSend Error: {response.status_code} - {response.text}")
+            
         return response.status_code
-    except:
+    except Exception as e:
+        # Pokud spadne samotný Python (např. chybí knihovna requests)
+        st.error(f"🔥 Kritická chyba v kódu: {e}")
         return "Chyba"
 
 # --- 2. KONFIGURACE VÝZKUMU ---
