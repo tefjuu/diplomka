@@ -231,23 +231,30 @@ with tab_dotaznik:
                 st.warning("Vyplňte prosím všechna pole.")
             else:
                 try:
-                    # Načtení aktuálních dat s ttl=0, abychom viděli i čerstvé registrace
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # Hledáme řádek, kde sedí Email, Heslo i Kód zároveň
+                    # --- OPRAVA ZAČÍNÁ ZDE ---
+                    # Příprava vstupů (všechno na malá/velká a bez mezer)
+                    vstup_email = login_email.lower().strip()
+                    vstup_heslo = login_pass.strip()
+                    vstup_kod = login_kod.upper().strip()
+
+                    # Hledáme řádek - u Emailu dáváme .str.lower(), aby se ignorovala velikost písmen
                     uzivatel = df_login[
-                        (df_login["Email"] == login_email) & 
-                        (df_login["Password"] == login_pass) & 
-                        (df_login["Code"] == login_kod)
+                        (df_login["Email"].str.lower().str.strip() == vstup_email) & 
+                        (df_login["Password"].astype(str).str.strip() == vstup_heslo) & 
+                        (df_login["Code"].str.strip() == vstup_kod)
                     ]
+                    # --- OPRAVA KONČÍ ZDE ---
                     
                     if not uzivatel.empty:
                         st.session_state.prihlasen = True
-                        st.session_state.moje_id = login_kod
-                        st.session_state.muj_email = login_email
+                        st.session_state.moje_id = vstup_kod
+                        st.session_state.muj_email = vstup_email
                         st.success(f"Vítejte zpět! Nyní můžete přejít na záložku Lekce.")
                         st.balloons()
+                        st.rerun() # Přidáno pro okamžitý skok do aplikace
                     else:
                         st.error("❌ Nesprávný e-mail, heslo nebo kód. Zkontrolujte prosím údaje.")
                 except Exception as e:
