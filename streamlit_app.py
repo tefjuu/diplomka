@@ -11,11 +11,27 @@ def odeslat_email(prijemce, kod):
             "Authorization": f"Bearer {st.secrets['MAILERSEND_API_KEY']}"
         }
         data = {
-            "from": {"email": st.secrets["MAILERSEND_SENDER"], "name": "Vyzkum Dech"},
+            "from": {
+                "email": st.secrets["MAILERSEND_SENDER"], 
+                "name": "Výzkum: Diplomová práce"
+            },
             "to": [{"email": prijemce}],
-            "subject": "Tvůj kód pro přihlášení",
-            "text": f"Dobrý den, tvůj unikátní kód pro výzkum je: {kod}"
-        }
+            "subject": "Tvůj unikátní kód pro výzkum",
+            "text": (
+                f"Dobrý den,\n\n"
+                f"děkujeme za zapojení do výzkumu k diplomové práci. Tvůj unikátní kód pro přihlášení je: {kod}\n\n"
+                f"Do aplikace s lekcemi se můžeš kdykoliv vrátit kliknutím na tento odkaz:\n"
+                f"https://vyzkum-diplomka.streamlit.app/\n\n"
+                f"Doporučujeme si tento e-mail uložit pro budoucí přihlášení."
+            ),
+            "html": (
+                f"<div style='font-family: sans-serif; line-height: 1.5; color: #333;'>"
+                f"<p>Dobrý den,</p>"
+                f"<p>děkujeme za zapojení do výzkumu k diplomové práci. Tvůj unikátní kód pro přihlášení je: "
+                f"<span style='font-size: 1.2em; font-weight: bold; color: #4CAF50;'>{kod}</span></p>"
+                f"<p>Do aplikace s lekcemi se můžeš kdykoliv vrátit kliknutím na odkaz níže:</p>"
+                f"<p><a href='https://vyzkum-diplomka.streamlit.app/' "
+                f"style='display: inline-block; padding: 10px 20px; background-color: #4CAF50
         response = requests.post(url, json=data, headers=headers)
         return response.status_code
     except:
