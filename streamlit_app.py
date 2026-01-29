@@ -128,10 +128,13 @@ with tab_dotaznik:
         stop_registrace = False
         if novy_kod and not df.empty:
             if novy_kod in df["Kod"].values:
-                st.error("❌ Tento kód už existuje.")
+                st.error("""
+                    ⚠️ **Tento kód už je obsazený.** Zkuste jej prosím mírně upravit (např. místo 1. a 2. písmene jména použijte 1. a 3.). 
+                    Kód vám po registraci pošleme e-mailem, takže si novou verzi nemusíte složitě pamatovat.
+                """)
                 stop_registrace = True
             elif reg_email in df["Email"].values:
-                st.error("❌ Tento e-mail už je registrovaný.")
+                st.error("❌ Tento e-mail už je zaregistrován.")
                 stop_registrace = True
 
         # TLAČÍTKO - přidána kontrola délky (kod_je_spravne_dlouhy)
