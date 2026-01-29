@@ -102,6 +102,13 @@ with tab_dotaznik:
             reg_email = st.text_input("Zadejte svůj e-mail:")
         with col2:
             reg_email_potvrzeni = st.text_input("Zadejte e-mail znovu pro kontrolu:")
+
+        # --- NOVÁ ČÁST: OKAMŽITÁ KONTROLA SHODY ---
+        if reg_email and reg_email_potvrzeni:
+            if reg_email == reg_email_potvrzeni:
+                st.success("✅ E-maily se shodují")
+            else:
+                st.error("❌ E-maily se neshodují")
         
         st.info("""
         **Váš unikátní kód si vytvořte takto:**
@@ -129,7 +136,6 @@ with tab_dotaznik:
                     st.balloons()
                 else:
                     st.error(f"E-mail se nepodařilo odeslat. (Chyba {status})")
-
 
     else:
         st.subheader("Přihlášení")
