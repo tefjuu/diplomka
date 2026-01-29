@@ -217,45 +217,44 @@ with tab_dotaznik:
         # --- SEKCE PŘIHLÁŠENÍ ---
         st.subheader("Přihlášení do výzkumu")
         
-        col_l1, col_l2 = st.columns(2)
-        with col_l1:
-            login_email = st.text_input("E-mail:", key="login_email_field").strip()
-        with col_l2:
-            login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
+        login_email = st.text_input("E-mail:", key="login_email_field").strip()
+        login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
         
         if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
-            if not login_email or not login_pass:
-                st.warning("Vyplňte prosím e-mail a heslo.")
-            else:
-                try:
-                    conn = st.connection("gsheets", type=GSheetsConnection)
-                    df_login = conn.read(worksheet="List 1", ttl=0)
+            try:
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                df_login = conn.read(worksheet="List 1", ttl=0)
+                
+                # Odstranění prázdných řádků a mezer z názvů sloupců
+                df_login.columns = df_login.columns.str.strip()
+                df_login = df_login.dropna(subset=["Email", "Password"])
 
-                    vstup_email = str(login_email).strip().lower()
-                    vstup_heslo = str(login_pass).strip()
+                vstup_email = str(login_email).lower().strip()
+                vstup_heslo = str(login_pass).strip()
 
-                    maska = (
-                        (df_login["Email"].astype(str).str.strip().str.lower() == vstup_email) & 
-                        (df_login["Password"].astype(str).str.strip() == vstup_heslo)
-                    )
-                    uzivatel = df_login[maska]
+                # DIAGNOSTIKA: Vypíše nám to, co aplikace reálně vidí
+                st.write("DEBUG - Data v tabulce (Email | Heslo):")
+                st.write(df_login[["Email", "Password"]].astype(str).values.tolist())
 
-                    if not uzivatel.empty:
-                        st.session_state.prihlasen = True
-                        st.session_state.muj_email = vstup_email
-                        st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
-                        # Tímto řádkem opravíme tu AttributeError chybu:
-                        st.session_state.vybrana_oblast = str(uzivatel.iloc[0]["Topic"]).strip()
-                        
-                        st.success("🎉 Přihlášení úspěšné!")
-                        st.balloons()
-                        st.rerun()
-                    else:
-                        st.error("❌ Nesprávný e-mail nebo heslo.")
-                except Exception as e:
-                    st.error(f"Chyba při komunikaci s tabulkou: {e}")
+                # Hledání shody
+                maska = (
+                    (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
+                    (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+                )
+                uzivatel = df_login[maska]
 
-# Tady končí tab_dotaznik a začíná tab_lekce (mimo předchozí bloky)
+                if not uzivatel.empty:
+                    st.session_state.prihlasen = True
+                    st.session_state.muj_email = vstup_email
+                    st.session_state.moje_id = str(uzivatel.iloc[0]["Code"])
+                    st.session_state.vybrana_oblast = str(uzivatel.iloc[0]["Topic"])
+                    st.success("🎉 Přihlášení úspěšné!")
+                    st.balloons()
+                    st.rerun()
+                else:
+                    st.error("❌ Nesprávný e-mail nebo heslo.")
+            except Exception as e:
+                st.error(f"Chyba: {e}")
 with tab_lekce:
     if not st.session_state.get("prihlasen"):
         st.warning("Pro zobrazení lekcí se nejprve přihlaste v záložce Přihlášení/Registrace.")
