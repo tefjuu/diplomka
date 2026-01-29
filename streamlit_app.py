@@ -213,48 +213,62 @@ with tab_dotaznik:
                             st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
                     except Exception as e:
                         st.error(f"Chyba při ukládání: {e}")
-    else:
+od přihlášení po konec kodování:    
+else:
         # --- SEKCE PŘIHLÁŠENÍ ---
         st.subheader("Přihlášení do výzkumu")
         
-        login_email = st.text_input("E-mail:", key="login_email_field").strip()
-        login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
+        col_l1, col_l2 = st.columns(2)
+        with col_l1:
+            login_email = st.text_input("E-mail:", key="login_email_field").strip()
+        with col_l2:
+            login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
         
         if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
-            try:
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                df_login = conn.read(worksheet="List 1", ttl=0)
-                
-                # Odstranění prázdných řádků a mezer z názvů sloupců
-                df_login.columns = df_login.columns.str.strip()
-                df_login = df_login.dropna(subset=["Email", "Password"])
+            if not login_email or not login_pass:
+                st.warning("Vyplňte prosím e-mail a heslo.")
+            else:
+                try:
+                    conn = st.connection("gsheets", type=GSheetsConnection)
+                    df_login = conn.read(worksheet="List 1", ttl=0)
+
+                    # --- TATO ČÁST OPRAVUJE TU DESETINNOU ČÁRKU (.0) ---
+                def vycisti_heslo(heslo):
+                    h = str(heslo).strip()
+                    if h.endswith('.0'):
+                        return h[:-2]  # Uřízne poslední dva znaky (.0)
+                    return h
 
                 vstup_email = str(login_email).lower().strip()
                 vstup_heslo = str(login_pass).strip()
 
-                # DIAGNOSTIKA: Vypíše nám to, co aplikace reálně vidí
-                st.write("DEBUG - Data v tabulce (Email | Heslo):")
-                st.write(df_login[["Email", "Password"]].astype(str).values.tolist())
-
-                # Hledání shody
+                # Vyčistíme hesla v celé tabulce před porovnáním
+                df_login["Password"] = df_login["Password"].apply(vycisti_heslo)
+                
+                # Teď už maska bude fungovat, protože 12345678.0 se změnilo na 12345678
                 maska = (
                     (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
-                    (df_login["Password"].astype(str).str.strip() == vstup_heslo)
+                    (df_login["Password"] == vstup_heslo)
                 )
-                uzivatel = df_login[maska]
+                # ----------------------------------------------------
+                    uzivatel = df_login[maska]
 
-                if not uzivatel.empty:
-                    st.session_state.prihlasen = True
-                    st.session_state.muj_email = vstup_email
-                    st.session_state.moje_id = str(uzivatel.iloc[0]["Code"])
-                    st.session_state.vybrana_oblast = str(uzivatel.iloc[0]["Topic"])
-                    st.success("🎉 Přihlášení úspěšné!")
-                    st.balloons()
-                    st.rerun()
-                else:
-                    st.error("❌ Nesprávný e-mail nebo heslo.")
-            except Exception as e:
-                st.error(f"Chyba: {e}")
+                    if not uzivatel.empty:
+                        st.session_state.prihlasen = True
+                        st.session_state.muj_email = vstup_email
+                        st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
+                        # Tímto řádkem opravíme tu AttributeError chybu:
+                        st.session_state.vybrana_oblast = str(uzivatel.iloc[0]["Topic"]).strip()
+                        
+                        st.success("🎉 Přihlášení úspěšné!")
+                        st.balloons()
+                        st.rerun()
+                    else:
+                        st.error("❌ Nesprávný e-mail nebo heslo.")
+                except Exception as e:
+                    st.error(f"Chyba při komunikaci s tabulkou: {e}")
+
+# Tady končí tab_dotaznik a začíná tab_lekce (mimo předchozí bloky)
 with tab_lekce:
     if not st.session_state.get("prihlasen"):
         st.warning("Pro zobrazení lekcí se nejprve přihlaste v záložce Přihlášení/Registrace.")
