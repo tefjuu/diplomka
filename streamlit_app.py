@@ -98,9 +98,17 @@ with tab_dotaznik:
     if rezim == "Chci se zaregistrovat":
         st.subheader("Nová registrace")
         
-        # Propojení s tabulkou
-        conn = st.connection("gsheets", type=GSheetsConnection)
+        # CSS úprava pro zelené orámování políček (místo červeného)
+        st.markdown("""
+            <style>
+            .stTextInput div[data-baseweb="input"]:focus-within {
+                border-color: #4CAF50 !important;
+                box-shadow: 0 0 0 1px #4CAF50 !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
         
+        conn = st.connection("gsheets", type=GSheetsConnection)
         try:
             df = conn.read()
         except:
@@ -108,7 +116,7 @@ with tab_dotaznik:
 
         col1, col2 = st.columns(2)
         with col1:
-            reg_email = st.text_input("Zadejte svůj e-mail:", key="email_1")
+            reg_email = st.text_input("Zadejte svůj e-mail:", key="email_1", placeholder="napr. t.novakova@email.cz")
         with col2:
             reg_email_potvrzeni = st.text_input("Zadejte e-mail znovu:", key="email_2")
 
@@ -118,17 +126,46 @@ with tab_dotaznik:
             else:
                 st.error("❌ E-maily se neshodují")
 
-        novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
+        # --- TVŮJ PŘESNÝ NÁVOD NA KÓD ---
+        st.markdown("""
+        <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50;">
+            <b>Váš unikátní kód si vytvořte takto:</b><br>
+            1. První 2 písmena jména (Tereza -> <b>TE</b>)<br>
+            2. Den narození (vždy 2 cifry, 2. den -> <b>02</b>)<br>
+            3. Poslední 2 čísla mobilu (...89 -> <b>89</b>)<br>
+            <i>Výsledek: <b>TE0289</b></i>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        novy_kod = st.text_input("Vytvořte si svůj kód podle návodu výše:", key="reg_kod").upper()
 
-        # --- KONTROLA DUPLICITY V TABULCE ---
+        # Kontrola duplicity
         stop_registrace = False
         if novy_kod and not df.empty:
             if novy_kod in df["Kod"].values:
-                st.error("❌ Tento kód je již použit – kontaktujte vedoucího výzkumu.")
+                st.error("❌ Tento kód je již použit – zkuste jej poupravit nebo kontaktujte vedoucího.")
                 stop_registrace = True
             elif reg_email in df["Email"].values:
                 st.error("❌ Tento e-mail je již zaregistrován.")
                 stop_registrace = True
+
+        if st.button("Dokončit registraci", key="btn_finalni_registrace"):
+            if not reg_email or not reg_email_potvrzeni or not novy_kod:
+                st.error("Vyplňte prosím všechna pole!")
+            elif reg_email != reg_email_potvrzeni:
+                st.error("Zadané e-maily se neshodují!")
+            elif stop_registrace:
+                st.error("Registrace není možná. Zkontrolujte prosím kód nebo e-mail.")
+            else:
+                status = odeslat_email(reg_email, novy_kod)
+                if status in [200, 202]:
+                    novy_radek = pd.DataFrame([{"Email": reg_email, "Kod": novy_kod}])
+                    aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
+                    conn.update(data=aktualizovana_data)
+                    st.success(f"Registrace úspěšná! Kód byl odeslán na {reg_email}.")
+                    st.balloons()
+                else:
+                    st.error(f"E-mail se nepodařilo odeslat (Chyba {status}).")
 
         # Tlačítko pro registraci (OPRAVA ODSZENÍ A DUPLICITY)
         if st.button("Dokončit registraci", key="btn_finalni_registrace"):
