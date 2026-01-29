@@ -157,8 +157,8 @@ with tab_dotaznik:
                 status = odeslat_email(reg_email, novy_kod)
                 if status in [200, 202]:
                     import datetime
-                    # Všechny řádky níže mají přesně 12 mezer od kraje
                     registration_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+                    
                     novy_radek = pd.DataFrame([{
                         "Email": reg_email, 
                         "Code": novy_kod,
@@ -166,13 +166,13 @@ with tab_dotaznik:
                         "Topic": "Diplomka_Vyzkum",
                         "Last_Lesson": "N/A"
                     }])
-                    # Pozor: proměnná s daty se u tebe jmenuje 'df' (podle řádku 150 na tvém obrázku)
+                    
                     aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
                     conn.update(worksheet="Sheet1", data=aktualizovana_data)
                     
-            st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
-            st.balloons()
-            else:
+                    st.success("Registrace proběhla úspěšně! Váš kód a další informace byly odeslány na Váš e-mail.")
+                    st.balloons()
+                else:
                     st.error(f"Chyba při odesílání e-mailu (kód chyby: {status}). Zkuste to prosím později.")
 
     else:
