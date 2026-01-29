@@ -1,16 +1,34 @@
 import streamlit as st
+import requests  # PŘIDÁNO: Nutné pro MailerSend
 from datetime import datetime, time
 
-# --- 1. KONFIGURACE VÝZKUMU ---
+# --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU (NOVÉ) ---
+def odeslat_email(prijemce, kod):
+    try:
+        url = "https://api.mailersend.com/v1/email"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {st.secrets['MAILERSEND_API_KEY']}"
+        }
+        data = {
+            "from": {"email": st.secrets["MAILERSEND_SENDER"], "name": "Vyzkum Dech"},
+            "to": [{"email": prijemce}],
+            "subject": "Tvůj kód pro přihlášení",
+            "text": f"Dobrý den, tvůj unikátní kód pro výzkum je: {kod}"
+        }
+        response = requests.post(url, json=data, headers=headers)
+        return response.status_code
+    except:
+        return "Chyba"
+
+# --- 2. KONFIGURACE VÝZKUMU ---
 DATUM_STARTU = datetime(2026, 1, 29) 
 CAS_ODEMCENI = time(9, 0)
 
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
-
-# HLAVNÍ NÁZEV
 st.title("🧘 Výzkum: Vliv dechových cvičení")
 
-# --- 2. CSS STYLY ---
+# --- 3. CSS STYLY ---
 st.markdown("""
     <style>
     .stButton > button {
@@ -28,7 +46,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. POMOCNÉ FUNKCE ---
+# --- 4. POMOCNÉ FUNKCE ---
 def ziskej_dostupnou_lekci():
     ted = datetime.now()
     rozdil = ted - DATUM_STARTU
@@ -37,23 +55,19 @@ def ziskej_dostupnou_lekci():
         pocet_dni -= 1
     return max(0, pocet_dni)
 
-# --- 4. HLAVNÍ STRUKTURA (MENU) ---
+# --- 5. HLAVNÍ STRUKTURA (MENU) ---
 tab_uvod, tab_dotaznik, tab_lekce = st.tabs([
     "🏠 Úvodní informace", 
     "📊 Přihlášení / Registrace", 
     "📅 Vaše lekce"
 ])
 
-# --- SEKCE ÚVOD ---
 with tab_uvod:
     st.header("Vítejte v programu")
     st.write("Tato aplikace je součástí výzkumu k diplomové práci.")
 
-# --- SEKCE PŘIHLÁŠENÍ / REGISTRACE ---
 with tab_dotaznik:
     st.header("Vstup do programu")
-    
-    # Přepínač mezi registrací a přihlášením
     rezim = st.radio("Jste zde poprvé?", ["Chci se zaregistrovat", "Už mám svůj kód (Přihlášení)"], horizontal=True)
     st.divider()
 
@@ -66,43 +80,39 @@ with tab_dotaznik:
         1. První 2 písmena jména (Tereza -> **TE**)
         2. Den narození (vždy 2 cifry, 2. den -> **02**)
         3. Poslední 2 čísla mobilu (...89 -> **89**)
-        *Výsledek: **TE0289***
         """)
         
         novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
         
         if st.button("Dokončit registraci"):
             if reg_email and novy_kod:
-                # --- TADY BUDE PROPOJENÍ ---
-                # 1. Zápis do Google Tabulky
-                # 2. Odeslání e-mailu přes SendGrid
-                st.success(f"Registrace úspěšná! Na e-mail {reg_email} byl odeslán váš kód: {novy_kod}")
-                st.balloons()
+                # --- OPRAVENÉ PROPOJENÍ NA MAIL ---
+                status = odeslat_email(reg_email, novy_kod)
+                if status in [200, 202]:
+                    st.success(f"Registrace úspěšná! Na e-mail {reg_email} byl odeslán váš kód: {novy_kod}")
+                    st.balloons()
+                else:
+                    st.error(f"E-mail se nepodařilo odeslat. (Chyba {status}). Máte správně Secrets?")
             else:
                 st.error("Vyplňte prosím e-mail i kód!")
 
     else:
         st.subheader("Přihlášení")
         login_kod = st.text_input("Zadejte svůj unikátní kód:", key="login_kod").upper()
-        
         if st.button("Vstoupit k lekcím"):
             if login_kod:
-                # Tady web zkontroluje kód v Google tabulce
                 st.session_state.prihlasen = True
                 st.session_state.moje_id = login_kod
                 st.success(f"Přihlášeno! Vítejte zpět.")
             else:
                 st.error("Zadejte prosím kód.")
 
-# --- SEKCE LEKCE ---
 with tab_lekce:
     if not st.session_state.get("prihlasen", False):
-        st.warning("⚠️ Pro přístup k lekcím se prosím nejdříve přihlaste v záložce 'Přihlášení / Registrace'.")
+        st.warning("⚠️ Pro přístup k lekcím se prosím nejdříve přihlaste.")
     else:
         if 'vybrana_oblast' not in st.session_state:
             st.header("Vyberte si své zaměření")
-            st.info("Vyberte oblast, na které chcete pracovat. Toto rozhodnutí je konečné.")
-            
             if st.button("🚀 Zvládání stresu a zkoušková úzkost", use_container_width=True):
                 st.session_state.vybrana_oblast = "Stres"
                 st.rerun()
@@ -112,31 +122,21 @@ with tab_lekce:
             if st.button("😴 Problémy se spánkem a regenerací", use_container_width=True):
                 st.session_state.vybrana_oblast = "Spánek"
                 st.rerun()
-        
         else:
             oblast = st.session_state.vybrana_oblast
             st.subheader(f"Vaše cesta: {oblast}")
-            
             max_dostupna = ziskej_dostupnou_lekci()
-            # Pokud se přihlásíš jako ADMIN, uvidíš všechno
-            if st.session_state.get("input_jmeno") == "ADMIN":
-                max_dostupna = 7
+            if st.session_state.get("moje_id") == "ADMIN": max_dostupna = 7
 
             cols = st.columns(7)
             for i in range(1, 8):
-                je_odemceno = i <= max_dostupna
                 with cols[i-1]:
-                    if st.button(f"{i}", key=f"btn_l{i}", use_container_width=True, disabled=not je_odemceno):
+                    if st.button(f"{i}", key=f"btn_l{i}", use_container_width=True, disabled=not (i <= max_dostupna)):
                         st.session_state.vybrana_lekce = i
 
             st.divider()
-
             vyber = st.session_state.get("vybrana_lekce", 1)
             st.subheader(f"Den {vyber}: Instrukce")
-
-            if oblast == "Stres":
-                st.write("Dnes se zaměříme na techniku 4-7-8 pro okamžité uklidnění...")
-            elif oblast == "Time-management":
-                st.write("Dnes využijeme dech k zostření pozornosti před studiem...")
-            elif oblast == "Spánek":
-                st.write("Před spaním vyzkoušejte toto uvolňující cvičení...")
+            if oblast == "Stres": st.write("Technika 4-7-8...")
+            elif oblast == "Time-management": st.write("Soustředění...")
+            elif oblast == "Spánek": st.write("Uvolnění...")
