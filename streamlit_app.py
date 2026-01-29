@@ -123,14 +123,14 @@ with tab_dotaznik:
                 cisla_stred = novy_kod[2:6]      # 3. až 6. znak
                 pismena_konec = novy_kod[6:8]    # 7. a 8. znak
                 
-                if len(novy_kod) < 8:
-                    st.warning(f"⚠️ Kód je zatím krátký ({len(novy_kod)}/8 znaků).")
-                    elif not (pismena_zacatek.isalpha() and cisla_stred.isdigit() and pismena_konec.isalpha()):
-                    st.error("❌ Chybný formát kódu. Kód by musí obsahovat: 2 písmena, 4 čísla a 2 písmena (např. TE0241JU).")
-                elif not df_aktualni.empty and novy_kod in df_aktualni["Code"].values:
-                    st.error("❌ Tento kód už někdo používá. V tomto případě změňte některý ze znaků, aby se kódy neshodovaly.")
-                else:
-                    st.success("✅ Tento kód je v pořádku a ve správném formátu.")
+            if len(novy_kod) < 8:
+                st.warning(f"⚠️ Kód je zatím krátký ({len(novy_kod)}/8 znaků).")
+            elif not (pismena_zacatek.isalpha() and cisla_stred.isdigit() and pismena_konec.isalpha()):
+                st.error("❌ Chybný formát kódu. Kód by musí obsahovat: 2 písmena, 4 čísla a 2 písmena (např. TE0241JU).")
+            elif not df_aktualni.empty and novy_kod in df_aktualni["Code"].values:
+                st.error("❌ Tento kód už někdo používá. V tomto případě změňte některý ze znaků, aby se kódy neshodovaly.")
+            else:
+                st.success("✅ Tento kód je v pořádku a ve správném formátu.")
 
             # TLAČÍTKO PRO REGISTRACI (Pouze jedno)
             if st.button("Dokončit registraci", key="final_reg_btn"):
