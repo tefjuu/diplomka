@@ -111,9 +111,20 @@ with tab_dotaznik:
         </div>
         """, unsafe_allow_html=True)
         
-        novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field").upper()
+        # Vstup pro kód
+        novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field").upper().strip()
 
-        # Kontrola duplicit
+        # --- KONTROLA DÉLKY (8 ZNAKŮ) ---
+        kod_je_spravne_dlouhy = False
+        if novy_kod:
+            delka = len(novy_kod)
+            if delka != 8:
+                st.error(f"❌ Kód musí mít přesně 8 znaků (aktuálně máte {delka}).")
+            else:
+                st.success("✅ Délka kódu je v pořádku.")
+                kod_je_spravne_dlouhy = True
+
+        # --- KONTROLA DUPLICITY V TABULCE ---
         stop_registrace = False
         if novy_kod and not df.empty:
             if novy_kod in df["Kod"].values:
@@ -122,6 +133,17 @@ with tab_dotaznik:
             elif reg_email in df["Email"].values:
                 st.error("❌ Tento e-mail už je registrovaný.")
                 stop_registrace = True
+
+        # TLAČÍTKO - přidána kontrola délky (kod_je_spravne_dlouhy)
+        if st.button("Dokončit registraci", key="final_reg_btn"):
+            if not reg_email or reg_email != reg_email_potvrzeni or not novy_kod:
+                st.error("Zkontrolujte e-maily a vyplňte kód!")
+            elif not kod_je_spravne_dlouhy:
+                st.error("Registrace není možná. Kód musí mít přesně 8 znaků!")
+            elif stop_registrace:
+                st.error("Registrace není možná. Tento kód nebo e-mail už existuje.")
+            else:
+                # Zde následuje zbytek kódu pro odeslání emailu a zápis (status = odeslat_email...)
 
         if st.button("Dokončit registraci", key="final_reg_btn"):
             if not reg_email or reg_email != reg_email_potvrzeni or not novy_kod:
