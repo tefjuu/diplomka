@@ -24,14 +24,19 @@ def odeslat_email(prijemce, kod):
                 f"https://vyzkum-diplomka.streamlit.app/\n\n"
                 f"Doporučujeme si tento e-mail uložit pro budoucí přihlášení."
             ),
-            "html": (
-                f"<div style='font-family: sans-serif; line-height: 1.5; color: #333;'>"
-                f"<p>Dobrý den,</p>"
-                f"<p>děkujeme za zapojení do výzkumu k diplomové práci. Tvůj unikátní kód pro přihlášení je: "
-                f"<span style='font-size: 1.2em; font-weight: bold; color: #4CAF50;'>{kod}</span></p>"
-                f"<p>Do aplikace s lekcemi se můžeš kdykoliv vrátit kliknutím na odkaz níže:</p>"
-                f"<p><a href='https://vyzkum-diplomka.streamlit.app/' "
-                f"style='display: inline-block; padding: 10px 20px; background-color: #4CAF50
+            "html": f"""
+                <div style="font-family: sans-serif; line-height: 1.5; color: #333;">
+                    <p>Dobrý den,</p>
+                    <p>děkujeme za zapojení do výzkumu k diplomové práci. Tvůj unikátní kód pro přihlášení je: 
+                    <b style="color: #4CAF50; font-size: 1.2em;">{kod}</b></p>
+                    <p>Do aplikace s lekcemi se můžeš kdykoliv vrátit kliknutím na odkaz níže:</p>
+                    <p><a href="https://vyzkum-diplomka.streamlit.app/" 
+                    style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    VSTOUPIT DO APLIKACE</a></p>
+                    <p>Doporučujeme si tento e-mail uložit.</p>
+                </div>
+            """
+        }
         response = requests.post(url, json=data, headers=headers)
         }
         return response.status_code
