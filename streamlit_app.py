@@ -122,7 +122,7 @@ with tab_dotaznik:
                 if len(novy_kod) < 8:
                     st.warning(f"⚠️ Kód je zatím krátký ({len(novy_kod)}/8 znaků).")
                 elif not df_aktualni.empty and novy_kod in df_aktualni["Code"].values:
-                    st.error("❌ Tento kód už někdo používá. V tomto případě, prosím, změňte některý ze znaků, aby vznikl kód originální, po registraci obdržíte e-mail, ve kterém obdržíte Vámi vytvořený kód, takže si jej nebudete muset pamatovat.")
+                    st.error("❌ Tento kód už někdo používá. V tomto případě změňte některý ze znaků, aby se kódy neshodovaly.")
                 else:
                     st.success("✅ Tento kód je v pořádku")
 
