@@ -108,7 +108,7 @@ with tab_dotaznik:
             # --- NOVÉ: KOLONKY PRO HESLO ---
             col3, col4 = st.columns(2)
             with col3:
-                reg_heslo = st.text_input("Vaše heslo:", type="password", key="reg_pass_field", placeholder="Zadejte heslo")
+                reg_heslo = st.text_input("Heslo:", type="password", key="reg_pass_field", placeholder="Zadejte heslo")
             with col4:
                 reg_heslo_potvrzeni = st.text_input("Zopakujte heslo:", type="password", key="reg_pass_confirm")
             
