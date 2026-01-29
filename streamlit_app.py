@@ -233,9 +233,34 @@ with tab_dotaznik:
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # Očista vstupů
-                    vstup_email = login_email.lower().strip()
-                    vstup_heslo = login_pass.strip()
+                    # 1. VYČIŠTĚNÍ VSTUPŮ OD UŽIVATELE
+                    vstup_email = str(login_email).lower().strip()
+                    vstup_heslo = str(login_pass).strip()
+
+                    # 2. VYČIŠTĚNÍ DAT V TABULCE (převedení na text, malá písmena a odstranění mezer)
+                    # Vytvoříme si pomocné řady, aby se tabulka nepoškodila
+                    emails_v_tabulce = df_login["Email"].astype(str).str.lower().str.strip()
+                    hesla_v_tabulce = df_login["Password"].astype(str).str.strip()
+
+                    # 3. HLEDÁNÍ SHODY
+                    maska = (emails_v_tabulce == vstup_email) & (hesla_v_tabulce == vstup_heslo)
+                    uzivatel = df_login[maska]
+                    
+                    if not uzivatel.empty:
+                        # Uložíme si kód z původní tabulky
+                        st.session_state.prihlasen = True
+                        st.session_state.muj_email = vstup_email
+                        st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
+                        
+                        st.success("🎉 Přihlášení úspěšné!")
+                        st.balloons()
+                        st.rerun()
+                    else:
+                        st.error("❌ Nesprávný e-mail nebo heslo. Zkontrolujte prosím údaje.")
+                        # Pomocný výpis pro tebe (později ho smaž)
+                        # st.write(f"Zkouším: '{vstup_email}' a '{vstup_heslo}'")
+                except Exception as e:
+                    st.error(f"Chyba při ověřování: {e}")
 
                     # Hledáme shodu pouze Email + Heslo
                     uzivatel = df_login[
