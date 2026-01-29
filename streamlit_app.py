@@ -78,19 +78,18 @@ with tab_dotaznik:
     st.divider()
 
     if rezim == "Chci se zaregistrovat":
-        # 1. Tato podmínka kontroluje, zda už se registrace povedla
+        # 1. KONTROLA STAVU (Schová formulář po úspěchu)
         if st.session_state.get("registrace_dokoncena", False):
             st.success("### 🎉 Registrace proběhla úspěšně!")
-            st.info("Na Váš e-mail jsme poslali potvrzení s Vaším unikátním kódem. Nyní se prosím přepněte nahoře na **'Už mám svůj kód'** a přihlaste se.")
+            st.info("Na Váš e-mail jsme poslali potvrzení. Nyní se prosím přepněte nahoře na **'Už mám svůj kód'**.")
             st.balloons()
         
         else:
-            # 2. Pokud se registrace ještě nepovedla, ukáže se tento formulář
             st.subheader("Nová registrace")
             
+            # Načtení dat z tabulky (pouze jednou)
             try:
                 conn = st.connection("gsheets", type=GSheetsConnection)
-                # Důležité: Tady používáme název List 1 (s mezerou), jak jsme zjistili
                 df_aktualni = conn.read(worksheet="List 1")
             except:
                 df_aktualni = pd.DataFrame(columns=["Email", "Code", "Registration_Date", "Topic", "Last_Lesson"])
@@ -101,6 +100,7 @@ with tab_dotaznik:
             with col2:
                 reg_email_potvrzeni = st.text_input("E-mail znovu:", key="reg_email_confirm").strip()
             
+            # Okamžitá vizuální kontrola shody
             if reg_email and reg_email_potvrzeni:
                 if reg_email == reg_email_potvrzeni:
                     st.success("✅ E-maily se shodují")
@@ -110,130 +110,38 @@ with tab_dotaznik:
             st.markdown("""
             <div style="background-color: #f0f7f0; padding: 15px; border-radius: 10px; border-left: 5px solid #4CAF50; margin: 10px 0;">
                 <b>Váš unikátní kód si vytvořte takto:</b><br>
-                1. První 2 písmena Vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
-                2. Den Vašeho narození (vždy pište 2 cifry, např. datum narození 2. září -> <b>02</b>)<br>
-                3. Poslední 2 cifry Vašeho tel. čísla (0911 564 742 -> <b>42</b>)<br>
-                4. První 2 písmena jména Vaší matky(např. Julie -> <b>JU</b>)<br>
+                1. První 2 písmena jména (TE), 2. Den narození (02), 3. Poslední 2 čísla tel. (42), 4. První 2 písmena jména matky (JU).<br>
                 <i>Výsledný kód: <b>TE0242JU</b></i>
             </div>
             """, unsafe_allow_html=True)
             
             novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field", max_chars=8).upper().strip()
 
-            # TLAČÍTKO
+            # JEDINÉ TLAČÍTKO PRO REGISTRACI
             if st.button("Dokončit registraci", key="final_reg_btn"):
                 vse_ok = True
-                email_cisty = reg_email.strip()
-                kod_cisty = novy_kod.strip()
-
-                # Kontroly (shoda, prázdná pole, duplicita)
-                if not email_cisty or not kod_cisty:
+                
+                # Kontroly před odesláním
+                if not reg_email or not novy_kod:
                     st.error("Vyplňte prosím všechna pole.")
                     vse_ok = False
-                elif email_cisty != reg_email_potvrzeni.strip():
+                elif reg_email != reg_email_potvrzeni:
                     st.error("E-maily se neshodují.")
                     vse_ok = False
                 elif not df_aktualni.empty:
-                    # Tady pozor na názvy sloupců "Email" a "Code"
-                    if email_cisty in df_aktualni["Email"].values:
-                        st.error("❌ Tento e-mail už je zaregistrován. Přejděte k přihlášení.")
+                    if reg_email in df_aktualni["Email"].values:
+                        st.error("❌ Tento e-mail už je zaregistrován.")
                         vse_ok = False
-                    # Řádek 141: Kontrola, zda kód už v tabulce existuje
-                elif kod_cisty in df_aktualni["Code"].values:
-                    st.error("⚠️ Tento kód už někdo používá. Upravte si jej.")
-                    vse_ok = False
+                    elif novy_kod in df_aktualni["Code"].values:
+                        st.error("⚠️ Tento kód už někdo používá.")
+                        vse_ok = False
 
-            # TLAČÍTKO - Teď už je odsazené správně a mimo podmínky výše
-            if st.button("Dokončit registraci", key="final_reg_btn"):
+                # Pokud je vše v pořádku, provedeme zápis a e-mail
                 if vse_ok:
                     try:
                         import datetime
                         reg_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
-                        
-                        novy_radek = pd.DataFrame([{
-                            "Email": email_cisty, 
-                            "Code": kod_cisty,
-                            "Registration_Date": reg_time,
-                            "Topic": "Diplomka_Vyzkum",
-                            "Last_Lesson": "N/A"
-                        }])
-                        
-                        # Zápis do tabulky
-                        nova_data = pd.concat([df_aktualni, novy_radek], ignore_index=True)
-                        conn.update(worksheet="List 1", data=nova_data)
-                        
-                        # Odeslání emailu
-                        status = odeslat_email(email_cisty, kod_cisty)
-                        
-                        if status in [200, 202]:
-                            # ZDE JE TA STOPKA: Nastavíme, že je hotovo, a stránka se překreslí bez formuláře
-                            st.session_state.registrace_dokoncena = True
-                            st.rerun() 
-                        else:
-                            st.warning("Data uložena, ale e-mail se nepodařilo odeslat.")
-                    except Exception as e:
-                        st.error("Chyba při ukládání. Zkuste to prosím znovu.")
-            
-            # 1. POKUS O NAČTENÍ DAT (S opravou na "List 1")
-            try:
-                df_aktualni = conn.read(worksheet="List 1")
-            except Exception as e:
-                st.error(f"Chyba: Nepodařilo se načíst tabulku. Zkontrolujte název listu (má být List 1 s mezerou). Detaily: {e}")
-                df_aktualni = pd.DataFrame() 
-
-            # 2. PŘÍPRAVA KONTROL
-            vse_ok = True
-            email_cisty = reg_email.strip()
-            kod_cisty = novy_kod.strip()
-
-            # Kontrola prázdných polí
-            if not email_cisty or not reg_email_potvrzeni or not kod_cisty:
-                st.error("Vyplňte prosím všechna pole.")
-                vse_ok = False
-            
-            # Kontrola shody e-mailů
-            elif email_cisty != reg_email_potvrzeni.strip():
-                st.error("Zadané e-maily se neshodují.")
-                vse_ok = False
-
-            # Kontrola duplicity (jen pokud se tabulka načetla)
-            elif not df_aktualni.empty:
-                if email_cisty in df_aktualni["Email"].values:
-                    st.error("❌ Tento e-mail už je zaregistrován. Přejděte k přihlášení.")
-                    vse_ok = False
-                elif kod_cisty in df_aktualni["Code"].values:
-                    st.error("⚠️ Tento kód už někdo používá. Upravte si jej.")
-                    vse_ok = False
-
-            # 3. ZÁPIS A ODESLÁNÍ
-            if vse_ok:
-                import datetime
-                registration_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
-                
-                novy_radek = pd.DataFrame([{
-                    "Email": email_cisty, 
-                    "Code": kod_cisty,
-                    "Registration_Date": registration_time,
-                    "Topic": "Diplomka_Vyzkum",
-                    "Last_Lesson": "N/A"
-                }])
-                
-                try:
-                    # ZÁPIS DO TABULKY (List 1)
-                    nova_data = pd.concat([df_aktualni, novy_radek], ignore_index=True)
-                    conn.update(worksheet="List 1", data=nova_data)
-                    
-                    # ODESLÁNÍ EMAILU (až po úspěšném zápisu)
-                    status = odeslat_email(email_cisty, kod_cisty)
-                    
-                    if status in [200, 202]:
-                        st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
-                        st.balloons()
-                    else:
-                        st.warning(f"Data uložena, ale e-mail se nepodařilo odeslat (kód: {status}).")
-                
-                except Exception as e:
-                    st.error("Omlouváme se, ale registraci se nepodařilo dokončit kvůli technické chybě na straně databáze. Zkuste to prosím za chvíli nebo nás kontaktujte.")
+                        novy_radek
     else:
         st.subheader("Přihlášení")
         login_kod = st.text_input("Zadejte kód:", key="login_field").upper()
