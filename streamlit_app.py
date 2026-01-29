@@ -95,7 +95,13 @@ with tab_dotaznik:
 
     if rezim == "Chci se zaregistrovat":
         st.subheader("Nová registrace")
-        reg_email = st.text_input("Zadejte svůj e-mail (pro zaslání kódu):")
+        
+        # Dvě políčka pro e-mail vedle sebe
+        col1, col2 = st.columns(2)
+        with col1:
+            reg_email = st.text_input("Zadejte svůj e-mail:")
+        with col2:
+            reg_email_potvrzeni = st.text_input("Zadejte e-mail znovu pro kontrolu:")
         
         st.info("""
         **Váš unikátní kód si vytvořte takto:**
@@ -105,6 +111,24 @@ with tab_dotaznik:
         """)
         
         novy_kod = st.text_input("Vytvořte si svůj kód (např. TE0289):", key="reg_kod").upper()
+        
+        if st.button("Dokončit registraci"):
+            # 1. KONTROLA PRÁZDNÝCH POLÍ
+            if not reg_email or not reg_email_potvrzeni or not novy_kod:
+                st.error("Vyplňte prosím všechna pole!")
+            
+            # 2. KONTROLA SHODY E-MAILŮ
+            elif reg_email != reg_email_potvrzeni:
+                st.error("Zadané e-maily se neshodují! Zkontrolujte prosím překlepy.")
+            
+            else:
+                # --- TADY BUDE POZDĚJI KONTROLA DUPLICIT Z TABULKY ---
+                status = odeslat_email(reg_email, novy_kod)
+                if status in [200, 202]:
+                    st.success(f"Registrace úspěšná! Kód byl odeslán na {reg_email}.")
+                    st.balloons()
+                else:
+                    st.error(f"E-mail se nepodařilo odeslat. (Chyba {status})")
         
         if st.button("Dokončit registraci"):
             if reg_email and novy_kod:
