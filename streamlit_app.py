@@ -141,47 +141,54 @@ with tab_dotaznik:
         # TLAČÍTKO - Finální zpracování registrace
         if st.button("Dokončit registraci", key="final_reg_btn"):
             
-            # 1. NEJDŘÍV KONTROLA DUPLICITY (aby uživatel hned věděl, že už existuje)
-            if stop_registrace:
-                # Zjistíme, co konkrétně je špatně, abychom vypsali správnou hlášku
-                if reg_email in df["Email"].values:
-                    st.error("❌ Tento e-mail už je zaregistrován. Zkuste se přihlásit.")
-                else:
-                    st.error("⚠️ Tento kód už někdo používá. Upravte si svůj unikátní kód.")
-            
-            # 2. POTOM KONTROLA PRÁZDNÝCH POLÍ A SHODY
-            elif not reg_email or not reg_email_potvrzeni or not novy_kod:
-                st.error("Vyplňte prosím všechna pole (E-mail i Kód).")
-            elif reg_email != reg_email_potvrzeni:
-                st.error("E-maily se neshodují.")
-            
-            # 3. KONTROLA DÉLKY KÓDU
-            elif not kod_je_spravne_dlouhy:
-                st.error("Kód musí mít přesně 8 znaků.")
+            try:
+                # ZDE OPRAVENO: Název tvého listu (záložky) v Google Sheets je List1
+                df_check = conn.read(worksheet="List1") 
+                
+                # Očištění vstupů a kontrola v tabulce
+                email_v_databazi = reg_email.strip() in df_check["Email"].values
+                kod_v_databazi = novy_kod.strip() in df_check["Code"].values
+            except Exception as e:
+                st.error(f"Nepodařilo se připojit k tabulce: {e}")
+                email_v_databazi = False
+                kod_v_databazi = False
 
-            # 4. POKUD PROŠLO VŠÍM, ZAPÍŠEME
+            # --- STOPKY (VYHODNOCUJÍ SE ODSHORA DOLŮ) ---
+            if email_v_databazi:
+                st.error("❌ Tento e-mail už je zaregistrován. Přejděte prosím do sekce 'Už mám svůj kód' a přihlaste se.")
+            
+            elif kod_v_databazi:
+                st.error("⚠️ Tento kód už někdo používá. Upravte si jej prosím (např. použijte jiné písmeno ze jména).")
+
+            elif not reg_email or not reg_email_potvrzeni or not novy_kod:
+                st.error("Vyplňte prosím všechna pole.")
+
+            elif reg_email != reg_email_potvrzeni:
+                st.error("Zadané e-maily se neshodují.")
+
             else:
+                # VŠE JE OK -> REGISTRUJEME
                 status = odeslat_email(reg_email, novy_kod)
                 if status in [200, 202]:
                     import datetime
                     registration_time = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
                     
                     novy_radek = pd.DataFrame([{
-                        "Email": reg_email, 
-                        "Code": novy_kod,
+                        "Email": reg_email.strip(), 
+                        "Code": novy_kod.strip(),
                         "Registration_Date": registration_time,
                         "Topic": "Diplomka_Vyzkum",
                         "Last_Lesson": "N/A"
                     }])
                     
-                    # Důležité: Ujisti se, že worksheet se jmenuje "Sheet1"
-                    aktualizovana_data = pd.concat([df, novy_radek], ignore_index=True)
-                    conn.update(worksheet="Sheet1", data=aktualizovana_data)
+                    # Zápis do správného listu List1
+                    aktualizovana_data = pd.concat([df_check, novy_radek], ignore_index=True)
+                    conn.update(worksheet="List1", data=aktualizovana_data)
                     
-                    st.success("Registrace proběhla úspěšně! Kód byl odeslán na e-mail.")
+                    st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
                     st.balloons()
                 else:
-                    st.error(f"Chyba při odesílání e-mailu (kód: {status}).")
+                    st.error(f"Chyba při odesílání e-mailu (kód: {status}). Zkuste to později.")
 
     else:
         st.subheader("Přihlášení")
