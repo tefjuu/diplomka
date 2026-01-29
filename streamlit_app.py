@@ -173,8 +173,8 @@ with tab_dotaznik:
             st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
             st.balloons()
                     
-                    st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
-                    st.balloons()
+            st.success("Registrace úspěšná! Kód byl odeslán na Váš e-mail.")
+            st.balloons()
                 else:
                     st.error(f"Chyba při odesílání e-mailu (kód chyby: {status}). Zkuste to prosím později.")
 
