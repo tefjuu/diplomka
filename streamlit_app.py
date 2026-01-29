@@ -215,7 +215,7 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-        # --- SEKCE PŘIHLÁŠENÍ (Jen e-mail a heslo) ---
+        # --- SEKCE PŘIHLÁŠENÍ ---
         st.subheader("Přihlášení do výzkumu")
         
         col_l1, col_l2 = st.columns(2)
@@ -229,23 +229,15 @@ with tab_dotaznik:
                 st.warning("Vyplňte prosím e-mail a heslo.")
             else:
                 try:
-                    # 1. Načtení dat
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # 2. Příprava vstupů
+                    # Příprava vstupů od uživatele
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
 
-                    # 3. DIAGNOSTIKA - uvidíš pod tlačítkem, co aplikace čte
-                    st.write("---")
-                    st.write(f"DEBUG: Hledám e-mail: `{vstup_email}`")
-                    if not df_login.empty:
-                        # Ukáže e-mail z prvního řádku v tabulce pro porovnání
-                        prvni_email_v_tabulce = str(df_login.iloc[0]['Email']).lower().strip()
-                        st.write(f"DEBUG: V tabulce na 1. řádku vidím: `{prvni_email_v_tabulce}`")
-                    
-                    # 4. Samotné hledání (očištěné)
+                    # HLEDÁNÍ V CELÉ TABULCE:
+                    # Vytvoříme masku, která projde každý řádek a hledá shodu e-mailu i hesla
                     maska = (
                         (df_login["Email"].astype(str).str.lower().str.strip() == vstup_email) & 
                         (df_login["Password"].astype(str).str.strip() == vstup_heslo)
@@ -253,10 +245,10 @@ with tab_dotaznik:
                     uzivatel = df_login[maska]
                     
                     if not uzivatel.empty:
-                        # Uložíme data do session_state
+                        # NAŠLI JSME SHODU (v jakémkoliv řádku)
                         st.session_state.prihlasen = True
                         st.session_state.muj_email = vstup_email
-                        # Bezpečné získání kódu
+                        # Vytáhneme kód z toho konkrétního řádku, kde seděl e-mail a heslo
                         st.session_state.moje_id = str(uzivatel.iloc[0]["Code"]).strip()
                         
                         st.success("🎉 Přihlášení úspěšné!")
@@ -264,7 +256,6 @@ with tab_dotaznik:
                         st.rerun()
                     else:
                         st.error("❌ Nesprávný e-mail nebo heslo.")
-                        
                 except Exception as e:
                     st.error(f"Chyba při ověřování: {e}")
 
