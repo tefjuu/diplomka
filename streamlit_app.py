@@ -118,6 +118,14 @@ with tab_dotaznik:
             
             novy_kod = st.text_input("Vytvořte si svůj unikátní kód:", key="reg_kod_field", max_chars=8).upper().strip()
 
+            if novy_kod:
+                if len(novy_kod) < 8:
+                    st.warning(f"⚠️ Kód je zatím krátký ({len(novy_kod)}/8 znaků).")
+                elif not df_aktualni.empty and novy_kod in df_aktualni["Code"].values:
+                    st.error("❌ Tento kód už někdo používá. Upravte si jej.")
+                else:
+                    st.success("✅ Tento kód je v pořádku")
+
             # TLAČÍTKO PRO REGISTRACI (Pouze jedno)
             if st.button("Dokončit registraci", key="final_reg_btn"):
                 vse_ok = True
