@@ -106,8 +106,8 @@ with tab_dotaznik:
             1. První 2 písmena Vašeho křestního jména (např. Tereza -> <b>TE</b>)<br>
             2. Den Vašeho narození (vždy pište 2 cifry, např. datum narození 2. září -> <b>02</b>)<br>
             3. Poslední 2 cifry Vašeho tel. čísla (0911 564 742 -> <b>42</b>)<br>
-            4. První 2 písmena Vašeho rodného města(např. Púchov -> <b>PÚ</b>)<br>
-            <i>Výsledný kód: <b>TE0242PÚ</b></i>
+            4. První 2 písmena jména Vaší matky(např. Julie -> <b>JU</b>)<br>
+            <i>Výsledný kód: <b>TE0242JU</b></i>
         </div>
         """, unsafe_allow_html=True)
         
