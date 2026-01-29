@@ -233,9 +233,22 @@ with tab_dotaznik:
                     conn = st.connection("gsheets", type=GSheetsConnection)
                     df_login = conn.read(worksheet="List 1", ttl=0)
                     
-                    # 1. VYČIŠTĚNÍ VSTUPŮ OD UŽIVATELE
+                    # --- DETEKTIVNÍ VÝPIS (Potom ho smažeme) ---
+                    # st.write("Sloupce v tabulce:", df_login.columns.tolist())
+                    # st.dataframe(df_login) 
+                    # ------------------------------------------
+
                     vstup_email = str(login_email).lower().strip()
                     vstup_heslo = str(login_pass).strip()
+
+                    # Vynutíme, aby Pandas bral data jako čistý text a odstranil mezery
+                    df_login['Email'] = df_login['Email'].astype(str).str.lower().str.strip()
+                    df_login['Password'] = df_login['Password'].astype(str).str.strip()
+
+                    uzivatel = df_login[
+                        (df_login["Email"] == vstup_email) & 
+                        (df_login["Password"] == vstup_heslo)
+                    ]
 
                     # 2. VYČIŠTĚNÍ DAT V TABULCE (převedení na text, malá písmena a odstranění mezer)
                     # Vytvoříme si pomocné řady, aby se tabulka nepoškodila
