@@ -215,23 +215,43 @@ with tab_dotaznik:
                         st.error(f"Chyba při ukládání: {e}")
 
     else:
-        # SEKCE PŘIHLÁŠENÍ (Už mám svůj kód)
-        st.subheader("Přihlášení")
-        login_kod = st.text_input("Zadejte kód:", key="login_field").upper().strip()
+        # --- SEKCE PŘIHLÁŠENÍ (Už mám svůj kód) ---
+        st.subheader("Přihlášení do výzkumu")
         
-        if st.button("Vstoupit", key="login_btn"):
-            try:
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                df_login = conn.read(worksheet="List 1")
-                
-                if login_kod in df_login["Code"].values:
-                    st.session_state.prihlasen = True
-                    st.session_state.moje_id = login_kod
-                    st.success("Vítejte! Nyní můžete přejít na záložku Lekce.")
-                else:
-                    st.error("Tento kód neexistuje. Zaregistrujte se prosím.")
-            except:
-                st.error("Chyba při ověřování kódu.")
+        col_l1, col_l2 = st.columns(2)
+        with col_l1:
+            login_email = st.text_input("E-mail:", key="login_email_field").strip()
+        with col_l2:
+            login_pass = st.text_input("Heslo:", type="password", key="login_pass_field").strip()
+        
+        login_kod = st.text_input("Tvůj unikátní kód:", key="login_code_field").upper().strip()
+        
+        if st.button("Vstoupit do aplikace", key="login_btn", use_container_width=True):
+            if not login_email or not login_pass or not login_kod:
+                st.warning("Vyplňte prosím všechna pole.")
+            else:
+                try:
+                    # Načtení aktuálních dat s ttl=0, abychom viděli i čerstvé registrace
+                    conn = st.connection("gsheets", type=GSheetsConnection)
+                    df_login = conn.read(worksheet="List 1", ttl=0)
+                    
+                    # Hledáme řádek, kde sedí Email, Heslo i Kód zároveň
+                    uzivatel = df_login[
+                        (df_login["Email"] == login_email) & 
+                        (df_login["Password"] == login_pass) & 
+                        (df_login["Code"] == login_kod)
+                    ]
+                    
+                    if not uzivatel.empty:
+                        st.session_state.prihlasen = True
+                        st.session_state.moje_id = login_kod
+                        st.session_state.muj_email = login_email
+                        st.success(f"Vítejte zpět! Nyní můžete přejít na záložku Lekce.")
+                        st.balloons()
+                    else:
+                        st.error("❌ Nesprávný e-mail, heslo nebo kód. Zkontrolujte prosím údaje.")
+                except Exception as e:
+                    st.error(f"Chyba při ověřování: {e}")
 
 with tab_lekce:
     if not st.session_state.get("prihlasen", False):
