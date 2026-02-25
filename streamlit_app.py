@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import streamlit.components.v1 as components
 from datetime import datetime, time
 from streamlit_gsheets import GSheetsConnection
 
@@ -317,3 +318,25 @@ with tab_lekce:
         if st.button("Odhlásit se", key="logout_btn"):
             st.session_state.prihlasen = False
             st.rerun()
+
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7610756366369554485',
+    },
+    componentProps: {
+      title: 'Yumo',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
+',
+      onRefreshToken: function () {
+        return 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
+'
+      }
+    }
+  });
+</script>
+"""
+components.html(yumo_html, height=0)
