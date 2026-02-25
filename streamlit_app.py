@@ -7,38 +7,39 @@ from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
-# --- KONEČNÁ VERZE PRO YUMA ---
-yumo_html = """
+# --- 1. NASTAVENÍ STRÁNKY (MUSÍ BÝT PRVNÍ) ---
+st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
+
+# --- 2. NOVÝ A JEDINÝ KÓD PRO YUMA ---
+yumo_script = """
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
-  console.log("Yumo skript se spouští...");
-  try {
-    new CozeWebSDK.WebChatClient({
-      config: {
-        bot_id: '7610756366369554485',
-      },
-      componentProps: {
-        title: 'Yumo',
-      },
-      auth: {
-        type: 'token',
-        token: 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7',
-        onRefreshToken: function () {
-          return 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7';
-        }
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7610756366369554485',
+    },
+    componentProps: {
+      title: 'Yumo',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7',
+      onRefreshToken: function () {
+        return 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7';
       }
-    });
-    console.log("Yumo byl úspěšně zinicializován.");
-  } catch (e) {
-    console.error("Chyba při spouštění Yuma:", e);
-  }
+    }
+  });
 </script>
-<div style="padding: 10px; background: #f0f2f6; border-radius: 5px; font-size: 12px; color: #555;">
-  🤖 Chatbot Yumo se načítá v rohu stránky...
+<div style="padding:10px; background:#e1f5fe; border:1px solid #01579b; border-radius:5px;">
+   ℹ️ Diagnostika: Pokud vidíš tento modrý rámeček, skript Yuma je načten v kódu.
 </div>
 """
-# Nastavíme výšku na 60, aby tam byl vidět ten text výše jako potvrzení
-components.html(yumo_html, height=60)
+
+# Vložíme komponentu s pevnou výškou, aby byla vidět
+st.components.v1.html(yumo_script, height=100)
+
+# --- 3. NADPIS (AŽ POTOM) ---
+st.title("🧘 Výzkum: Podpůrné intervence na redukci stresu")
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
 def odeslat_email(prijemce, kod):
