@@ -23,7 +23,7 @@ if prompt := st.chat_input("Napíš niečo..."):
         st.markdown(prompt)
 
     response = client.models.generate_content(
-        model="gemini-1.0-pro",
+        model="gemini-1.5-flash",
         contents=prompt,
     )
 
