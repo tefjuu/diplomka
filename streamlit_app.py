@@ -19,9 +19,9 @@ yumo_html = """
     },
     auth: {
       type: 'token',
-      token: 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6',
+      token: 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7',
       onRefreshToken: function () {
-        return 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6'
+        return 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7'
       }
     }
   });
