@@ -33,9 +33,6 @@ yumo_html = f"""
 </script>
 """
 
-# 3. Vložení do stránky
-components.html(yumo_html, height=60)
-
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
 def odeslat_email(prijemce, kod):
@@ -350,3 +347,6 @@ with tab_lekce:
         if st.button("Odhlásit se", key="logout_btn"):
             st.session_state.prihlasen = False
             st.rerun()
+
+with st.container():
+    components.html(yumo_html, height=500)
