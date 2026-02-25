@@ -5,6 +5,8 @@ import streamlit.components.v1 as components
 from datetime import datetime, time
 from streamlit_gsheets import GSheetsConnection
 
+yumo_html = """
+<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
   new CozeWebSDK.WebChatClient({
     config: {
@@ -15,11 +17,9 @@ from streamlit_gsheets import GSheetsConnection
     },
     auth: {
       type: 'token',
-      token: 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
-',
+      token: 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6',
       onRefreshToken: function () {
-        return 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
-'
+        return 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6'
       }
     }
   });
