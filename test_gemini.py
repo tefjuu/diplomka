@@ -1,11 +1,9 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 
 st.set_page_config(page_title="Gemini test", layout="centered")
 
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-
-model = genai.GenerativeModel("models/gemini-1.5-flash")
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 st.title("Test Gemini napojenia")
 
@@ -18,11 +16,14 @@ for msg in st.session_state.history:
 
 if prompt := st.chat_input("Napíš niečo..."):
     st.session_state.history.append({"role": "user", "content": prompt})
-    
+
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=prompt,
+    )
 
     reply = response.text
 
