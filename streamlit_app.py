@@ -5,6 +5,8 @@ import streamlit.components.v1 as components
 from datetime import datetime, time
 from streamlit_gsheets import GSheetsConnection
 
+st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
+
 yumo_html = """
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
@@ -75,7 +77,7 @@ DATUM_STARTU = datetime(2026, 1, 29)
 CAS_ODEMCENI = time(9, 0)
 
 # OPRAVA CHYBY Z OBRÁZKU: Přidána uzavírací závorka )
-st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
+
 st.title("🧘 Výzkum: Podpůrné intervence na redukci stresu")
 
 # --- 3. CSS STYLY (Zelené orámování a vzhled tlačítek) ---
