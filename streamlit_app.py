@@ -352,5 +352,3 @@ with tab_lekce:
             st.session_state.prihlasen = False
             st.rerun()
 
-with st.container():
-    components.html(yumo_html, height=500)
