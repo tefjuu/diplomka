@@ -5,8 +5,7 @@ st.set_page_config(page_title="Gemini test", layout="centered")
 
 # 1. OPRAVA: Přidání api_version='v1' do klienta
 client = genai.Client(
-    api_key=st.secrets["GEMINI_API_KEY"],
-    http_options={'api_version': 'v1'}
+    api_key=st.secrets["GEMINI_API_KEY"]
 )
 
 st.title("Test Gemini napojenia")
