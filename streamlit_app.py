@@ -8,6 +8,7 @@ from streamlit_gsheets import GSheetsConnection
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
 # Načtení tokenu ze Secrets
+yumo_token = st.secrets["COZE_TOKEN"]
 yumo_html = f"""
 <div id="coze-chat" style="width:100%; height:600px;"></div>
 
