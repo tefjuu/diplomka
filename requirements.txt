@@ -2,5 +2,5 @@ streamlit
 requests
 pandas
 st-gsheets-connection
-google-genai
+google-genai>=0.3.0
 
