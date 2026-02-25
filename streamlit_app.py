@@ -7,9 +7,6 @@ from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
-# --- 1. NASTAVENÍ STRÁNKY (MUSÍ BÝT PRVNÍ) ---
-st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
-
 # Načtení tokenu ze Secrets
 # 1. Načtení tokenu ze Secrets
 yumo_token = st.secrets["COZE_TOKEN"]
@@ -37,7 +34,7 @@ yumo_html = f"""
 """
 
 # 3. Vložení do stránky
-components.html(yumo_html, height=0)
+components.html(yumo_html, height=60)
 
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
