@@ -10,10 +10,6 @@ st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 # --- 1. NASTAVENÍ STRÁNKY (MUSÍ BÝT PRVNÍ) ---
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
-# --- 2. NOVÝ A JEDINÝ KÓD PRO YUMA ---
-import streamlit as st
-import streamlit.components.v1 as components
-
 # Načtení tokenu ze Secrets
 yumo_token = st.secrets["COZE_TOKEN"]
 
