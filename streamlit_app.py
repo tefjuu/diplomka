@@ -11,32 +11,34 @@ st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
 # --- 2. NOVÝ A JEDINÝ KÓD PRO YUMA ---
-yumo_script = """
+import streamlit as st
+import streamlit.components.v1 as components
+
+# Načtení tokenu ze Secrets
+yumo_token = st.secrets["COZE_TOKEN"]
+
+yumo_html = f"""
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
-  new CozeWebSDK.WebChatClient({
-    config: {
+  new CozeWebSDK.WebChatClient({{
+    config: {{
       bot_id: '7610756366369554485',
-    },
-    componentProps: {
+    }},
+    componentProps: {{
       title: 'Yumo',
-    },
-    auth: {
+    }},
+    auth: {{
       type: 'token',
-      token: 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7',
-      onRefreshToken: function () {
-        return 'pat_yZ3egeW1ELmxglNzMpEuTz1N31C8keDk6JEpADyY3Lb6TvBXRhqeL5nXCG7WjAY7';
-      }
-    }
-  });
+      token: '{yumo_token}',
+      onRefreshToken: function () {{
+        return '{yumo_token}';
+      }}
+    }}
+  }});
 </script>
-<div style="padding:10px; background:#e1f5fe; border:1px solid #01579b; border-radius:5px;">
-   ℹ️ Diagnostika: Pokud vidíš tento modrý rámeček, skript Yuma je načten v kódu.
-</div>
 """
 
-# Vložíme komponentu s pevnou výškou, aby byla vidět
-st.components.v1.html(yumo_script, height=100)
+components.html(yumo_html, height=0)
 
 # --- 3. NADPIS (AŽ POTOM) ---
 st.title("🧘 Výzkum: Podpůrné intervence na redukci stresu")
