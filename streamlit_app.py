@@ -5,6 +5,28 @@ import streamlit.components.v1 as components
 from datetime import datetime, time
 from streamlit_gsheets import GSheetsConnection
 
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7610756366369554485',
+    },
+    componentProps: {
+      title: 'Yumo',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
+',
+      onRefreshToken: function () {
+        return 'pat_B4am7o2JSYpoKfjqN5cchUan3vkrryaa2Qq92g13mfU6KYqgk96rMIIu5qzRhso6
+'
+      }
+    }
+  });
+</script>
+"""
+components.html(yumo_html, height=0)
+
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
 def odeslat_email(prijemce, kod):
     try:
