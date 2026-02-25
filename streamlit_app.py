@@ -8,33 +8,33 @@ from streamlit_gsheets import GSheetsConnection
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
 # Načtení tokenu ze Secrets
-# 1. Načtení tokenu ze Secrets
-yumo_token = st.secrets["COZE_TOKEN"]
+yumo_html = f"""
+<div id="coze-chat" style="width:100%; height:600px;"></div>
 
-# Smaž starý blok s yumo_html a vlož tam tento:
-yumo_token = st.secrets["COZE_TOKEN"]
-
-yumo_html = """
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+
 <script>
-  new CozeWebSDK.WebChatClient({
-    config: {
+document.addEventListener("DOMContentLoaded", function() {{
+  new CozeWebSDK.WebChatClient({{
+    config: {{
       bot_id: '7610756366369554485',
-    },
-    componentProps: {
+    }},
+    componentProps: {{
       title: 'Yumo',
-    },
-    auth: {
+    }},
+    auth: {{
       type: 'token',
-      token: '""" + yumo_token + """',
-      onRefreshToken: function () {
-        return '""" + yumo_token + """';
-      }
-    }
-  });
+      token: '{yumo_token}',
+      onRefreshToken: function () {{
+        return '{yumo_token}';
+      }}
+    }},
+    mount: document.getElementById("coze-chat")
+  }});
+}});
 </script>
 """
-components.html(yumo_html, height=100)
+components.html(yumo_html, height=650)
 
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
