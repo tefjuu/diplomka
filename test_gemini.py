@@ -5,7 +5,6 @@ st.set_page_config(page_title="Gemini test", layout="centered")
 
 client = genai.Client(
     api_key=st.secrets["GEMINI_API_KEY"],
-    http_options={"api_version": "v1"}
 )
 
 st.title("Test Gemini napojenia")
@@ -24,7 +23,7 @@ if prompt := st.chat_input("Napíš niečo..."):
         st.markdown(prompt)
 
     response = client.models.generate_content(
-        model="gemini-1.5-flash",
+        model="gemini-1.0-pro",
         contents=prompt,
     )
 
