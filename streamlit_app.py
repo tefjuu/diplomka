@@ -11,27 +11,30 @@ st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 # 1. Načtení tokenu ze Secrets
 yumo_token = st.secrets["COZE_TOKEN"]
 
-# 2. HTML kód s proměnnou yumo_token
-yumo_html = f"""
+# Smaž starý blok s yumo_html a vlož tam tento:
+yumo_token = st.secrets["COZE_TOKEN"]
+
+yumo_html = """
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
-  new CozeWebSDK.WebChatClient({{
-    config: {{
+  new CozeWebSDK.WebChatClient({
+    config: {
       bot_id: '7610756366369554485',
-    }},
-    componentProps: {{
+    },
+    componentProps: {
       title: 'Yumo',
-    }},
-    auth: {{
+    },
+    auth: {
       type: 'token',
-      token: '{yumo_token}',
-      onRefreshToken: function () {{
-        return '{yumo_token}';
-      }}
-    }}
-  }});
+      token: '""" + yumo_token + """',
+      onRefreshToken: function () {
+        return '""" + yumo_token + """';
+      }
+    }
+  });
 </script>
 """
+components.html(yumo_html, height=100)
 
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
