@@ -11,8 +11,10 @@ st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 st.set_page_config(page_title="Výzkum: Dechová cvičení", layout="wide")
 
 # Načtení tokenu ze Secrets
+# 1. Načtení tokenu ze Secrets
 yumo_token = st.secrets["COZE_TOKEN"]
 
+# 2. HTML kód s proměnnou yumo_token
 yumo_html = f"""
 <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 <script>
@@ -34,10 +36,9 @@ yumo_html = f"""
 </script>
 """
 
+# 3. Vložení do stránky
 components.html(yumo_html, height=0)
 
-# --- 3. NADPIS (AŽ POTOM) ---
-st.title("🧘 Výzkum: Podpůrné intervence na redukci stresu")
 
 # --- 1. FUNKCE PRO ODESÍLÁNÍ EMAILU ---
 def odeslat_email(prijemce, kod):
