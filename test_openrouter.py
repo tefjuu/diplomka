@@ -49,6 +49,24 @@ def detect_gender(history_text: str) -> str:
     if any(re.search(p, t) for p in female_markers):
         return "F"
     return "F"
+    
+def generate_with_thinking(system, user_block, temperature=0.6):
+    with st.chat_message("assistant"):
+        placeholder = st.empty()
+
+        # 1️⃣ zobraz text
+        placeholder.markdown("🟢 Yumo rozmýšľa...")
+
+        # 2️⃣ DONUTÍME Streamlit vykreslit UI
+        time.sleep(0.15)
+
+        # 3️⃣ zavoláme LLM
+        response = llm_text(system, user_block, temperature=temperature)
+
+        # 4️⃣ smažeme thinking
+        placeholder.empty()
+
+    return response
 
 def is_number_0_10(text: str):
     text = text.strip()
@@ -255,10 +273,7 @@ if user_input:
                 "Krátko zvaliduj emócie používateľa a plynulo ich zhrň v 2–4 vetách. "
                 "Bez psychoedukácie."
             )
-            with st.chat_message("assistant"):
-                with st.spinner("🟢 Yumo rozmýšľa..."):
-                    validation = llm_text(system, D["emotions_body"], temperature=0.6)
-
+            validation = generate_with_thinking(system, D["emotions_body"])
             say(validation)
 
             st.session_state.phase = "STEP3"
@@ -287,10 +302,7 @@ if user_input:
                 f"Emócie a telo:\n{D['emotions_body']}\n\n"
                 f"Automatická myšlienka:\n{D['thought']}\n"
             )
-            with st.chat_message("assistant"):
-                with st.spinner("🟢 Yumo rozmýšľa..."):
-                    reframed = llm_text(system, user_block, temperature=0.6)
-
+            reframed = generate_with_thinking(system, user_block)
             say(reframed)
 
             st.session_state.phase = "STEP3_5"
@@ -463,10 +475,7 @@ if user_input:
                 "Používateľ navrhol malý krok. 1) pochváľ ho, 2) ak je príliš veľký, zmenši ho na verziu do 5 minút, "
                 "3) spýtaj sa, či je to takto OK."
             )
-            with st.chat_message("assistant"):
-                with st.spinner("🟢 Yumo rozmýšľa..."):
-                    coach = llm_text(system, idea, temperature=0.6)
-
+            coach = generate_with_thinking(system, idea)
             say(coach)
 
     # ---- STEP7_NEED ----
