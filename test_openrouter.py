@@ -289,7 +289,7 @@ if user_input:
             )
             with st.chat_message("assistant"):
                 with st.spinner("🟢 Yumo rozmýšľa..."):
-                reframed = llm_text(system, user_block, temperature=0.6)
+                    reframed = llm_text(system, user_block, temperature=0.6)
 
             say(reframed)
 
