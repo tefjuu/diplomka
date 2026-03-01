@@ -191,6 +191,8 @@ Odpovedz striktne ako JSON:
 
 # =========================================================
 # SESSION INIT
+if "pending_llm" not in st.session_state:
+    st.session_state.pending_llm = None
 # =========================================================
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -226,6 +228,21 @@ for m in st.session_state.messages:
 
 user_input = st.chat_input("Napíš správu…")
 
+if st.session_state.pending_llm is not None:
+
+    payload = st.session_state.pending_llm
+
+    with st.chat_message("assistant"):
+        st.markdown("🟢 Yumo rozmýšľa...")
+
+    response = llm_text(payload["system"], payload["user"])
+
+    st.session_state.pending_llm = None
+    st.session_state.phase = payload["next_phase"]
+
+    say(response)
+    st.rerun()
+    
 if user_input:
 
     st.session_state.messages.append({
@@ -273,8 +290,12 @@ if user_input:
                 "Krátko zvaliduj emócie používateľa a plynulo ich zhrň v 2–4 vetách. "
                 "Bez psychoedukácie."
             )
-            validation = generate_with_thinking(system, D["emotions_body"])
-            say(validation)
+            st.session_state.pending_llm = {
+                "system": system,
+                "user": D["emotions_body"],
+                "next_phase": "STEP3"
+            }
+            st.rerun()
 
             st.session_state.phase = "STEP3"
             say(
