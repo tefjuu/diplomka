@@ -190,14 +190,32 @@ if "phase" not in st.session_state:
 
 user_input = st.chat_input("Napíš správu…")
 
-if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
+user_input = st.chat_input("Napíš správu…")
 
-    # ---- TADY CELÝ TVŮJ FLOW KÓD ----
-    # validate_step(...)
-    # say(...)
-    # phase transitions
-    # atd.
+if user_input:
+
+    # 1️⃣ přidat user zprávu
+    st.session_state.messages.append({
+        "role": "user",
+        "content": user_input
+    })
+
+    # 2️⃣ načíst phase až teď
+    phase = st.session_state.phase
+    D = st.session_state.data
+
+    # 3️⃣ celý flow uvnitř tohoto bloku
+    if phase == "STEP1":
+        v = validate_step("STEP1", user_input)
+        if not v["complete"]:
+            say(v["followup"] or "Môžeš mi prosím povedať, čo ťa trápi?")
+        else:
+            D["stressor"] = user_input.strip()
+            say("Ďakujem, že to zdieľaš. Môžeš pridať ešte pár detailov?")
+            st.session_state.phase = "STEP1_FOLLOWUP"
+
+    elif phase == "STEP1_FOLLOWUP":
+        ...
 
 # AŽ TEĎ vykresli historii
 for m in st.session_state.messages:
