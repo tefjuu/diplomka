@@ -120,11 +120,11 @@ def say(text: str):
         "content": text
     })
     
-with st.chat_message("assistant"):
-    with st.spinner("🟢 Yumo rozmýšľa..."):
-        result = llm_text(...)
+    with st.chat_message("assistant"):
+        with st.spinner("🟢 Yumo rozmýšľa..."):
+            result = llm_text(...)
 
-say(result)
+    say(result)
 
 # =========================================================
 # VALIDATORS (Variant B orchestration layer)
@@ -485,7 +485,7 @@ if user_input:
         )
         with st.chat_message("assistant"):
             with st.spinner("🟢 Yumo rozmýšľa..."):
-            suggestion = llm_text(system, user_input, temperature=0.6)
+                suggestion = llm_text(system, user_input, temperature=0.6)
 
         st.session_state.phase = "STEP7_TINY"
         say(suggestion)
