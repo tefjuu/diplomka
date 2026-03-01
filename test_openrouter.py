@@ -185,17 +185,21 @@ if "phase" not in st.session_state:
         "content": "Ahoj, som Yumo. Čo ťa dnes trápi alebo čo ti spôsobuje stres? Pokojne mi to opíš vlastnými slovami."
     })
 
-# Render history
+user_input = st.chat_input("Napíš správu…")
+
+if user_input:
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # ---- TADY CELÝ TVŮJ FLOW KÓD ----
+    # validate_step(...)
+    # say(...)
+    # phase transitions
+    # atd.
+
+# AŽ TEĎ vykresli historii
 for m in st.session_state.messages:
     with st.chat_message(m["role"]):
         st.markdown(m["content"])
-
-# Input
-user_input = st.chat_input("Napíš správu…")
-if not user_input:
-    st.stop()
-
-st.session_state.messages.append({"role": "user", "content": user_input})
 
 # Update gender guess from user history
 all_user_text = "\n".join([m["content"] for m in st.session_state.messages if m["role"] == "user"])
