@@ -104,17 +104,11 @@ def llm_json(system: str, user: str):
 
     return {"complete": True, "followup": ""}
 
-def say(text: str, generation_time: float = 0):
+def say(text: str):
 
     with st.chat_message("assistant"):
         placeholder = st.empty()
 
-        # Pokud model odpovídal déle než 1.2 sekundy → zobraz thinking
-        if generation_time > 1.2:
-            placeholder.markdown("🟢 Yumo rozmýšľa...")
-            time.sleep(0.6)
-
-        # Typing efekt
         displayed = ""
         for char in text:
             displayed += char
@@ -125,7 +119,12 @@ def say(text: str, generation_time: float = 0):
         "role": "assistant",
         "content": text
     })
-
+    
+def thinking():
+    with st.chat_message("assistant"):
+        placeholder = st.empty()
+        placeholder.markdown("🟢 Yumo rozmýšľa...")
+    return placeholder
 
 # =========================================================
 # VALIDATORS (Variant B orchestration layer)
@@ -263,11 +262,10 @@ if user_input:
                 "Krátko zvaliduj emócie používateľa a plynulo ich zhrň v 2–4 vetách. "
                 "Bez psychoedukácie."
             )
-            start = time.time()
+            placeholder = thinking()
             validation = llm_text(system, f"Používateľ: {D['emotions_body']}", temperature=0.6)
-            elapsed = time.time() - start
-            
-            say(validation, generation_time=elapsed)
+            placeholder.empty()
+            say(validation)
 
             st.session_state.phase = "STEP3"
             say(
@@ -295,11 +293,11 @@ if user_input:
                 f"Emócie a telo:\n{D['emotions_body']}\n\n"
                 f"Automatická myšlienka:\n{D['thought']}\n"
             )
-            start = time.time()
+            placeholder = thinking()
             reframed = llm_text(system, user_block, temperature=0.6)
-            elapsed = time.time() - start
-            
-            say(reframed, generation_time=elapsed)
+
+            placeholder.empty()
+            say(reframed)
 
             st.session_state.phase = "STEP3_5"
             say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
@@ -471,11 +469,12 @@ if user_input:
                 "Používateľ navrhol malý krok. 1) pochváľ ho, 2) ak je príliš veľký, zmenši ho na verziu do 5 minút, "
                 "3) spýtaj sa, či je to takto OK."
             )
-            start = time.time()
+            placeholder = thinking()
+
             coach = llm_text(system, idea, temperature=0.6)
-            elapsed = time.time() - start
-            
-            say(coach, generation_time=elapsed)
+
+            placeholder.empty()
+            say(coach)
 
     # ---- STEP7_NEED ----
     elif phase == "STEP7_NEED":
@@ -484,12 +483,14 @@ if user_input:
         system = (
             "Si Yumo. Navrhni JEDEN ultra-malý krok do 5 minút podľa potreby používateľa."
         )
-        start = time.time()
+        placeholder = thinking()
+
         suggestion = llm_text(system, user_input, temperature=0.6)
-        elapsed = time.time() - start
+
+        placeholder.empty()
 
         st.session_state.phase = "STEP7_TINY"
-        say(suggestion, generation_time=elapsed)
+        say(suggestion)
 
     # ---- STEP7_CONFIRM ----
     elif phase == "STEP7_CONFIRM":
