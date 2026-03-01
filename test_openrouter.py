@@ -267,15 +267,18 @@ if user_input:
             say("Ďakujem, že to zdieľaš. Môžeš pridať ešte pár detailov?")
             st.session_state.phase = "STEP1_FOLLOWUP"
 
-    # ---- STEP1_FOLLOWUP ----
+   # ---- STEP1_FOLLOWUP ----
     elif phase == "STEP1_FOLLOWUP":
-        v = validate_step("STEP1_FOLLOWUP", user_input)
-        if not v["complete"]:
-            say(v["followup"] or "Skús prosím pridať aspoň jeden konkrétny detail.")
-        else:
-            D["stressor"] = (D["stressor"] + "\n" + user_input.strip()).strip()
-            st.session_state.phase = "STEP2"
-            say("Rozumiem. Poďme to jemne rozkódovať. Aké emócie v tom cítiš—napríklad smútok, hnev, úzkosť, hanbu…? A kde to cítiš v tele?")
+
+        D["stressor"] = (D["stressor"] + "\n" + user_input.strip()).strip()
+
+        st.session_state.phase = "STEP2"
+
+        say(
+        "Rozumiem. Poďme sa teraz pozrieť na to, čo v tom cítiš. "
+        "Aké emócie sa ti v tej situácii objavujú? "
+        "A kde ich cítiš v tele?"
+        )
 
     # ---- STEP2 ----
     elif phase == "STEP2":
