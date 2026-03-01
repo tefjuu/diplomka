@@ -210,6 +210,11 @@ if "phase" not in st.session_state:
 
 user_input = st.chat_input("Napíš správu…")
 
+# AŽ TEĎ vykresli historii
+for m in st.session_state.messages:
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
+
 if user_input:
 
     st.session_state.messages.append({
@@ -507,10 +512,6 @@ if user_input:
     # ---- STEP8 ----
     else:
         say("Ak chceš, môžeš mi napísať, ako sa ti darí s tým malým krokom.")
-# AŽ TEĎ vykresli historii
-for m in st.session_state.messages:
-    with st.chat_message(m["role"]):
-        st.markdown(m["content"])
 
 # Update gender guess from user history
 all_user_text = "\n".join([m["content"] for m in st.session_state.messages if m["role"] == "user"])
