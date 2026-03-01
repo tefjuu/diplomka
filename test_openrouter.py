@@ -120,11 +120,11 @@ def say(text: str):
         "content": text
     })
     
-def thinking():
-    with st.chat_message("assistant"):
-        placeholder = st.empty()
-        placeholder.markdown("🟢 Yumo rozmýšľa...")
-    return placeholder
+with st.chat_message("assistant"):
+    with st.spinner("🟢 Yumo rozmýšľa..."):
+        result = llm_text(...)
+
+say(result)
 
 # =========================================================
 # VALIDATORS (Variant B orchestration layer)
@@ -262,9 +262,10 @@ if user_input:
                 "Krátko zvaliduj emócie používateľa a plynulo ich zhrň v 2–4 vetách. "
                 "Bez psychoedukácie."
             )
-            placeholder = thinking()
-            validation = llm_text(system, f"Používateľ: {D['emotions_body']}", temperature=0.6)
-            placeholder.empty()
+            with st.chat_message("assistant"):
+                with st.spinner("🟢 Yumo rozmýšľa..."):
+                    validation = llm_text(system, user_block, temperature=0.6)
+
             say(validation)
 
             st.session_state.phase = "STEP3"
@@ -293,11 +294,11 @@ if user_input:
                 f"Emócie a telo:\n{D['emotions_body']}\n\n"
                 f"Automatická myšlienka:\n{D['thought']}\n"
             )
-            placeholder = thinking()
-            reframed = llm_text(system, user_block, temperature=0.6)
+          with st.chat_message("assistant"):
+            with st.spinner("🟢 Yumo rozmýšľa..."):
+                reframed = llm_text(system, user_block, temperature=0.6)
 
-            placeholder.empty()
-            say(reframed)
+        say(reframed)
 
             st.session_state.phase = "STEP3_5"
             say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
@@ -469,11 +470,10 @@ if user_input:
                 "Používateľ navrhol malý krok. 1) pochváľ ho, 2) ak je príliš veľký, zmenši ho na verziu do 5 minút, "
                 "3) spýtaj sa, či je to takto OK."
             )
-            placeholder = thinking()
+            with st.chat_message("assistant"):
+                with st.spinner("🟢 Yumo rozmýšľa..."):
+                    coach = llm_text(system, idea, temperature=0.6)
 
-            coach = llm_text(system, idea, temperature=0.6)
-
-            placeholder.empty()
             say(coach)
 
     # ---- STEP7_NEED ----
@@ -483,11 +483,9 @@ if user_input:
         system = (
             "Si Yumo. Navrhni JEDEN ultra-malý krok do 5 minút podľa potreby používateľa."
         )
-        placeholder = thinking()
-
-        suggestion = llm_text(system, user_input, temperature=0.6)
-
-        placeholder.empty()
+        with st.chat_message("assistant"):
+            with st.spinner("🟢 Yumo rozmýšľa..."):
+            suggestion = llm_text(system, user_input, temperature=0.6)
 
         st.session_state.phase = "STEP7_TINY"
         say(suggestion)
