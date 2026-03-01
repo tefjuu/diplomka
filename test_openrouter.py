@@ -278,8 +278,7 @@ if user_input:
                 "často sa v nej lepšie zorientujeme a napätie sa začne znižovať. "
                 "Ale ak chceš, môžeme ísť rovno k tomu, čo v tom cítiš."
             )
-        return
-
+            return
         # normální pokračování
         D["stressor"] = (D["stressor"] + "\n" + user_input.strip()).strip()
 
