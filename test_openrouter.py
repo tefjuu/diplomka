@@ -105,7 +105,6 @@ def llm_json(system: str, user: str):
     return {"complete": True, "followup": ""}
 
 def say(text: str):
-
     with st.chat_message("assistant"):
         placeholder = st.empty()
 
@@ -119,12 +118,6 @@ def say(text: str):
         "role": "assistant",
         "content": text
     })
-    
-    with st.chat_message("assistant"):
-        with st.spinner("🟢 Yumo rozmýšľa..."):
-            result = llm_text(...)
-
-    say(result)
 
 # =========================================================
 # VALIDATORS (Variant B orchestration layer)
@@ -264,7 +257,7 @@ if user_input:
             )
             with st.chat_message("assistant"):
                 with st.spinner("🟢 Yumo rozmýšľa..."):
-                    validation = llm_text(system, user_block, temperature=0.6)
+                    validation = llm_text(system, D["emotions_body"], temperature=0.6)
 
             say(validation)
 
@@ -300,8 +293,8 @@ if user_input:
 
         say(reframed)
 
-            st.session_state.phase = "STEP3_5"
-            say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
+        st.session_state.phase = "STEP3_5"
+        say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
 
     # ---- STEP3_5 ----
     elif phase == "STEP3_5":
