@@ -210,17 +210,16 @@ if "phase" not in st.session_state:
 
 user_input = st.chat_input("Napíš správu…")
 
-# AŽ TEĎ vykresli historii
-for m in st.session_state.messages:
-    with st.chat_message(m["role"]):
-        st.markdown(m["content"])
-
 if user_input:
 
     st.session_state.messages.append({
         "role": "user",
         "content": user_input
     })
+# AŽ TEĎ vykresli historii
+for m in st.session_state.messages:
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
 
     phase = st.session_state.phase
     D = st.session_state.data
