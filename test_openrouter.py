@@ -483,11 +483,10 @@ if user_input:
         D["need_category"] = user_input.strip()
 
         system = (
-            "Si Yumo. Navrhni JEDEN ultra-malý krok do 5 minút podľa potreby používateľa."
+        "Si Yumo. Navrhni JEDEN ultra-malý krok do 5 minút podľa potreby používateľa."
         )
-        with st.chat_message("assistant"):
-            with st.spinner("🟢 Yumo rozmýšľa..."):
-                suggestion = llm_text(system, user_input, temperature=0.6)
+
+        suggestion = generate_with_thinking(system, user_input)
 
         st.session_state.phase = "STEP7_TINY"
         say(suggestion)
