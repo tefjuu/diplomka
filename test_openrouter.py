@@ -192,6 +192,8 @@ user_input = st.chat_input("Napíš správu…")
 
 user_input = st.chat_input("Napíš správu…")
 
+user_input = st.chat_input("Napíš správu…")
+
 if user_input:
 
     # 1️⃣ přidat user zprávu
@@ -216,7 +218,6 @@ if user_input:
 
     elif phase == "STEP1_FOLLOWUP":
         ...
-
 # AŽ TEĎ vykresli historii
 for m in st.session_state.messages:
     with st.chat_message(m["role"]):
