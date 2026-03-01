@@ -287,14 +287,14 @@ if user_input:
                 f"Emócie a telo:\n{D['emotions_body']}\n\n"
                 f"Automatická myšlienka:\n{D['thought']}\n"
             )
-          with st.chat_message("assistant"):
-            with st.spinner("🟢 Yumo rozmýšľa..."):
+            with st.chat_message("assistant"):
+                with st.spinner("🟢 Yumo rozmýšľa..."):
                 reframed = llm_text(system, user_block, temperature=0.6)
 
-        say(reframed)
+            say(reframed)
 
-        st.session_state.phase = "STEP3_5"
-        say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
+            st.session_state.phase = "STEP3_5"
+            say("Skôr než začneme s technikou na upokojenie, aká je tvoja aktuálna úroveň napätia na škále 0 – 10? (0 = úplný pokoj, 10 = maximum stresu)")
 
     # ---- STEP3_5 ----
     elif phase == "STEP3_5":
