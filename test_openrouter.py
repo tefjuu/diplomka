@@ -222,6 +222,9 @@ if user_input:
         "role": "user",
         "content": user_input
     })
+    # 🔥 OKAMŽITÉ VYKRESLENÍ USER ZPRÁVY
+    with st.chat_message("user"):
+        st.markdown(user_input)
 
     phase = st.session_state.phase
     D = st.session_state.data
