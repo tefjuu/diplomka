@@ -12,6 +12,7 @@ MODEL = "arcee-ai/trinity-large-preview:free"
 st.set_page_config(page_title="Yumo – empatický sprievodca", layout="centered")
 
 st.write("SECRETS:", st.secrets)
+st.write("RUNNING FILE:", __file__)
 
 client = OpenAI(
     api_key=st.secrets.get("OPENROUTER_API_KEY"),
