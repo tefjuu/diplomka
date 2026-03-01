@@ -106,9 +106,31 @@ if phase == "STEP1":
     say("Môžeš mi o tom povedať viac detailov?")
 
 elif phase == "STEP2":
-    D["details"] = user_input
-    st.session_state.phase = "STEP3"
-    say("Aké emócie v tom cítiš? A kde ich cítiš v tele?")
+    text = user_input.strip().lower()
+    
+    # jednoduchá heuristika pro tělo
+    body_keywords = [
+        "hrudi", "žalúdku", "bruchu", "ramenách",
+        "hlave", "krku", "srdci", "tele", "rukách", "nohách"
+    ]
+    
+    has_body = any(word in text for word in body_keywords)
+    
+    if not has_body:
+        say("Rozumiem tej emócii. A kde ju cítiš v tele? Napríklad v hrudi, žalúdku alebo inde?")
+    else:
+        D["emotions_body"] = user_input.strip()
+        
+        # validácia cez LLM
+        system = (
+            "Si Yumo, empatický psychologický sprievodca. "
+            "Krátko validuj emócie používateľa v 2–3 vetách."
+        )
+        validation = llm_slot(system, user_input)
+        say(validation)
+        
+        st.session_state.phase = "STEP3"
+        say("Aká konkrétna myšlienka ti vtedy prebehne hlavou?")
 
 elif phase == "STEP3":
     D["emotions"] = user_input
