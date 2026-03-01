@@ -71,33 +71,36 @@ def llm_text(system: str, user: str, temperature: float = 0.6) -> str:
     return resp.choices[0].message.content.strip()
 
 def llm_json(system: str, user: str):
-    """
-    Validator that MUST return JSON.
-    If parsing fails, returns safe default (complete=True) to avoid deadlocks.
-    """
-    resp = client.chat.completions.create(
-        model=MODEL,
-        temperature=0,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
-    )
+    if not user:
+        return {"complete": False, "followup": ""}
+
+    try:
+        resp = client.chat.completions.create(
+            model=MODEL,
+            temperature=0.2,
+            messages=[
+                {
+                    "role": "user",
+                    "content": system + "\n\n" + user
+                }
+            ],
+        )
+    except Exception as e:
+        st.error(f"LLM JSON ERROR: {e}")
+        return {"complete": True, "followup": ""}
+
     raw = resp.choices[0].message.content.strip()
 
-    # Try strict JSON
     try:
         return json.loads(raw)
-    except Exception:
-        # Try to extract JSON substring if model wrapped it
+    except:
         m = re.search(r"\{.*\}", raw, re.DOTALL)
         if m:
             try:
                 return json.loads(m.group(0))
-            except Exception:
+            except:
                 pass
 
-    # Fallback: assume complete
     return {"complete": True, "followup": ""}
 
 def say(text: str):
