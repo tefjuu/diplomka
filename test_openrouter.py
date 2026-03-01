@@ -267,9 +267,20 @@ if user_input:
             say("Ďakujem, že to zdieľaš. Môžeš pridať ešte pár detailov?")
             st.session_state.phase = "STEP1_FOLLOWUP"
 
-   # ---- STEP1_FOLLOWUP ----
     elif phase == "STEP1_FOLLOWUP":
 
+        txt = user_input.strip().lower()
+
+        # 🔥 META OTÁZKA
+        if txt in ["prečo?", "prečo", "proč?", "proč", "čo tým myslíš", "nerozumiem"]:
+            say(
+                "Pýtam sa na detaily preto, že keď situáciu trochu viac rozložíme, "
+                "často sa v nej lepšie zorientujeme a napätie sa začne znižovať. "
+                "Ale ak chceš, môžeme ísť rovno k tomu, čo v tom cítiš."
+            )
+            return
+
+        # normální pokračování
         D["stressor"] = (D["stressor"] + "\n" + user_input.strip()).strip()
 
         st.session_state.phase = "STEP2"
