@@ -3,4 +3,4 @@ requests
 pandas
 st-gsheets-connection
 google-genai>=0.3.0
-
+openai>=1.0.0
