@@ -108,8 +108,10 @@ alebo nepokojom v rukách.
 Je niečo z toho podobné tomu,
 čo zažívaš ty?
 
-a) Chatbot: Napätie v hrudi a žalúdku býva častým signálom toho,
-že je človek pod veľkým tlakom. Aké myšlienky ti v týchto situáciách najčastejšie napadajú?
+b)Používateľ: Ano, cítím napätie v hrudi a žalúdku.
+
+a) b) Chatbot: Dokážem si predstaviť, že to pre teba môže byť v tej chvíli veľmi náročné. Napätie v hrudi a žalúdku býva častým signálom toho,
+že je človek pod veľkým tlakom.  Aké myšlienky ti v týchto situáciách najčastejšie napadajú?
 
 a) Používateľ: Že to nestihnem a že zlyhám.
 b) Používateľ: Neviem, nedokážem ich identifikovať.
