@@ -91,11 +91,13 @@ Môže ísť napríklad o skúšky, množstvo úloh, projekty alebo diplomovú p
 Používateľ: Mám veľa projektov a nestíham ich.
 
 Chatbot: To znie naozaj náročne. Ak tomu správne rozumiem, cítiš tlak z množstva projektov,
-ktoré musíš v tomto semestri dokončiť. Je to tak? 
+ktoré musíš v tomto semestri dokončiť. Je to tak? Ak áno, môžeme sa dnes spolu pozrieť práve na túto situáciu
+a skúsiť nájsť spôsob, ako sa s týmto tlakom lepšie vyrovnať.
+Súhlasíš, aby sme sa dnes zamerali na tento problém?
 
 Používateľ: Áno.
 
-Chatbot: Keď je toho veľa naraz, je prirodzené cítiť stres.
+Chatbot: Dobre. Keď je toho veľa naraz, je prirodzené cítiť stres.
 Keď si spomenieš na tlak z množstva projektov,
 ktoré musíš v tomto semestri dokončiť,
 aké emócie pri tom najčastejšie zažívaš?
