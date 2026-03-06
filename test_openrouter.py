@@ -247,7 +247,7 @@ def get_assistant_reply(day: int, messages: list):
             model=MODEL,
             messages=api_messages,
             temperature=0.3,
-            max_tokens=200,
+            max_tokens=300,
         )
 
         # bezpečné získanie textu
@@ -314,7 +314,7 @@ if st.session_state.selected_day is not None:
 
     if user_input:
         # volitelný limit délky
-        max_chars = 700
+        max_chars = 200
         if len(user_input) > max_chars:
             st.warning(f"Zpráva je příliš dlouhá. Zkrať ji prosím pod {max_chars} znaků.")
             st.stop()
