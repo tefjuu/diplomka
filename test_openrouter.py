@@ -149,10 +149,15 @@ Jej cieľom je presunúť pozornosť z obáv
 späť k prítomnému okamihu a postupne znížiť stres.
 
 Ak chceš, môžeme ju spolu krátko vyskúšať.
-b) Chatbot: To je naprosto v poriadku. Niekedy sa objavujú myšlienky ako
+b) Chatbot: To je úplne v poriadku. Keď je človek pod veľkým tlakom, môže byť niekedy ťažké si svoje myšlienky hneď uvedomiť alebo ich presne pomenovať.
+U mnohých ľudí sa v podobných situáciách objavujú myšlienky ako
 „nestihnem to“, „nezvládnem to“
-alebo „je toho na mňa priveľa“.
-Objavuje sa u teba niečo podobné?
+alebo „je toho na mňa priveľa“. Často ide o skôr negatívne myšlienky, ktoré smerujú voči sebe samému.
+
+Je niečo z toho podobné tomu,
+čo sa objavuje aj u teba?
+
+Ak nie, vôbec to nevadí. Niekedy trvá trochu dlhšie, kým si človek svoje myšlienky dokáže lepšie uvedomiť alebo sformulovať. Ak to dnes nejde, môžeme sa k tomu pokojne vrátiť zajtra.
 
 (technika)
 
