@@ -294,6 +294,9 @@ if "messages" not in st.session_state:
 if "chat_started" not in st.session_state:
     st.session_state.chat_started = False
 
+if "chat_finished" not in st.session_state:
+    st.session_state.chat_finished = False
+
 
 
 # Reset button (useful for supervisor demo)
@@ -377,7 +380,11 @@ if st.session_state.selected_day is not None:
             st.markdown(msg["content"])
 
     # Vstup uživatele
-    user_input = st.chat_input("Napiš svou odpověď...")
+    if not st.session_state.chat_finished:
+        user_input = st.chat_input("Napiš svou odpověď...")
+    else:
+        st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
+        user_input = None
 
     if user_input:
         # volitelný limit délky
@@ -399,6 +406,8 @@ if st.session_state.selected_day is not None:
                     st.session_state.selected_day,
                     st.session_state.messages
                 )
+            if "Ďakujem ti za dnešnú konverzáciu" in reply:
+                st.session_state.chat_finished = True
             
             full_text = ""
 
