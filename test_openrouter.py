@@ -1,4 +1,4 @@
-PODLESNÍ VERZE PÁTEK YUMA: import time
+import time
 import streamlit as st
 from openai import OpenAI
 
