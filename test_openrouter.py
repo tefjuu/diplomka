@@ -176,9 +176,9 @@ if st.session_state.selected_day is not None:
     if not st.session_state.chat_started:
         if st.session_state.selected_day == 1:
             opening = (
-                "Ahoj, jsem digitální průvodce pro krátkou reflexi stresu. "
-                "Dnes spolu projdeme jednu situaci, která tě zatěžuje, a zkusíme najít malý krok, "
-                "který můžeš udělat ještě dnes. Jakému tématu nebo problému se chceš dnes věnovat?"
+                "Ahoj, som digitálny sprievodca založený na umelej inteligencii. Počas krátkeho rozhovoru ti môžem pomôcť zamyslieť sa nad tým, čo ti dnes spôsobuje stres alebo čo ťa trápi. 
+                Ak máš dnes konkrétnu tému, ktorá ťa zaťažuje, pokojne mi ju opíš vlastnými slovami. 
+                Ak dnes nič aktuálne nemáš, môžeš sa zamyslieť nad niečím, čo ťa trápilo alebo zaťažovalo v posledných dňoch alebo týždňoch a čomu by si sa chcel/a dnes venovať."
             )
         else:
             opening = (
