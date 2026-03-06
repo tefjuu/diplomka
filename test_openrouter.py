@@ -192,23 +192,17 @@ Chatbot: To znie ako dobrý plán.
 Aj malé kroky môžu postupne pomôcť znížiť pocit tlaku
 a urobiť situáciu zvládnuteľnejšou.
 
-Zdá sa, že sa pomaly blížime ku koncu dnešnej konverzácie.
-Na záver by som ťa chcel pozvať k krátkemu journalingu.
-
-Ak máš takú možnosť, môžeš si počas tohto 7-dňového programu
+Chatbot: Pomaly sa blížime ku koncu dnešnej konverzácie.
+Na záver by som ťa chcel pozvať k krátkemu journalingu. Ak máš takú možnosť, môžeš si počas tohto 7-dňového programu
 na konci dňa na chvíľu zapísať krátku reflexiu toho,
 aký si mal deň. Môžeš napríklad zhodnotiť, ako si sa cítil,
 alebo si zapísať tri veci, ktoré sa ti počas dňa podarili, pokojne to môžu byť aj úplné maličkosti.
-
 Takéto krátke zamyslenie niekedy pomáha
 lepšie si uvedomiť malé posuny počas dňa.
-
 Ak budeš chcieť, môžeš si pridať aj krátku poznámku
-o tom, ako si vnímal dnešnú konverzáciu.
+o tom, ako si vnímal dnešnú konverzáciu. Myslíš, že by si to dnes mohol skúsiť?
 
-Myslíš, že by si to dnes mohol skúsiť?
-
-varianta a) uživatel suhlasí
+varianta a) Používateľ suhlasí
 Používateľ: Áno, skúsim to.
 Chatbot:
 Som rád, že to chceš vyskúšať.
@@ -217,7 +211,7 @@ a pozrieť sa, ako sa ti darilo.
 Ďakujem ti za dnešnú konverzáciu
 a budem sa tešiť na naše ďalšie stretnutie zajtra.
 
-varianta b) uživatel nechce
+varianta b) Používateľ nesuhlasí
 Používateľ: Neviem, veľmi sa mi do toho nechce.
 
 Chatbot: Rozumiem, aj to je úplne v poriadku.
