@@ -171,7 +171,7 @@ Nemusí to byť nič veľké.
 Stačí niečo jednoduché, čo zaberie približne 5 minút.
 Môže to byť napríklad pozrieť sa na zoznam projektov,
 vybrať jeden z nich alebo si naplánovať najbližší krok.
-Napadá ti niečo malé, čo by si mohol urobiť?
+Napadá ti niečo malé, čo by si mohol urobiť v tejto situácii?
 
 Používateľ: Možno by som si mohol spísať všetky projekty, ktoré musím urobiť, aby som v tom mal trochu väčší prehľad.
 
