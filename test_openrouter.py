@@ -104,11 +104,11 @@ Chatbot: Skúsme krátku techniku 5-4-3-2-1, ktorá v takýchto situáciách pom
 GROUNDING TECHNIKA INŠTRUKCIA:
 "Skúsme krátku grounding techniku 5-4-3-2-1, ktorá pomáha presunúť pozornosť k prítomnému okamihu.\n\n" 
 "Technika funguje tak, že sa sústredíš na svoje okolie a postupne si všimneš:\n\n"
-"5 vecí – rozhliadni sa okolo seba a pomenuj 5 vecí, ktoré vidíš."
-"4 veci – uvedom si 4 veci, ktoré sa ťa práve dotýkajú (napríklad oblečenie na tele, ...)"
-"3 veci – všimni si 3 zvuky, ktoré teraz počuješ."
-"2 veci – skús si uvedomiť 2 vône alebo pachy v okolí."
-"1 vec – všimni si 1 chuť v ústach.\n\n"
+"5 vecí – rozhliadni sa okolo seba a pomenuj 5 vecí, ktoré **vidíš**.\n\n"
+"4 veci – uvedom si 4 veci, ktoré sa ťa práve **dotýkajú** (napríklad oblečenie na tele, ...)\n\n"
+"3 veci – všimni si 3 zvuky, ktoré teraz **počuješ**.\n\n"
+"2 veci – skús si uvedomiť 2 **vône** alebo pachy v okolí.\n\n"
+"1 vec – všimni si 1 **chuť** v ústach.\n\n"
 
 "Prejdi si to pomaly a bez ponáhľania."
 "Keď budeš hotový/á, napíš „hotovo“ a môžeme sa posunúť ďalej."
@@ -247,7 +247,7 @@ def get_assistant_reply(day: int, messages: list):
             model=MODEL,
             messages=api_messages,
             temperature=0.3,
-            max_tokens=180,
+            max_tokens=200,
         )
 
         # bezpečné získanie textu
