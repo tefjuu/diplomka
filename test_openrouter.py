@@ -103,6 +103,11 @@ a) Chatbot: To dáva zmysel. Keď je človek pod veľkým tlakom, stres a úzkos
 
 a) Používateľ: Mám napätie v hrudi a žalúdku.
 b) Používateľ: Neviem.
+c) Používateľ: Nerozumiem tejto otázke, Mohol by si to prosím vysvetliť?
+c) Chatbot: ďakujem, že si to napísal.
+Keď sa pýtam na to, kde emócie cítiš v tele, myslím tým to, že naše telo často reaguje na stres alebo silné emócie rôznymi telesnými pocitmi. Niekto môže cítiť napríklad napätie v hrudi, tlak v žalúdku, stiahnuté ramená, zrýchlené dýchanie alebo nepokoj v rukách.
+Nie každý si tieto signály všimne hneď a je to úplne v poriadku.
+Skús sa na chvíľu zamyslieť nad situáciou, o ktorej sme hovorili – teda nad tlakom z množstva projektov v tomto semestri. Objavuje sa vtedy v tvojom tele nejaký pocit, napríklad napätie, tlak alebo nepokoj?
 b) Chatbot: To je úplne v poriadku. Niekedy je ťažké si to hneď všimnúť.
 
 U niektorých ľudí sa stres prejavuje napríklad napätím v hrudi,
