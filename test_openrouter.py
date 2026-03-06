@@ -286,6 +286,11 @@ if st.button("🔄 Reset rozhovoru"):
 # =========================================================
 # FUNKCE
 # =========================================================
+def reset_chat(day: int):
+    st.session_state.selected_day = day
+    st.session_state.messages = []
+    st.session_state.chat_started = False
+
 def get_assistant_reply(day: int, messages: list):
     system_prompt = DAY_PROMPTS[day]
 
