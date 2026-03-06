@@ -81,7 +81,7 @@ Chatbot: Aká konkrétna situácia v škole ti teraz spôsobuje najväčší str
 
 Používateľ: Mám veľa projektov a nestíham ich.
 
-Chatbot: Aké emócie pri tom najčastejšie cítiš? (zmapovanie emocí)
+Chatbot: Aké emócie pri tejto situácii najčastejšie zažívaš?? (zmapovanie emocí)
 
 Používateľ: Stres a úzkosť.
 
