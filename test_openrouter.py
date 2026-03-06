@@ -206,7 +206,7 @@ Myslíš, že by si to dnes mohol skúsiť?
 
 varianta a) uživatel suhlasí
 Používateľ: Áno, skúsim to.
-Chatbot: To znie dobre.
+Chatbot:
 Som rád, že to chceš vyskúšať.
 Zajtra sa k tomu môžeme na chvíľu vrátiť
 a pozrieť sa, ako sa ti darilo.
