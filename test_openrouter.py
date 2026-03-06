@@ -12,7 +12,7 @@ st.caption(
     "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: ..."
 )
 
-MODEL = "arcee-ai/trinity-large-preview:free"
+MODEL = "stepfun/step-3.5-flash:free"
 
 client = OpenAI(
     api_key=st.secrets.get("OPENROUTER_API_KEY"),
