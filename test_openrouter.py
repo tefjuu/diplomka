@@ -247,7 +247,7 @@ def get_assistant_reply(day: int, messages: list):
             model=MODEL,
             messages=api_messages,
             temperature=0.3,
-            max_tokens=300,
+            max_tokens=330,
         )
 
         # bezpečné získanie textu
