@@ -275,24 +275,28 @@ if st.button("🔄 Reset rozhovoru"):
 # =========================================================
 # FUNKCE
 # =========================================================
-def reset_chat(day: int):
-    st.session_state.selected_day = day
-    st.session_state.messages = []
-    st.session_state.chat_started = False
-
 def get_assistant_reply(day: int, messages: list):
     system_prompt = DAY_PROMPTS[day]
 
     api_messages = [{"role": "system", "content": system_prompt}] + messages
 
-    response = client.chat.completions.create(
-        model=MODEL,
-        messages=api_messages,
-        temperature=0.4,
-        max_tokens=500,
-    )
+    try:
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=api_messages,
+            temperature=0.3,
+            max_tokens=500,
+        )
 
-    return response.choices[0].message.content.strip()
+        # bezpečné získanie textu
+        if response.choices and response.choices[0].message.content:
+            return response.choices[0].message.content.strip()
+        else:
+            return "Prepáč, nastala technická chyba. Skús prosím odpovedať ešte raz."
+
+    except Exception:
+        return "Prepáč, nastala technická chyba pri generovaní odpovede."
+
 # =========================================================
 # UI - HLAVNÍ STRÁNKA
 # =========================================================
