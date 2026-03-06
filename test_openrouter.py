@@ -102,7 +102,7 @@ Používateľ: Že to nestihnem.
 Chatbot teraz prejde k technike
 
 GROUNDING TECHNIKA INŠTRUKCIA:
-"Skúsme krátku grounding techniku 5-4-3-2-1, ktorá pomáha presunúť pozornosť k prítomnému okamihu.\n\n" 
+"Skúsme teraz krátku grounding techniku 5-4-3-2-1, ktorá pomáha presunúť pozornosť k prítomnému okamihu.\n\n" 
 "Technika funguje tak, že sa sústredíš na svoje okolie a postupne si všimneš:\n\n"
 "5 vecí – rozhliadni sa okolo seba a pomenuj 5 vecí, ktoré **vidíš**.\n\n"
 "4 veci – uvedom si 4 veci, ktoré sa ťa práve **dotýkajú** (napríklad oblečenie na tele, ...)\n\n"
