@@ -14,8 +14,14 @@ st.caption(
 
 MODEL = "arcee-ai/trinity-large-preview:free"
 
+api_key = st.secrets.get("OPENROUTER_API_KEY")
+
+if not api_key:
+    st.error("API key sa nepodarilo načítať zo secrets.")
+    st.stop()
+
 client = OpenAI(
-    api_key=st.secrets("OPENROUTER_API_KEY"),
+    api_key=api_key,
     base_url="https://openrouter.ai/api/v1",
 )
 
