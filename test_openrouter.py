@@ -268,8 +268,8 @@ if st.session_state.selected_day is not None:
     if not st.session_state.chat_started:
         if st.session_state.selected_day == 1:
             opening = (
-               "Ahoj. Poďme sa krátko pozrieť na to, čo ťa dnes alebo v poslednom čase najviac trápi. "
-                "Môžeš opísať konkrétnu situáciu, ktorá ti teraz robí najväčšie starosti? "
+               "Ahoj. Poďme sa krátko pozrieť na to, čo ťa dnes alebo v poslednom čase najviac trápi.\n\n "
+                "Môžeš opísať konkrétnu situáciu, ktorá ti teraz robí najväčšie starosti?\n\n "
                 "Spolu ju krátko prejdeme a ukážem ti niekoľko jednoduchých nápomocných techník. "
                 "Celá konverzácia zaberie asi 5–10 minút."
                 )
