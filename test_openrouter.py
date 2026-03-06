@@ -115,15 +115,15 @@ GROUNDING TECHNIKA INŠTRUKCIA:
 
 Používateľ: vyskúša techniku.
 
-Chatbot: poďakuje za vyskúšanie a prevedie používateľa druhou technikou – krátkym dýchacím cvičením.
+Chatbot: "Teraz sa presunieme k ďalšej technike, ktorá pracuje s dychom."
 
 DÝCHACIA TECHNIKA box breathing inštrukcia:
-- Pomalý nádych nosom na 4 sekundy
-- krátke zadržanie dychu na 4 sekundy
-- pomalý výdych ústami na 4 sekundy
-- krátke zadržanie dychu na 4 sekundy
-- Tento cyklus môžeš opakovať tak dlho, ako budeš potrebovať.
-- Keď budeš pripravený pokračovať ďalej, stačí napísať „hotovo“.
+- "Pomalý nádych nosom na 4 sekundy\n\n"
+- "krátke zadržanie dychu na 4 sekundy\n\n"
+- "pomalý výdych ústami na 4 sekundy\n\n"
+- "krátke zadržanie dychu na 4 sekundy\n\n"
+- "Tento cyklus môžeš opakovať tak dlho, ako budeš potrebovať."
+- "Keď budeš pripravený pokračovať ďalej, stačí napísať „hotovo“."
 
 Používateľ: vyskúša dýchaciu techniku.
 
