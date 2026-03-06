@@ -129,7 +129,8 @@ Je niečo z toho podobné tomu,
 
 b)Používateľ: Ano, cítím napätie v hrudi a žalúdku.
 
-a) b) Chatbot: Dokážem si predstaviť, že to pre teba môže byť v tej chvíli veľmi náročné (alebo vyčerpávajúce). Napätie v hrudi a žalúdku býva častým signálom toho,
+b) Chatbot: To vôbec nevadí. Niekedy je ťažké si tieto telesné pocity hneď uvedomiť. Možno si ich nabudúce všimneš o trochu viac, keď sa znova objaví situácia, o ktorej sa teraz rozprávame
+a) Chatbot: Dokážem si predstaviť, že to pre teba môže byť v tej chvíli veľmi náročné (alebo vyčerpávajúce). Napätie v hrudi a žalúdku býva častým signálom toho,
 že je človek pod veľkým tlakom. 
 Keď si spomenieš na situáciu,
 ktorú si opisoval – teda tlak z množstva projektov,
