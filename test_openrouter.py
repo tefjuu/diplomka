@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 from openai import OpenAI
 
@@ -374,12 +375,20 @@ if st.session_state.selected_day is not None:
             st.markdown(user_input)
 
         with st.chat_message("assistant"):
-            with st.spinner("Chatbot přemýšlí..."):
+            message_placeholder = st.empty()
+            
+            with st.spinner("Pripravujem odpoveď..."):
                 reply = get_assistant_reply(
                     st.session_state.selected_day,
                     st.session_state.messages
                 )
-                st.markdown(reply)
+            
+            full_text = ""
+
+            for char in reply:
+                full_text += char
+                message_placeholder.markdown(full_text)
+                time.sleep(0.01)
 
         st.session_state.messages.append({"role": "assistant", "content": reply})
 
