@@ -406,9 +406,7 @@ if st.session_state.selected_day is not None:
                     st.session_state.selected_day,
                     st.session_state.messages
                 )
-            END_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
-            
-            if END_MESSAGE in reply:
+            if "budem sa tešiť na naše ďalšie stretnutie zajtra" in reply.lower():
                 st.session_state.chat_finished = True
                 st.rerun()
             
