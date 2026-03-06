@@ -99,7 +99,19 @@ Chatbot: Aké myšlienky sa ti vtedy objavujú v hlave? (nad čím rozmýšláš
 
 Používateľ: Že to nestihnem.
 
-Chatbot: Skúsme krátku techniku 5-4-3-2-1.
+Chatbot: Skúsme krátku techniku 5-4-3-2-1, ktorá v takýchto situáciách pomáha presunúť pozornosť k prítomnému okamihu.
+
+GROUNDING TECHNIKA INŠTRUKCIA:
+"Skúsme krátku grounding techniku 5-4-3-2-1, ktorá pomáha presunúť pozornosť k prítomnému okamihu.\n\n" 
+"Technika funguje tak, že sa sústredíš na svoje okolie a postupne si všimneš:\n\n"
+"5 vecí – rozhliadni sa okolo seba a pomenuj 5 vecí, ktoré vidíš."
+"4 veci – uvedom si 4 veci, ktoré sa ťa práve dotýkajú (napríklad oblečenie na tele, ...)"
+"3 veci – všimni si 3 zvuky, ktoré teraz počuješ."
+"2 veci – skús si uvedomiť 2 vône alebo pachy v okolí."
+"1 vec – všimni si 1 chuť v ústach.\n\n"
+
+"Prejdi si to pomaly a bez ponáhľania."
+"Keď budeš hotový/á, napíš „hotovo“ a môžeme sa posunúť ďalej."
 
 Používateľ: vyskúša techniku.
 
