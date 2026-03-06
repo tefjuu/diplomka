@@ -143,11 +143,9 @@ Keď sa objavujú obavy, že to človek nestihne alebo zlyhá,
 môžu ešte viac zosilniť stres a napätie v tele.
 V takýchto chvíľach môže pomôcť krátka technika,
 ktorá pomáha na chvíľu spomaliť a upokojiť myseľ.
-
 Jednou z nich je grounding technika 5-4-3-2-1.
 Jej cieľom je presunúť pozornosť z obáv
 späť k prítomnému okamihu a postupne znížiť stres.
-
 Ak chceš, môžeme ju spolu krátko vyskúšať.
 b) Chatbot: To je úplne v poriadku. Keď je človek pod veľkým tlakom, môže byť niekedy ťažké si svoje myšlienky hneď uvedomiť alebo ich presne pomenovať.
 U mnohých ľudí sa v podobných situáciách objavujú myšlienky ako
