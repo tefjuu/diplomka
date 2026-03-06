@@ -43,17 +43,12 @@ a over si, či si ju pochopil správne.
 5. až potom sa zeptej na emócie spojené s touto situáciou
 6. zeptej se na tělesné prožívání v této situaci
 7. zeptej se na myšlenky, které se mu v této situaci honí hlavou
-8. na základě odpovědí vyber JEDNU vhodnou techniku z tohoto seznamu:
-   - dýchací cvičení
-   - grounding 5-4-3-2-1
-   - krátké mindfulness zastavení
-   - kognitivní přerámování / restrukturalizace
-   - malý behaviorální krok / aktivace
-9. proveď uživatele technikou 1
-10. proveď uživatele technikou 2
-11. prove´d uživatele technikou 3 podle vzorové konverzace
-12. pomoz mu najít malý konkrétní krok do 5 minut, který může udělat ještě dnes a podpoř ho k tomu, věnovat se mu i následující dny
-13. povzbuď ho, aby se dnes např. před tím než půjde spát sepsal pocity z dnešního dne, ocenil, 3 věci, které se mu dnes poveldi a citlivě konverzaci ukonči
+8. proveď uživatele technikou 1
+9. proveď uživatele technikou 2
+10. prove´d uživatele technikou 3 podle vzorové konverzace
+11. pomoz mu najít malý konkrétní krok do 5 minut, který může udělat ještě dnes a podpoř ho k tomu, věnovat se mu i následující dny
+12. povzbuď ho, aby se dnes např. před tím než půjde spát sepsal pocity z dnešního dne, ocenil, 3 věci, které se mu dnes poveldi a citlivě konverzaci ukonči presne tútou záverečnou vetou a nič na nej nemeň: "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra." Po tejto vete už nepokladaj žiadne otázky ani nepíš ďalšie vety.
+
 
 Pravidla:
 - mluv po slovensky
@@ -73,6 +68,7 @@ Pravidla:
 - pripomínaj konkrétnu situáciu používateľa
 - používaj jednoduchý a podporný jazyk
 - Nikdy nepíš označenie „Chatbot:“ ani „Používateľ:“. Píš iba samotnú odpoveď chatbota.
+- Na úplnom konci konverzácie vždy použi presne túto záverečnú vetu a nič na nej nemeň: "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra." Po tejto vete už nepokladaj žiadne otázky ani nepíš ďalšie vety.
 
 Nižšie je ukážková konverzácia.
 Použi ju ako príklad štýlu, empatie a štruktúry rozhovoru.
@@ -410,7 +406,9 @@ if st.session_state.selected_day is not None:
                     st.session_state.selected_day,
                     st.session_state.messages
                 )
-            if "Ďakujem ti za dnešnú konverzáciu" in reply:
+            END_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra." in reply:
+            
+            if END_MESSAGE in reply:
                 st.session_state.chat_finished = True
             
             full_text = ""
