@@ -108,7 +108,7 @@ pocit preťaženia alebo niečo iné.
 Je niečo z toho blízke tomu,
 čo v tejto situácii prežívaš?
 
-a) Chatbot: To dáva zmysel. Keď je človek pod veľkým tlakom, stres a úzkosť sa objavujú pomerne často. Ako sa tieto pocity prejavujú vo tvojom tele?
+a) Chatbot: To dáva zmysel. Keď je človek pod veľkým tlakom, stres a úzkosť (Vypíš všetky emócie, ktoré používateľ uviedol) sa objavujú pomerne často. Ako sa tieto pocity prejavujú vo tvojom tele?
 
 a) Používateľ: Mám napätie v hrudi a žalúdku.
 b) Používateľ: Neviem.
