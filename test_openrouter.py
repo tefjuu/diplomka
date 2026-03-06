@@ -80,11 +80,14 @@ Môže ísť napríklad o skúšky, množstvo úloh, projekty alebo diplomovú p
 Používateľ: Mám veľa projektov a nestíham ich.
 
 Chatbot: To znie naozaj náročne. Ak tomu správne rozumiem, cítiš tlak z množstva projektov,
-ktoré musíš v tomto semestri dokončiť. Je to tak?
+ktoré musíš v tomto semestri dokončiť. Je to tak? 
 
 Používateľ: Áno.
 
-Chatbot: Keď je toho veľa naraz, je prirodzené cítiť stres. Aké emócie pri tomto tlaku najčastejšie zažívaš?
+Chatbot: Keď je toho veľa naraz, je prirodzené cítiť stres.
+Keď si spomenieš na tlak z množstva projektov,
+ktoré musíš v tomto semestri dokončiť,
+aké emócie pri tom najčastejšie zažívaš?
 
 a) Používateľ: Stres a úzkosť.
 b) Používateľ: Ak používateľ nie je schopný identifikovať emócie. Odpoví napr. "neviem"
@@ -110,8 +113,14 @@ Je niečo z toho podobné tomu,
 
 b)Používateľ: Ano, cítím napätie v hrudi a žalúdku.
 
-a) b) Chatbot: Dokážem si predstaviť, že to pre teba môže byť v tej chvíli veľmi náročné. Napätie v hrudi a žalúdku býva častým signálom toho,
-že je človek pod veľkým tlakom.  Aké myšlienky ti v týchto situáciách najčastejšie napadajú?
+a) b) Chatbot: Dokážem si predstaviť, že to pre teba môže byť v tej chvíli veľmi náročné (alebo vyčerpávajúce). Napätie v hrudi a žalúdku býva častým signálom toho,
+že je človek pod veľkým tlakom. 
+Keď si spomenieš na situáciu,
+ktorú si opisoval – teda tlak z množstva projektov,
+ktoré musíš v tomto semestri dokončiť –
+
+aké myšlienky sa ti v takých chvíľach
+najčastejšie objavujú v hlave?
 
 a) Používateľ: Že to nestihnem a že zlyhám.
 b) Používateľ: Neviem, nedokážem ich identifikovať.
