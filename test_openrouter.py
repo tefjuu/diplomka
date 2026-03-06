@@ -5,6 +5,7 @@ from openai import OpenAI
 # =========================================================
 # CONFIG
 # =========================================================
+st.write(st.secrets)
 st.set_page_config(page_title="výskum pre diplomovú prácu", layout="centered")
 
 st.caption(
