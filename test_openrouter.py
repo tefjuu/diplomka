@@ -12,7 +12,7 @@ st.caption(
     "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: ..."
 )
 
-MODEL = "eta-llama/llama-3.3-70b-instruct:free"
+MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 api_key = st.secrets.get("OPENROUTER_API_KEY")
 
