@@ -18,7 +18,6 @@ client = OpenAI(
     api_key=st.secrets.get("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
 )
-
 # =========================================================
 # PROMPTY PRO JEDNOTLIVÉ DNY
 # =========================================================
