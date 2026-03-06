@@ -134,6 +134,7 @@ Napiš krátkou empatickou odpověď a doporuč lidskou pomoc:
 
 Linka první psychické pomoci 116 123  
 nebo 112 při bezprostředním ohrožení.
+"""
 PROMPT_DAY_2 = """
 Jsi empatický, strukturovaný digitální průvodce pro krátkou podporu zvládání stresu u vysokoškolských studentů.
 Nejsi terapeut, nediagnostikuješ a nedáváš medicínské rady.
