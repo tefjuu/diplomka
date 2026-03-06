@@ -12,7 +12,7 @@ st.caption(
     "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: ..."
 )
 
-MODEL = "stepfun/step-3.5-flash:free"
+MODEL = "arcee-ai/trinity-large-preview:free"
 
 client = OpenAI(
     api_key=st.secrets.get("OPENROUTER_API_KEY"),
@@ -220,8 +220,8 @@ def get_assistant_reply(day: int, messages: list):
         response = client.chat.completions.create(
             model=MODEL,
             messages=api_messages,
-            temperature=0.3,
-            max_tokens=500,
+            temperature=0.2,
+            max_tokens=200,
         )
 
         # bezpečné získanie textu
