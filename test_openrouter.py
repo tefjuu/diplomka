@@ -306,14 +306,14 @@ if st.session_state.selected_day is not None:
         if st.session_state.selected_day == 1:
             opening = (
                "Ahoj. Poďme sa krátko pozrieť na to, čo ťa dnes alebo v poslednom čase najviac trápi.\n\n "
-                "Môžeš opísať konkrétnu situáciu, ktorá ti teraz robí najväčšie starosti?\n\n "
+                "Môžeš opísať **konkrétnu situáciu**, ktorá ti teraz robí najväčšie **starosti**?\n\n "
                 "Spolu ju krátko prejdeme a ukážem ti niekoľko jednoduchých nápomocných techník. "
                 "Celá konverzácia zaberie asi 5–10 minút."
                 )
         else:
             opening = (
-                "Ahoj, vítej zpátky. Jak se ti dařilo od minula realizovat malý krok, "
-                "který sis stanovil? Klidně napiš, jestli se to podařilo, částečně podařilo, nebo nepodařilo."
+                "Ahoj, som rád, že si sa rozhodol/la pokračovať v našej konverzácii aj dnes. "
+                "Ako sa ti darilo od včera? Podarilo sa ti vyskúšať niektorú z techník, o ktorých sme sa spolu rozprávali?"
             )
 
         st.session_state.messages.append({"role": "assistant", "content": opening})
