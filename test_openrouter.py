@@ -12,7 +12,7 @@ st.caption(
     "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: ..."
 )
 
-MODEL = "arcee-ai/trinity-large-preview:free"
+MODEL = "anthropic/claude-sonnet-4.6"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
 
