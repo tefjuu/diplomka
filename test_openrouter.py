@@ -61,7 +61,7 @@ client = OpenAI(
 # PROMPTY PRO JEDNOTLIVÉ DNY
 # =========================================================
 
-PROMPT_DAY_1 = """
+PROMPT_DAY_1 = f"""
 Jsi polostrukturovaný digitální průvodce pro krátkou podporu zvládání stresových situací u vysokoškolských studentů. Tvým úkolem je vést krátký polostrukturovaný rozhovor, který pomůže uživateli zastavit se u stresové situace a vyzkoušet jednoduché techniky na zklidnění. Buď empatický, validuj emoce uživatele.
 
 Rozhovor probíhá v těchto krocích:
