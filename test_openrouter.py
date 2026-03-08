@@ -152,27 +152,24 @@ V druhej technike sme navyše pracovali s dychom, ktorý má priamy vplyv na to,
 Obe tieto techniky môžeš použiť v rôznych situáciách. Napríklad keď sa objaví stres, nepokoj alebo napätie, ale aj kedykoľvek počas dňa, keď cítiš, že by ti krátke zastavenie a upokojenie mohlo pomôcť.\n\n
 
 Stačí niekoľko minút a môžeš sa k nim vrátiť vždy, keď to budeš potrebovať.\n\n
-Myslíš si, že by niektorá z týchto techník mohla byť pre teba užitočná aj v súvislosti s témou, ktorú dnes spolu riešime?
+Myslíš si, že by niektorá z týchto techník mohla byť pre teba užitočná aj v súvislosti s témou, ktorú spolu dnes riešime?
 
 Používateľ: vyjadrí súhlas alebo nesúhlas
 
-Chatbot: Blížime sa pomaly ku koncu našej dnešnej konverzácie. Na záver ti chcem ešte ponúknuť jednu jednoduchú techniku, ktorá môže byť užitočná počas celého programu.\n\n
-Ide o journaling, teda krátke zapisovanie vlastných myšlienok, pocitov a malej reflexie dňa.\n\n
-Na konci každého dňa si skús nájsť približne **5 minút**, aby si si zapísal/a krátku reflexiu svojho dňa. Môžeš si ju zapísať napríklad do poznámok v telefóne alebo do sešita.\n\n
-Nemusí to byť nič dlhé ani dokonalé. Stačí **pár viet** o tom, čo ti napadne.\n\n
-Môžeš si napríklad zapísať:\n\n
-- akú si mal/a dnes náladu (napríklad na škále od 0 do 10, kde 0 znamená veľmi zle a 10 veľmi dobre),\n\n
-- čo bolo dnes pre teba náročné,\n\n
+validuj odpoved používatela a pokračuj:
+
+Chatbot: Blížime sa pomaly ku koncu našej dnešnej konverzácie. Na záver ti ešte chcem ponúknuť jednu jednoduchú techniku – journaling.\n\n
+Skús si na konci dňa nájsť asi 5 minút a zapísať si pár viet do poznámok v telefóne alebo do sešita.\n\n
+Môžeš si napríklad zapísať:
+- akú si mal/a dnes náladu (na škále 0–10, kde 0 je veľmi zle a 10 veľmi dobre),
+- čo bolo dnes náročné,
 - alebo tri veci, ktoré sa ti dnes podarili.\n\n
-Môžeš sa tiež krátko zamyslieť nad tým, či sa ti počas dňa podarilo vrátiť k niektorej z techník, ktoré sme dnes spolu skúšali, a ako na teba pôsobili.\n\n
-Tento krátky zápis ti môže pomôcť lepšie si uvedomiť, čo sa počas dňa dialo a čo ti pomáha zvládať náročné situácie.\n\n
 Myslíš si, že by si si na konci dňa vedel/a nájsť pár minút na takúto krátku reflexiu?
 
 Používateľ vyjadrí záujem (nezáujem) a chatbot validuje reákciu.
 
-Chatbot: Teraz sme na konci dnešnej konverzácie.\n\n
-Ďakujem ti, že si si na ňu našiel/la čas a zapojil/a sa. Dnes sme začali témou, ktorá ti v poslednom čase spôsobuje určitý stres. Spoločne sme sa pozreli na tvoje emócie, telesné prežívanie a myšlienky a vyskúšali sme si aj dve techniky, ktoré môžu pomôcť upokojiť myseľ, telo aj dych.\n\n
-Ak budeš mať chuť, skús si dnes večer nájsť pár minút na krátku reflexiu dňa.\n\n
+Chatbot: Teraz sme na konci dnešnej konverzácie.
+Ďakujem ti, že si sazapojil/a. Dnes sme začali témou, ktorá ti v poslednom čase spôsobuje určitý stres a vyskúšali sme si aj dve techniky, ktoré môžu pomôcť upokojiť myseľ, telo aj dych.\n\n
 Budem rád, ak si nájdeš pár minút svojho času aj **zajtra** a budeme môcť v našej konverzácii pokračovať.\n\n
 Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra.
 
