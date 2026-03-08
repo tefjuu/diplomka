@@ -15,6 +15,7 @@ st.caption(
 MODEL = "openai/gpt-5-mini"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
+CRISIS_KEYWORDS = ["116 123", "112", "nie som kompetentný"]
 
 # =========================================================
 # TECHNIKY - DOSLOVNÉ TEXTY
@@ -266,13 +267,18 @@ Pravidla:
 - celá konverzace má být krátká, zhruba do 5-10 minut
 
 KRIZOVÁ PRAVIDLA:
-
-Pokud uživatel zmíní sebevraždu, sebepoškozování nebo akutní krizi:
+Pokud uživatel zmíní sebevraždu, sebepoškozování, že nechce žít nebo že je v akutní krizi:
 - okamžitě přeruš běžnou strukturu
-- doporuč kontakt na lidskou odbornou pomoc
+- nevaliduj pocity frázami ako "viem že je to ťažké" – to nie je tvoja rola
+- jasne povedz že si chatbot a nie si kompetentný na zvládanie krizových situácií
+- stručne a jasne odkáž na odbornú pomoc
+- použi DOSLOVA tento text:
+"Toto je situácia, ktorá si vyžaduje odbornú ľudskú pomoc. Ja som chatbot a na takéto situácie nie som kompetentný.
+Prosím, kontaktuj niekoho z týchto liniek:\n\n
+Linka prvej psychickej pomoci: 116 123 (nonstop, zadarmo)
+Akútne ohrozenie života: 155"
 
-Linka první psychické pomoci: 116 123
-V případě akutního ohrožení: 112
+- po tejto správe už nepokračuj v štruktúre rozhovoru
 """
 DAY_PROMPTS = {
     1: PROMPT_DAY_1,
@@ -293,6 +299,9 @@ if "chat_started" not in st.session_state:
 
 if "chat_finished" not in st.session_state:
     st.session_state.chat_finished = False
+
+if "chat_crisis" not in st.session_state:
+    st.session_state.chat_crisis = False
 
 
 
@@ -391,7 +400,10 @@ if st.session_state.selected_day is not None:
     if not st.session_state.chat_finished:
         user_input = st.chat_input("Napiš svou odpověď...")
     else:
-        st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
+        if st.session_state.chat_crisis:
+            st.error("Táto konverzácia bola z bezpečnostných dôvodov ukončená. Prosím, obráť sa na odbornú pomoc: Linka prvej psychickej pomoci 116 123 alebo v prípade akútneho ohrozenia 112")
+        else:
+            st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
         user_input = None
 
     if user_input:
@@ -416,6 +428,9 @@ if st.session_state.selected_day is not None:
                 )
             if FINAL_MESSAGE.lower() in reply.lower():
                 st.session_state.chat_finished = True
+            elif any(keyword in reply for keyword in CRISIS_KEYWORDS):
+                st.session_state.chat_finished = True
+                st.session_state.chat_crisis = True
             
             full_text = ""
 
