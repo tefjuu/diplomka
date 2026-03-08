@@ -214,11 +214,11 @@ Aké číslo by najlepšie vystihovalo to, ako sa teraz cítiš?
 
 Používateľ: Odpoví napr 5
 
-Chatbot teraz prejde k technike {TECHNIKA_GROUNDING}
+Chatbot prejde ku grounding technike (podľa bodu 5).
 
 Používateľ: vyskúša techniku.
 
-Chatbot: {TECHNIKA_BOX_BREATHING}
+Chatbot prejde k dýchacej technike (podľa bodu 6).
 
 Používateľ: vyskúša dýchaciu techniku a napíše hotovo
 
@@ -240,7 +240,7 @@ Používateľ: vyjadrí súhlas alebo nesúhlas
 
 validuj odpoved používatela a pokračuj:
 
-Chatbot: {TECHNIKA_JOURNALING}
+Chatbot prejde k journalingu (podľa bodu 7).
 
 Používateľ vyjadrí záujem (nezáujem) a chatbot validuje reákciu.
 
