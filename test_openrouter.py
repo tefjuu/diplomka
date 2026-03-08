@@ -392,6 +392,9 @@ if "chat_finished" not in st.session_state:
 if "chat_crisis" not in st.session_state:
     st.session_state.chat_crisis = False
 
+if "scroll_to_bottom" not in st.session_state:
+    st.session_state.scroll_to_bottom = False
+
 
 # =========================================================
 # FUNKCE
@@ -536,9 +539,11 @@ if page == "📋 Výskumná intervencia":
                     )
                 if FINAL_MESSAGE.lower() in reply.lower():
                     st.session_state.chat_finished = True
+                    st.session_state.scroll_to_bottom = True
                 elif any(keyword in reply for keyword in CRISIS_KEYWORDS):
                     st.session_state.chat_finished = True
                     st.session_state.chat_crisis = True
+                    st.session_state.scroll_to_bottom = True
                 
                 full_text = ""
     
@@ -548,6 +553,10 @@ if page == "📋 Výskumná intervencia":
                     time.sleep(0.003)
     
             st.session_state.messages.append({"role": "assistant", "content": reply})
+            
+            if st.session_state.scroll_to_bottom:
+                st.markdown('<script>window.scrollTo(0, document.body.scrollHeight);</script>', unsafe_allow_html=True)
+                st.session_state.scroll_to_bottom = False
         
         # ------ INFORMÁCIE O VÝSKUME ------
 elif page == "ℹ️ Informácie o výskume":
