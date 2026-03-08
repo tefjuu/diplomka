@@ -8,17 +8,15 @@ from openai import OpenAI
 st.set_page_config(page_title="výskum pre diplomovú prácu", layout="centered")
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap');
+
 /* Sidebar background */
 [data-testid="stSidebar"] {
     background-color: #fde8d8;
-    border-right: 1px solid #eeeeee;
+    border-right: 1px solid #f5d5c0;
 }
 
 /* Skryj radio kolečka */
-[data-testid="stSidebar"] .stRadio > div {
-    gap: 0px !important;
-}
-
 [data-testid="stSidebar"] .stRadio input[type="radio"] {
     display: none !important;
 }
@@ -29,9 +27,10 @@ st.markdown("""
 
 /* Menu položky */
 [data-testid="stSidebar"] .stRadio label {
-    font-size: 16px !important;
-    font-weight: 500 !important;
-    color: #222222 !important;
+    font-family: 'Trebuchet MS', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
     padding: 12px 16px !important;
     display: block !important;
     border-radius: 8px !important;
@@ -39,27 +38,28 @@ st.markdown("""
     transition: all 0.2s ease !important;
 }
 
-/* Hover efekt - pastelová modrá */
+/* Hover efekt - levandulová */
 [data-testid="stSidebar"] .stRadio label:hover {
-    background-color: #e8eaf6 !important;
-    color: #9b8ea8 !important;
+    background-color: #f0e6f6 !important;
+    color: #7b6b8d !important;
     padding-left: 22px !important;
-    font-size: 17px !important;
 }
 
 /* Aktivní položka */
 [data-testid="stSidebar"] .stRadio label[data-checked="true"] {
     background-color: #f0e6f6 !important;
-    color: #9b8ea8 !important;
+    color: #7b6b8d !important;
 }
 
 /* Sidebar nadpis */
 [data-testid="stSidebar"] h1 {
+    font-family: 'Trebuchet MS', sans-serif !important;
     font-size: 18px !important;
+    font-weight: 700 !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    color: #222222 !important;
-    border-bottom: 1px solid #eeeeee !important;
+    color: #333333 !important;
+    border-bottom: 1px solid #f5d5c0 !important;
     padding-bottom: 12px !important;
 }
 
@@ -67,15 +67,15 @@ st.markdown("""
 .stButton button {
     border: 1px solid #cccccc !important;
     background-color: #ffffff !important;
-    color: #222222 !important;
+    color: #333333 !important;
     border-radius: 8px !important;
     transition: all 0.2s ease !important;
 }
 
 .stButton button:hover {
-    background-color: #e8eaf6 !important;
-    border-color: #9b8ea8 !important;
-    color: #9b8ea8 !important;
+    background-color: #f0e6f6 !important;
+    border-color: #7b6b8d !important;
+    color: #7b6b8d !important;
 }
 </style>
 """, unsafe_allow_html=True)
