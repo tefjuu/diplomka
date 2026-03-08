@@ -469,6 +469,12 @@ if page == "📋 Výskumná intervencia":
     if st.session_state.selected_day is not None and st.session_state.selected_day == AVAILABLE_DAY:
         st.divider()
         st.subheader(f"Chat – Den {st.session_state.selected_day}")
+
+        if st.session_state.chat_finished:
+            if st.session_state.chat_crisis:
+                st.error("Táto konverzácia bola z bezpečnostných dôvodov ukončená. Prosím, obráť sa na odbornú pomoc: Linka prvej psychickej pomoci **0800 500 333** alebo v prípade akútneho ohrozenia **155**")
+            else:
+                st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
     
         # Úvodní zpráva chatbota jen jednou po otevření dne
         if not st.session_state.chat_started:
@@ -511,10 +517,6 @@ if page == "📋 Výskumná intervencia":
         if not st.session_state.chat_finished:
             user_input = st.chat_input("Napiš svou odpověď...")
         else:
-            if st.session_state.chat_crisis:
-                st.error("Táto konverzácia bola z bezpečnostných dôvodov ukončená. Prosím, obráť sa na odbornú pomoc: Linka prvej psychickej pomoci **0800 500 333** alebo v prípade akútneho ohrozenia 155")
-            else:
-                st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
             user_input = None
     
         if user_input:
