@@ -78,7 +78,8 @@ st.markdown("""
     color: #7b6b8d !important;
 }
 [data-testid="collapsedControl"] {
-    display: none !important;
+    visibility: hidden !important;
+    width: 0px !important;
 }
 </style>
 """, unsafe_allow_html=True)
