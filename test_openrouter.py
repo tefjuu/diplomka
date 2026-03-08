@@ -321,8 +321,8 @@ def get_assistant_reply(day: int, messages: list):
         else:
             return "Prepáč, nastala technická chyba. Skús prosím odpovedať ešte raz."
 
-    except Exception:
-        return "Prepáč, nastala technická chyba pri generovaní odpovede."
+    except Exception as e:
+            return f"Chyba: {str(e)}"
 
 # =========================================================
 # UI - HLAVNÍ STRÁNKA
