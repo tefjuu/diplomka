@@ -364,9 +364,9 @@ page = st.sidebar.radio("", [
     "📞 Kontakt a pomoc"
 ])
 
-if page == "📋 PVýskumná intervencia":
-st.title("Výskum: AI program na podporu zvládania stresu")
-st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
+if page == "📋 Výskumná intervencia":
+    st.title("Výskum: AI program na podporu zvládania stresu")
+    st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
 
 # Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
 AVAILABLE_DAY = 1
