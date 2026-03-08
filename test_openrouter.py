@@ -362,10 +362,7 @@ page = st.sidebar.radio("", [
 if page == "📋 Výskumná intervencia":
     st.title("Výskum: AI program na podporu zvládania stresu")
     st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
-    st.caption(
-        "⚠️ Demo prototyp. Nenahrádza odbornú psychologickú pomoc. "
-        "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: 0800 500 333"
-    )
+    
 
     # Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
     AVAILABLE_DAY = 1
@@ -381,6 +378,10 @@ if page == "📋 Výskumná intervencia":
                     reset_chat(day_num)
             else:
                 st.button(f"🔒 {day_num}. deň", use_container_width=True, disabled=True)
+    st.caption(
+        "⚠️ Demo prototyp. Nenahrádza odbornú psychologickú pomoc. "
+        "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: 0800 500 333"
+    )
 
 # =========================================================
 # CHAT
