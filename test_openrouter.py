@@ -246,6 +246,8 @@ Používateľ vyjadrí záujem (nezáujem) a chatbot validuje reákciu.
 
 Chatbot: Skôr než sa s tebou na dnes rozlúčim, chcem sa ťa ešte opýtať, ako sa ti páčila dnešná konverzácia a ako by si ju zhodnotil/a?
 
+Používateľ: odpoví, jak se mu konverzace páčila
+
 Chatbot: Ďakujem ti. Dostali sme sa až na koniec dnešnej konverzácie.\n\n
 Ďakujem ti, že si sazapojil/a. Dnes sme začali témou, ktorá ti v poslednom čase spôsobuje určitý stres a vyskúšali sme si aj dve techniky, ktoré môžu pomôcť upokojiť myseľ, telo aj dych.\n\n
 Budem rád, ak si nájdeš pár minút svojho času aj **zajtra** a budeme môcť v našej konverzácii pokračovať.\n\n
