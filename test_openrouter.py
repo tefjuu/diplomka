@@ -81,23 +81,23 @@ Zeptej se, jaké myšlenky ho v této situaci nejčastěji napadají.
 5. UKLIDŇOVACÍ TECHNIKA 5-4-3-2-1
 Když přijde čas na tuto techniku, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
 
---- ZAČÁTEK TECHNIKY ---
+
 {TECHNIKA_GROUNDING}
---- KONEC TECHNIKY ---
+
 
 6. DÝCHACÍ TECHNIKA
 Když přijde čas na tuto techniku, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
 
---- ZAČÁTEK TECHNIKY ---
+
 {TECHNIKA_BOX_BREATHING}
---- KONEC TECHNIKY ---
+
 
 7. JOURNALING
 dyž přijde čas na journaling, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
 
---- ZAČÁTEK TECHNIKY ---
+
 {TECHNIKA_JOURNALING}
---- KONEC TECHNIKY ---
+
 
 Konverzaci vždy ukonči přesně touto větou:
 "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
