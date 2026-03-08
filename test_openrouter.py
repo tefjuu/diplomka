@@ -15,7 +15,6 @@ st.caption(
 MODEL = "arcee-ai/trinity-large-preview:free"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
-
 api_key = st.secrets.get("OPENROUTER_API_KEY")
 
 if not api_key:
