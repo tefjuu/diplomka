@@ -221,13 +221,19 @@ Na úplnom konci vždy použij presne túto vetu:
 
 Po tejto vete už nič nepíš.
 
-Krizová pravidla:
-Pokud uživatel zmíní sebevraždu, sebepoškozování, že nechce žít, nebo že je v akutní krizi:
+KRIZOVÁ PRAVIDLA:
+Pokud uživatel zmíní sebevraždu, sebepoškozování, že nechce žít nebo že je v akutní krizi:
 - okamžitě přeruš běžnou strukturu
-- nereflektuj dál techniky ani journaling
-- napiš krátkou empatickou krizovou odpověď
-- doporuč okamžitou lidskou pomoc
-- uveď: Linka první psychické pomoci 0800 500 333, případně 155 při bezprostředním ohrožení života
+- nevaliduj pocity frázami ako "viem že je to ťažké" – to nie je tvoja rola
+- jasne povedz že si chatbot a nie si kompetentný na zvládanie krizových situácií
+- stručne a jasne odkáž na odbornú pomoc
+- použi DOSLOVA tento text:
+"Toto je situácia, ktorá si vyžaduje odbornú ľudskú pomoc. Ja som chatbot a na takéto situácie nie som kompetentný.
+Prosím, kontaktuj niekoho z týchto liniek:\n\n
+Linka prvej psychickej pomoci: 0800 500 333 (nonstop, zadarmo)
+Akútne ohrozenie života: 155"
+
+- po tejto správe už nepokračuj v štruktúre rozhovoru
 """
 PROMPT_DAY_2 = """
 Jsi empatický, strukturovaný digitální průvodce pro krátkou podporu zvládání stresu u vysokoškolských studentů.
@@ -277,9 +283,23 @@ Akútne ohrozenie života: 155"
 
 - po tejto správe už nepokračuj v štruktúre rozhovoru
 """
+PROMPT_DAY_3 = """
+...(sem přijde tvůj prompt pro den 3)...
+"""
+
+PROMPT_DAY_4 = """
+...(sem přijde tvůj prompt pro den 4)...
+"""
+
+PROMPT_DAY_5 = """
+...(sem přijde tvůj prompt pro den 5)...
+"""
 DAY_PROMPTS = {
     1: PROMPT_DAY_1,
     2: PROMPT_DAY_2,
+    3: PROMPT_DAY_3,
+    4: PROMPT_DAY_4,
+    5: PROMPT_DAY_5,
 }
 
 # =========================================================
@@ -343,20 +363,25 @@ def get_assistant_reply(day: int, messages: list):
 st.title("Výzkum chatbotové intervence")
 st.write("Vyberte den programu, který chcete otevřít.")
 
-col1, col2 = st.columns(2)
+# Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
+AVAILABLE_DAY = 1
 
-with col1:
-    if st.button("Den 1", use_container_width=True):
-        reset_chat(1)
-
-with col2:
-    if st.button("Den 2", use_container_width=True):
-        reset_chat(2)
+cols = st.columns(5)
+for i, col in enumerate(cols):
+    day_num = i + 1
+    with col:
+        if day_num < AVAILABLE_DAY:
+            st.button(f"✅ {day_num}. deň", use_container_width=True, disabled=True)
+        elif day_num == AVAILABLE_DAY:
+            if st.button(f"{day_num}. deň", use_container_width=True):
+                reset_chat(day_num)
+        else:
+            st.button(f"🔒 {day_num}. deň", use_container_width=True, disabled=True)
 
 # =========================================================
 # CHAT
 # =========================================================
-if st.session_state.selected_day is not None:
+if st.session_state.selected_day is not None and st.session_state.selected_day == AVAILABLE_DAY:
     st.divider()
     st.subheader(f"Chat – Den {st.session_state.selected_day}")
 
