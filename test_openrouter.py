@@ -7,11 +7,6 @@ from openai import OpenAI
 # =========================================================
 st.set_page_config(page_title="výskum pre diplomovú prácu", layout="centered")
 
-st.caption(
-    "⚠️ Demo prototyp. Nenahrádza odbornú psychologickú pomoc. "
-    "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: 0800 500 333"
-)
-
 MODEL = "openai/gpt-5-mini"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
@@ -367,6 +362,10 @@ page = st.sidebar.radio("", [
 if page == "📋 Výskumná intervencia":
     st.title("Výskum: AI program na podporu zvládania stresu")
     st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
+    st.caption(
+        "⚠️ Demo prototyp. Nenahrádza odbornú psychologickú pomoc. "
+        "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: 0800 500 333"
+    )
 
     # Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
     AVAILABLE_DAY = 1
