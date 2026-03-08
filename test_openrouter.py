@@ -6,6 +6,57 @@ from openai import OpenAI
 # CONFIG
 # =========================================================
 st.set_page_config(page_title="výskum pre diplomovú prácu", layout="centered")
+st.markdown("""
+<style>
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background-color: #111111;
+}
+
+[data-testid="stSidebar"] * {
+    color: #ffffff !important;
+}
+
+/* Radio buttons */
+[data-testid="stSidebar"] .stRadio label {
+    font-size: 15px !important;
+    padding: 8px 0px !important;
+    border-bottom: 1px solid #333 !important;
+    display: block !important;
+}
+
+[data-testid="stSidebar"] .stRadio label:hover {
+    color: #aaaaaa !important;
+}
+
+/* Sidebar title */
+[data-testid="stSidebar"] h1 {
+    font-size: 20px !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    border-bottom: 2px solid #ffffff !important;
+    padding-bottom: 10px !important;
+}
+
+/* Main background */
+.main {
+    background-color: #ffffff;
+}
+
+/* Buttons */
+.stButton button {
+    border: 1px solid #111111 !important;
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border-radius: 0px !important;
+}
+
+.stButton button:hover {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 MODEL = "openai/gpt-5-mini"
 
