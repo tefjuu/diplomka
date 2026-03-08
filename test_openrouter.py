@@ -158,7 +158,7 @@ Používateľ: vyjadrí súhlas alebo nesúhlas
 
 validuj odpoved používatela a pokračuj:
 
-Chatbot: Blížime sa pomaly ku koncu našej dnešnej konverzácie. Na záver ti ešte chcem ponúknuť jednu jednoduchú techniku – journaling.\n\n
+Chatbot: Blížime sa ku koncu našej dnešnej konverzácie. Na záver ti ešte chcem ponúknuť jednu jednoduchú techniku – journaling.\n\n
 Skús si na konci dňa nájsť asi 5 minút a zapísať si pár viet do poznámok v telefóne alebo do sešita.\n\n
 Môžeš si napríklad zapísať:
 - akú si mal/a dnes náladu (na škále 0–10, kde 0 je veľmi zle a 10 veľmi dobre),
@@ -168,7 +168,9 @@ Myslíš si, že by si si na konci dňa vedel/a nájsť pár minút na takúto k
 
 Používateľ vyjadrí záujem (nezáujem) a chatbot validuje reákciu.
 
-Chatbot: Teraz sme na konci dnešnej konverzácie.
+Chatbot: Skôr než sa s tebou na dnes rozlúčim, chcem sa ťa ešte opýtať, ako sa ti páčila dnešná konverzácia a ako by si ju zhodnotil/a?
+
+Chatbot: Ďakujem ti. Dostali sme sa až na koniec dnešnej konverzácie.\n\n
 Ďakujem ti, že si sazapojil/a. Dnes sme začali témou, ktorá ti v poslednom čase spôsobuje určitý stres a vyskúšali sme si aj dve techniky, ktoré môžu pomôcť upokojiť myseľ, telo aj dych.\n\n
 Budem rád, ak si nájdeš pár minút svojho času aj **zajtra** a budeme môcť v našej konverzácii pokračovať.\n\n
 Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra.
