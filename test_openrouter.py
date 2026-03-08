@@ -354,6 +354,17 @@ def get_assistant_reply(day: int, messages: list):
 # =========================================================
 # UI - HLAVNÍ STRÁNKA
 # =========================================================
+#SIDEBAR MENU
+st.sidebar.title("Menu")
+page = st.sidebar.radio("", [
+    "📋 Výskumná intervencia",
+    "ℹ️ Informácie o výskume",
+    "📚 Edukačný materiál",
+    "📝 Dotazníky",
+    "📞 Kontakt a pomoc"
+])
+
+if page == "📋 PVýskumná intervencia":
 st.title("Výskum: AI program na podporu zvládania stresu")
 st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
 
@@ -456,4 +467,74 @@ if st.session_state.selected_day is not None and st.session_state.selected_day =
                 time.sleep(0.003)
 
         st.session_state.messages.append({"role": "assistant", "content": reply})
+        
+        # ------ INFORMÁCIE O VÝSKUME ------
+elif page == "ℹ️ Informácie o výskume":
+    st.title("Informácie o výskume")
+    st.markdown("""
+    **Cieľ výskumu**
+    
+    (doplň)
+    
+    **Kto výskum realizuje**
+    
+    (doplň)
+    
+    **Ako prebieha účasť**
+    
+    (doplň)
+    
+    **Ako budú dáta použité**
+    
+    (doplň)
+    
+    **Kontakt**
+    
+    (doplň)
+    """)
+
+# ------ EDUKAČNÝ MATERIÁL ------
+elif page == "📚 Edukačný materiál":
+    st.title("Edukačný materiál")
+    st.markdown("""
+    **Čo je stres?**
+    
+    (doplň)
+    
+    **Techniky, ktoré budeme používať**
+    
+    (doplň)
+    """)
+
+# ------ DOTAZNÍKY ------
+elif page == "📝 Dotazníky":
+    st.title("Dotazníky")
+    st.markdown("""
+    **Vstupný dotazník** (vyplň pred začatím programu)
+    
+    [Odkaz na vstupný dotazník](#)
+    
+    **Výstupný dotazník** (vyplň po ukončení programu)
+    
+    [Odkaz na výstupný dotazník](#)
+    """)
+
+# ------ KONTAKT A POMOC ------
+elif page == "📞 Kontakt a pomoc":
+    st.title("Kontakt a pomoc")
+    st.markdown("""
+    **Krizové linky**
+    
+    Linka prvej psychickej pomoci: **0800 500 333** (nonstop, zadarmo)
+    
+    Akútne ohrozenie života: **155**
+    
+    ---
+    
+    **Kontakt na výskumníka**
+    
+    Meno: (doplň)
+    
+    Email: (doplň)
+    """)
 
