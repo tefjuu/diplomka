@@ -40,14 +40,14 @@ st.markdown("""
 
 /* Hover efekt - levandulová */
 [data-testid="stSidebar"] .stRadio label:hover {
-    background-color: #f0e6f6 !important;
+    background-color: #ffffff !important;
     color: #7b6b8d !important;
     padding-left: 22px !important;
 }
 
 /* Aktivní položka */
 [data-testid="stSidebar"] .stRadio label[data-checked="true"] {
-    background-color: #f0e6f6 !important;
+    background-color: #ffffff !important;
     color: #7b6b8d !important;
 }
 
@@ -73,7 +73,7 @@ st.markdown("""
 }
 
 .stButton button:hover {
-    background-color: #f0e6f6 !important;
+    background-color: #ffffff !important;
     border-color: #7b6b8d !important;
     color: #7b6b8d !important;
 }
