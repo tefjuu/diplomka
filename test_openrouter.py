@@ -321,8 +321,8 @@ def get_assistant_reply(day: int, messages: list):
         if response.choices and response.choices[0].message.content:
             return response.choices[0].message.content.strip()
         else:
-            return "Prepáč, nastala technická chyba. Skús prosím odpovedať ešte raz."
-
+            return f"Prázdna odpoveď. Finish reason: {response.choices[0].finish_reason if response.choices else 'žiadne choices'}"
+            
     except Exception as e:
             return f"Chyba: {str(e)}"
 
