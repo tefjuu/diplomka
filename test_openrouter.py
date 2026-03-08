@@ -12,7 +12,7 @@ st.caption(
     "Ak si v akútnej kríze alebo sa cítiš v ohrození, vyhľadaj odbornú pomoc. na tel. čísle: ..."
 )
 
-MODEL = "anthropic/claude-sonnet-4.6"
+MODEL = "openai/gpt-5-mini"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
 
