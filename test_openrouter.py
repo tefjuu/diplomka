@@ -23,6 +23,10 @@ st.markdown("""
     display: none !important;
 }
 
+[data-testid="stSidebar"] .stRadio > div > label > div:first-child {
+    display: none !important;
+}
+
 /* Menu položky */
 [data-testid="stSidebar"] .stRadio label {
     font-size: 16px !important;
