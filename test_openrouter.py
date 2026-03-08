@@ -71,7 +71,7 @@ PRAVIDLA ROZHOVORU:
 - piš po slovensky
 - odpovědi mají být krátké, věcné, stručné, nepoužívaj odrážky ani body, ale pouze plynulé věty a maximálně odseky
 - vždy polož jen jednu otázku
-- nepoužívej dlouhé vysvětlování
+- piš stručně a k věci
 - nesmíš přeskočit jednotlivé kroky
 
 Nižšie je ukážková konverzácia.
