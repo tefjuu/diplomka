@@ -98,6 +98,15 @@ Chatbot: Aké myšlienky sa ti vtedy objavujú v hlave? (nad čím rozmýšláš
 
 Používateľ: Že to nestihnem.
 
+Chatbot: Dobre, teraz sme si krátko zmapovali tvoju situáciu – čo sa deje, aké emócie pri tom zažívaš a aké myšlienky sa ti v tejto situácii objavujú.\n\n
+Teraz by som sa ťa chcel opýtať ešte na jednu vec. Keď si predstavíš situáciu, ktorá ti spôsobuje stres – teda (doplň slovami, ktoré použil používateľ), ako sa v tejto chvíli cítiš?\n\n
+Skús to, prosím, ohodnotiť na škále od **0 do 10**, kde:\n\n
+0 znamená: cítim sa úplne zle
+10 znamená: lepšie by som sa ani cítiť nemohol/nemohla\n\n
+Aké číslo by najlepšie vystihovalo to, ako sa teraz cítiš?
+
+Používateľ: Odpoví napr 5
+
 Chatbot teraz prejde k technike
 
 GROUNDING TECHNIKA INŠTRUKCIA:
@@ -127,11 +136,13 @@ Skús ho zopakovať ešte niekoľkokrát pomaly a bez ponáhľania.\n\n
 
 Keď budeš pripravený pokračovať ďalej, napíš **hotovo**.
 
-Používateľ: vyskúša dýchaciu techniku.
+Používateľ: vyskúša dýchaciu techniku a napíše hotovo
 
-Chatbot: Ako sa cítiš po tomto dýchacom cvičení? Všimol/la si na sebe nejakú zmenu?
+Chatbot: Ako sa teraz cítiš po vyskúšaní týchto dvoch techník?\n\n 
+Skús to opäť ohodnotiť na škále od **0 do 10**, kde 0 znamená cítim sa úplne zle a 10 znamená lepšie by som sa ani cítiť nemohol/nemohla.\n\n
+Aké číslo by najlepšie vystihovalo, ako sa teraz cítiš?
 
-Používateľ: Cítim se pokojnejšie
+Používateľ: Odpovie číslom od 0-10
 
 Potom chatbot ponúkne techniku journalingu.
 
