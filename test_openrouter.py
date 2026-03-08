@@ -483,8 +483,12 @@ if page == "📋 Výskumná intervencia":
 
     # Vykreslení historie
         for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
+            if msg["role"] == "assistant":
+                with st.chat_message("assistant", avatar="yumo.png"):
+                    st.markdown(msg["content"])
+            else:
+                with st.chat_message("user"):
+                    st.markdown(msg["content"])
     
         if len(st.session_state.messages) >= 2 and not st.session_state.chat_finished:
             if st.button("🔄 Zopakovať poslednú odpoveď"):
