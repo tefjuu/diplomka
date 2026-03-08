@@ -370,7 +370,7 @@ if st.session_state.selected_day is not None:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-     if len(st.session_state.messages) >= 2 and not st.session_state.chat_finished:
+    if len(st.session_state.messages) >= 2 and not st.session_state.chat_finished:
         if st.button("🔄 Zopakovať poslednú odpoveď"):
             # Smaže poslední odpověď assistanta
             if st.session_state.messages[-1]["role"] == "assistant":
