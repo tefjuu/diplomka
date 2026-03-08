@@ -368,105 +368,105 @@ if page == "📋 Výskumná intervencia":
     st.title("Výskum: AI program na podporu zvládania stresu")
     st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
 
-# Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
-AVAILABLE_DAY = 1
-
-cols = st.columns(5)
-for i, col in enumerate(cols):
-    day_num = i + 1
-    with col:
-        if day_num < AVAILABLE_DAY:
-            st.button(f"✅ {day_num}. deň", use_container_width=True, disabled=True)
-        elif day_num == AVAILABLE_DAY:
-            if st.button(f"{day_num}. deň", use_container_width=True):
-                reset_chat(day_num)
-        else:
-            st.button(f"🔒 {day_num}. deň", use_container_width=True, disabled=True)
+    # Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
+    AVAILABLE_DAY = 1
+    
+    cols = st.columns(5)
+    for i, col in enumerate(cols):
+        day_num = i + 1
+        with col:
+            if day_num < AVAILABLE_DAY:
+                st.button(f"✅ {day_num}. deň", use_container_width=True, disabled=True)
+            elif day_num == AVAILABLE_DAY:
+                if st.button(f"{day_num}. deň", use_container_width=True):
+                    reset_chat(day_num)
+            else:
+                st.button(f"🔒 {day_num}. deň", use_container_width=True, disabled=True)
 
 # =========================================================
 # CHAT
 # =========================================================
-if st.session_state.selected_day is not None and st.session_state.selected_day == AVAILABLE_DAY:
-    st.divider()
-    st.subheader(f"Chat – Den {st.session_state.selected_day}")
-
-    # Úvodní zpráva chatbota jen jednou po otevření dne
-    if not st.session_state.chat_started:
-        if st.session_state.selected_day == 1:
-            opening = (
-               "Ahoj. Poďme sa krátko pozrieť na to, čo ťa dnes alebo v poslednom čase najviac trápi.\n\n "
-                "Môžeš opísať **konkrétnu situáciu**, ktorá ti teraz robí najväčšie **starosti**?\n\n "
-                "Spolu ju krátko prejdeme a ukážem ti niekoľko jednoduchých nápomocných techník. "
-                "Celá konverzácia zaberie asi 5–10 minút."
+    if st.session_state.selected_day is not None and st.session_state.selected_day == AVAILABLE_DAY:
+        st.divider()
+        st.subheader(f"Chat – Den {st.session_state.selected_day}")
+    
+        # Úvodní zpráva chatbota jen jednou po otevření dne
+        if not st.session_state.chat_started:
+            if st.session_state.selected_day == 1:
+                opening = (
+                   "Ahoj. Poďme sa krátko pozrieť na to, čo ťa dnes alebo v poslednom čase najviac trápi.\n\n "
+                    "Môžeš opísať **konkrétnu situáciu**, ktorá ti teraz robí najväčšie **starosti**?\n\n "
+                    "Spolu ju krátko prejdeme a ukážem ti niekoľko jednoduchých nápomocných techník. "
+                    "Celá konverzácia zaberie asi 5–10 minút."
+                    )
+            else:
+                opening = (
+                    "Ahoj, som rád, že si sa rozhodol/la pokračovať v našej konverzácii aj dnes. "
+                    "Ako sa ti darilo od včera? Podarilo sa ti vyskúšať niektorú z techník, o ktorých sme sa spolu rozprávali?"
                 )
-        else:
-            opening = (
-                "Ahoj, som rád, že si sa rozhodol/la pokračovať v našej konverzácii aj dnes. "
-                "Ako sa ti darilo od včera? Podarilo sa ti vyskúšať niektorú z techník, o ktorých sme sa spolu rozprávali?"
-            )
-
-        st.session_state.messages.append({"role": "assistant", "content": opening})
-        st.session_state.chat_started = True
+    
+            st.session_state.messages.append({"role": "assistant", "content": opening})
+            st.session_state.chat_started = True
 
     # Vykreslení historie
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    if len(st.session_state.messages) >= 2 and not st.session_state.chat_finished:
-        if st.button("🔄 Zopakovať poslednú odpoveď"):
-            # Smaže poslední odpověď assistanta
-            if st.session_state.messages[-1]["role"] == "assistant":
-                st.session_state.messages.pop()
-            # Smaže i poslední zprávu uživatele
-            if st.session_state.messages[-1]["role"] == "user":
-                st.session_state.messages.pop()
-            st.rerun()
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
+    
+        if len(st.session_state.messages) >= 2 and not st.session_state.chat_finished:
+            if st.button("🔄 Zopakovať poslednú odpoveď"):
+                # Smaže poslední odpověď assistanta
+                if st.session_state.messages[-1]["role"] == "assistant":
+                    st.session_state.messages.pop()
+                # Smaže i poslední zprávu uživatele
+                if st.session_state.messages[-1]["role"] == "user":
+                    st.session_state.messages.pop()
+                st.rerun()
 
     # Vstup uživatele
-    if not st.session_state.chat_finished:
-        user_input = st.chat_input("Napiš svou odpověď...")
-    else:
-        if st.session_state.chat_crisis:
-            st.error("Táto konverzácia bola z bezpečnostných dôvodov ukončená. Prosím, obráť sa na odbornú pomoc: Linka prvej psychickej pomoci **0800 500 333** alebo v prípade akútneho ohrozenia 155")
+        if not st.session_state.chat_finished:
+            user_input = st.chat_input("Napiš svou odpověď...")
         else:
-            st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
-        user_input = None
-
-    if user_input:
-        # volitelný limit délky
-        max_chars = 200
-        if len(user_input) > max_chars:
-            st.warning(f"Zpráva je příliš dlouhá. Zkrať ji prosím pod {max_chars} znaků.")
-            st.stop()
-
-        st.session_state.messages.append({"role": "user", "content": user_input})
-
-        with st.chat_message("user"):
-            st.markdown(user_input)
-
-        with st.chat_message("assistant"):
-            message_placeholder = st.empty()
-            
-            with st.spinner("Pripravujem odpoveď..."):
-                reply = get_assistant_reply(
-                    st.session_state.selected_day,
-                    st.session_state.messages
-                )
-            if FINAL_MESSAGE.lower() in reply.lower():
-                st.session_state.chat_finished = True
-            elif any(keyword in reply for keyword in CRISIS_KEYWORDS):
-                st.session_state.chat_finished = True
-                st.session_state.chat_crisis = True
-            
-            full_text = ""
-
-            for char in reply:
-                full_text += char
-                message_placeholder.markdown(full_text)
-                time.sleep(0.003)
-
-        st.session_state.messages.append({"role": "assistant", "content": reply})
+            if st.session_state.chat_crisis:
+                st.error("Táto konverzácia bola z bezpečnostných dôvodov ukončená. Prosím, obráť sa na odbornú pomoc: Linka prvej psychickej pomoci **0800 500 333** alebo v prípade akútneho ohrozenia 155")
+            else:
+                st.info("Dnešná konverzácia je ukončená. Pokračovať môžeš zajtra.")
+            user_input = None
+    
+        if user_input:
+            # volitelný limit délky
+            max_chars = 200
+            if len(user_input) > max_chars:
+                st.warning(f"Zpráva je příliš dlouhá. Zkrať ji prosím pod {max_chars} znaků.")
+                st.stop()
+    
+            st.session_state.messages.append({"role": "user", "content": user_input})
+    
+            with st.chat_message("user"):
+                st.markdown(user_input)
+    
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                
+                with st.spinner("Pripravujem odpoveď..."):
+                    reply = get_assistant_reply(
+                        st.session_state.selected_day,
+                        st.session_state.messages
+                    )
+                if FINAL_MESSAGE.lower() in reply.lower():
+                    st.session_state.chat_finished = True
+                elif any(keyword in reply for keyword in CRISIS_KEYWORDS):
+                    st.session_state.chat_finished = True
+                    st.session_state.chat_crisis = True
+                
+                full_text = ""
+    
+                for char in reply:
+                    full_text += char
+                    message_placeholder.markdown(full_text)
+                    time.sleep(0.003)
+    
+            st.session_state.messages.append({"role": "assistant", "content": reply})
         
         # ------ INFORMÁCIE O VÝSKUME ------
 elif page == "ℹ️ Informácie o výskume":
