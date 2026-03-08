@@ -16,6 +16,36 @@ MODEL = "arcee-ai/trinity-large-preview:free"
 
 FINAL_MESSAGE = "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
 
+# =========================================================
+# TECHNIKY - DOSLOVNÉ TEXTY
+# =========================================================
+
+TECHNIKA_GROUNDING = """Skúsme teraz krátku grounding techniku 5-4-3-2-1, ktorá pomáha presunúť pozornosť k prítomnému okamihu. Prejdi si ju pomaly a bez ponáhľania.\n\n
+Rozhliadni sa okolo seba a postupne si všimni:\n\n
+
+Pomenuj 5 vecí, ktoré **vidíš**.\n\n
+Uvedom si 4 veci, ktoré sa ťa práve **dotýkajú** (napríklad oblečenie na tele, podlaha pod nohami).\n\n
+Všimni si 3 zvuky, ktoré teraz **počuješ**.\n\n
+Skús si uvedomiť 2 **vône** alebo pachy v okolí.\n\n
+Všimni si 1 **chuť** v ústach.\n\n
+Keď budeš hotový/á, napíš **hotovo** a môžeme sa posunúť ďalej."""
+
+TECHNIKA_BOX_BREATHING = """Teraz sa presunieme k jednoduchej dýchacej technike, ktorá môže pomôcť upokojiť telo aj myseľ. Skús sa na chvíľu pohodlne posadiť a zamerať sa na svoj dych.\n\n
+Najprv sa pomaly nadýchni nosom na 4 sekundy.\n\n
+Teraz dych zadrž na 4 sekundy.\n\n
+Pomaly vydýchni ústami na 4 sekundy.\n\n
+Na konci výdychu ešte zadrž dych na 4 sekundy.\n\n
+
+Toto je jeden cyklus dýchania. Skús ho zopakovať ešte niekoľkokrát pomaly a bez ponáhľania. Keď budeš pripravený/á pokračovať ďalej, napíš **hotovo**."""
+
+TECHNIKA_JOURNALING = """Blížime sa pomaly ku koncu našej dnešnej konverzácie. Na záver ti ešte chcem ponúknuť jednu jednoduchú techniku – journaling.\n\n
+Skús si na konci dňa nájsť asi 5 minút a zapísať si pár viet do poznámok v telefóne alebo do sešita.\n\n
+Môžeš si napríklad zapísať:\n\n
+- akú si mal/a dnes náladu (na škále 0–10, kde 0 je veľmi zle a 10 veľmi dobre),\n\n
+- čo bolo dnes náročné,\n\n
+- alebo tri veci, ktoré sa ti dnes podarili.\n\n
+Myslíš si, že by si si na konci dňa vedel/a nájsť pár minút na takúto krátku reflexiu?"""
+
 api_key = st.secrets.get("OPENROUTER_API_KEY")
 
 if not api_key:
@@ -49,20 +79,26 @@ Zeptej se, jak se tyto emoce projevují v jeho těle.
 Zeptej se, jaké myšlenky ho v této situaci nejčastěji napadají.
 
 5. UKLIDŇOVACÍ TECHNIKA 5-4-3-2-1
-Proveď uživatele krátkou grounding technikou 5-4-3-2-1.
-Vysvětli ji stručně a proveď ho jednotlivými kroky (vše v jedné zprávě)
+Když přijde čas na tuto techniku, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
+
+--- ZAČÁTEK TECHNIKY ---
+{TECHNIKA_GROUNDING}
+--- KONEC TECHNIKY ---
 
 6. DÝCHACÍ TECHNIKA
-Proveď uživatele jednoduchým zpomaleným dýcháním.
+Když přijde čas na tuto techniku, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
+
+--- ZAČÁTEK TECHNIKY ---
+{TECHNIKA_BOX_BREATHING}
+--- KONEC TECHNIKY ---
 
 7. JOURNALING
-Na závěr vysvětli, že může být užitečné si každý večer krátce zapsat:
-- jak ses během dne cítil
-- co bylo náročné
-- tři malé věci, které se ti během dne podařily
+dyž přijde čas na journaling, použij DOSLOVA a BEZ JAKÝCHKOLI ZMĚN tento text:
 
-Řekni uživateli, že si to může zapisovat do poznámek v telefonu nebo do sešitu.
-Nakonec vysvětli, že se zítra znovu setkáte a vyzkoušíte další techniky.
+--- ZAČÁTEK TECHNIKY ---
+{TECHNIKA_JOURNALING}
+--- KONEC TECHNIKY ---
+
 Konverzaci vždy ukonči přesně touto větou:
 "Ďakujem ti, že si si dnes našiel čas na dnešnú konverzáciu. Budem sa tešiť na naše ďalšie stretnutie zajtra."
 
