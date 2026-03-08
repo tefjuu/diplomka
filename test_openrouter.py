@@ -8,52 +8,70 @@ from openai import OpenAI
 st.set_page_config(page_title="výskum pre diplomovú prácu", layout="centered")
 st.markdown("""
 <style>
-/* Sidebar styling */
+/* Sidebar background */
 [data-testid="stSidebar"] {
-    background-color: #111111;
+    background-color: #ffffff;
+    border-right: 1px solid #eeeeee;
 }
 
-[data-testid="stSidebar"] * {
-    color: #ffffff !important;
+/* Skryj radio kolečka */
+[data-testid="stSidebar"] .stRadio > div {
+    gap: 0px !important;
 }
 
-/* Radio buttons */
+[data-testid="stSidebar"] .stRadio input[type="radio"] {
+    display: none !important;
+}
+
+/* Menu položky */
 [data-testid="stSidebar"] .stRadio label {
-    font-size: 15px !important;
-    padding: 8px 0px !important;
-    border-bottom: 1px solid #333 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #222222 !important;
+    padding: 12px 16px !important;
     display: block !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
 }
 
+/* Hover efekt - pastelová modrá */
 [data-testid="stSidebar"] .stRadio label:hover {
-    color: #aaaaaa !important;
+    background-color: #e8eaf6 !important;
+    color: #9b8ea8 !important;
+    padding-left: 22px !important;
+    font-size: 17px !important;
 }
 
-/* Sidebar title */
+/* Aktivní položka */
+[data-testid="stSidebar"] .stRadio label[data-checked="true"] {
+    background-color: #f0e6f6 !important;
+    color: #9b8ea8 !important;
+}
+
+/* Sidebar nadpis */
 [data-testid="stSidebar"] h1 {
-    font-size: 20px !important;
+    font-size: 18px !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    border-bottom: 2px solid #ffffff !important;
-    padding-bottom: 10px !important;
+    color: #222222 !important;
+    border-bottom: 1px solid #eeeeee !important;
+    padding-bottom: 12px !important;
 }
 
-/* Main background */
-.main {
-    background-color: #ffffff;
-}
-
-/* Buttons */
+/* Tlačítka dní */
 .stButton button {
-    border: 1px solid #111111 !important;
+    border: 1px solid #cccccc !important;
     background-color: #ffffff !important;
-    color: #111111 !important;
-    border-radius: 0px !important;
+    color: #222222 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
 }
 
 .stButton button:hover {
-    background-color: #111111 !important;
-    color: #ffffff !important;
+    background-color: #e8eaf6 !important;
+    border-color: #9b8ea8 !important;
+    color: #9b8ea8 !important;
 }
 </style>
 """, unsafe_allow_html=True)
