@@ -321,12 +321,6 @@ if "chat_crisis" not in st.session_state:
     st.session_state.chat_crisis = False
 
 
-
-# Reset button (useful for supervisor demo)
-if st.button("🔄 Reset rozhovoru"):
-    st.session_state.clear()
-    st.rerun()
-
 # =========================================================
 # FUNKCE
 # =========================================================
@@ -360,8 +354,8 @@ def get_assistant_reply(day: int, messages: list):
 # =========================================================
 # UI - HLAVNÍ STRÁNKA
 # =========================================================
-st.title("Výzkum chatbotové intervence")
-st.write("Vyberte den programu, který chcete otevřít.")
+st.title("Výskum: AI program na podporu zvládania stresu")
+st.write("„Vyberte deň programu, ktorý chcete otvoriť.")
 
 # Který den je odemčený (změň na 2, 3, 4, 5 podle potřeby)
 AVAILABLE_DAY = 1
